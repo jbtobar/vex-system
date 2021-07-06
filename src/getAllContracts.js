@@ -30,7 +30,7 @@ pool.connect(function (err, client, done) {
 */
 
 const startTime = new Date().getTime()
-// let rowLength = 0
+let rowLength = 0
 
 pool.connect(async function (err, client, done) {
   const streamQ = client.query(copyFrom("COPY ipf_opt FROM STDIN WITH CSV DELIMITER ',' QUOTE '\"'"))
@@ -51,7 +51,7 @@ pool.connect(async function (err, client, done) {
   const stream = parse({ headers: true })
     .on('error', error => console.error(error))
     .on('data', row => {
-      // rowLength+=1
+      rowLength+=1
       // console.log(row)
       const rowkeys = Object.values(row)
       rowkeys.shift()
