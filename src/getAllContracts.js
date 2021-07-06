@@ -47,8 +47,8 @@ pool.connect(async function (err, client, done) {
 
 
   readable.pipe(streamQ)
-// objectMode: false
-  const stream = parse({ headers: true })
+
+  const stream = parse({ headers: true, objectMode: false })
     .on('error', error => console.error(error))
     .on('data', row => {
       rowLength+=1
