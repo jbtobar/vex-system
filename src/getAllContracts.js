@@ -1,7 +1,7 @@
 require('dotenv').config()
 const { parse } = require('@fast-csv/parse');
 const { Pool } = require('pg')
-const copyTo = require('pg-copy-streams').to
+const copyFrom = require('pg-copy-streams').from
 
 const pool = new Pool({
   user: process.env.DB_USER,
