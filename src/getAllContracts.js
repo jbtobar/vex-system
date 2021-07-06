@@ -52,7 +52,7 @@ pool.connect(async function (err, client, done) {
     .on('error', error => console.error(error))
     .on('data', row => {
       rowLength+=1
-      console.log(row)
+      console.log(row.toString())
       row.shift()
       const json = JSON.stringify(row)
       process.exit()
