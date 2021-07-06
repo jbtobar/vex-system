@@ -26,6 +26,7 @@ let rowLength = 0
 pool.connect(async function (err, client, done) {
   const streamQ = client.query(copyFrom("COPY ipf_opt FROM STDIN WITH CSV DELIMITER ',' QUOTE '\"'"))
   const readable = new Stream.Readable()
+  readable.read = () => {}
 
 
 

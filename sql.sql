@@ -20,3 +20,5 @@ create table ipf_opt (
   PRICE_INCREMENTS varchar,
   TRADING_HOURS varchar
 )
+
+GRANT ALL PRIVILEGES ON TABLE ipf_opt TO convex3;
