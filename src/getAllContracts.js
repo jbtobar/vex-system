@@ -29,7 +29,7 @@ pool.connect(function (err, client, done) {
 })
 */
 
-
+const startTime = new Date().getTime()
 let rowLength = 0
 
 pool.connect(async function (err, client, done) {
@@ -61,7 +61,7 @@ pool.connect(async function (err, client, done) {
       // console.log('finished pushing')
       streamQ.on('error', (err) => console.log('streamerr',err))
       stream.on('finish', () => {
-        console.log('finished')
+        console.log('finished', new Date().getTime() - startTime)
       })
 
     });
