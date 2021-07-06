@@ -18,7 +18,16 @@ const pool = new Pool({
 // https://tools.dxfeed.com/ipf?
 //
 //
-
+/*
+pool.connect(function (err, client, done) {
+  var stream = client.query(copyFrom('COPY my_table FROM STDIN'))
+  var fileStream = fs.createReadStream('some_file.tsv')
+  fileStream.on('error', done)
+  stream.on('error', done)
+  stream.on('finish', done)
+  fileStream.pipe(stream)
+})
+*/
 
 
 let rowLength = 0
@@ -26,7 +35,7 @@ let rowLength = 0
 pool.connect(async function (err, client, done) {
   const streamQ = client.query(copyFrom("COPY ipf_opt FROM STDIN WITH CSV DELIMITER ',' QUOTE '\"'"))
   const readable = new Stream.Readable()
-  readable.read = () => {}
+  // readable.read = () => {}
 
 
 
@@ -36,6 +45,11 @@ pool.connect(async function (err, client, done) {
 
 
 
+  streamQ.on('error', (err) => console.log('streamerr',err))
+  stream.on('finish', () => {
+    console.log('finished')
+  })
+  readable.pipe(streamQ)
 
 
 
@@ -50,9 +64,7 @@ pool.connect(async function (err, client, done) {
       console.log(`Parsed ${rowCount} rows`)
       readable.push(null)
       // console.log('finished pushing')
-      streamQ.on('error', (err) => console.log('streamerr',err))
-      // stream.on('finish', console.log)
-      readable.pipe(streamQ)
+
     });
 
 
