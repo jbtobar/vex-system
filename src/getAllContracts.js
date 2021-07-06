@@ -45,13 +45,8 @@ pool.connect(async function (err, client, done) {
 
 
 
-  streamQ.on('error', (err) => console.log('streamerr',err))
-  stream.on('finish', () => {
-    console.log('finished')
-  })
+
   readable.pipe(streamQ)
-
-
 
   const stream = parse({ headers: true })
     .on('error', error => console.error(error))
@@ -64,6 +59,10 @@ pool.connect(async function (err, client, done) {
       console.log(`Parsed ${rowCount} rows`)
       readable.push(null)
       // console.log('finished pushing')
+      streamQ.on('error', (err) => console.log('streamerr',err))
+      stream.on('finish', () => {
+        console.log('finished')
+      })
 
     });
 
