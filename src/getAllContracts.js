@@ -47,14 +47,15 @@ pool.connect(async function (err, client, done) {
 
 
   readable.pipe(streamQ)
-
-  const stream = parse({ headers: true, objectMode: false })
+// objectMode: false
+  const stream = parse({ headers: true })
     .on('error', error => console.error(error))
     .on('data', row => {
       rowLength+=1
       console.log(row)
       row.shift()
       const json = JSON.stringify(row)
+      process.exit()
       readable.push(json.substring(1, json.length-1)+'\n')
     })
     .on('end', rowCount => {
