@@ -18,7 +18,7 @@ pool.connect(async function (err, client, done) {
 
   await client.query(`DROP TABLE IF EXISTS ipf_opt_tmp`)
   await client.query(`CREATE TABLE ipf_opt_tmp (LIKE ipf_opt)`)
-  await client.query(`DROP MATERIALIZED VIEW IF EXISTS ipf_diff`)
+  await client.query(`DROP TABLE IF EXISTS ipf_diff`)
 
   const streamQ = client.query(copyFrom("COPY ipf_opt_tmp FROM STDIN WITH CSV DELIMITER ',' QUOTE '\"'"))
 
@@ -43,7 +43,7 @@ pool.connect(async function (err, client, done) {
         try {
           logger.info(`DONE: storesAllActiveOptionContracts:stream - t: ${new Date().getTime() - startTime} - ${timenow()}`,{ function: 'storesAllActiveOptionContracts' })
           await client.query(`
-            CREATE MATERIALIZED VIEW ipf_diff as (
+            CREATE TABLE ipf_diff as (
               SELECT ipf_opt.*
               FROM   ipf_opt_tmp
               FULL   OUTER JOIN ipf_opt USING (SYMBOL)
