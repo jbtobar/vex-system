@@ -46,7 +46,7 @@ pool.connect(async function (err, client, done) {
             CREATE MATERIALIZED VIEW ipf_diff as (
               SELECT *
               FROM   ipf_opt_tmp
-              FULL   OUTER JOIN ipf_opt USING (col)
+              FULL   OUTER JOIN ipf_opt USING (SYMBOL)
               WHERE  ipf_opt.SYMBOL IS NULL OR
                      ipf_opt_tmp.SYMBOL IS NULL;
             )`)
@@ -59,7 +59,7 @@ pool.connect(async function (err, client, done) {
           logger.info(`DONE: storesAllActiveOptionContracts:table replace - t: ${new Date().getTime() - startTime} - ${timenow()}`,{ function: 'storesAllActiveOptionContracts' })
           done()
           logger.info(`FINISH: storesAllActiveOptionContracts - t: ${new Date().getTime() - startTime} - ${timenow()}`,{ function: 'storesAllActiveOptionContracts' })
-        } catch (e) {
+        } catch (error) {
           logger.error(error,{ function: 'storesAllActiveOptionContracts' })
         }
       })
