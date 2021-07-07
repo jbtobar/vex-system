@@ -44,7 +44,7 @@ pool.connect(async function (err, client, done) {
           logger.info(`DONE: storesAllActiveOptionContracts:stream - t: ${new Date().getTime() - startTime} - ${timenow()}`,{ function: 'storesAllActiveOptionContracts' })
           await client.query(`
             CREATE TABLE ipf_diff as (
-              SELECT ipf_opt.*
+              SELECT ipf_opt_tmp.*
               FROM   ipf_opt_tmp
               FULL   OUTER JOIN ipf_opt USING (SYMBOL)
               WHERE  ipf_opt.SYMBOL IS NULL OR
