@@ -39,7 +39,7 @@ pool.connect(async function (err, client, done) {
     .on('end', rowCount => {
       readable.push(null)
       streamQ.on('error', (error) => logger.error(error,{ function: 'storesAllActiveOptionContracts' }))
-      streamQ.on('end', async () => {
+      streamQ.on('finish', async () => {
         try {
           logger.info(`DONE: storesAllActiveOptionContracts:stream - t: ${new Date().getTime() - startTime} - ${timenow()}`,{ function: 'storesAllActiveOptionContracts' })
           await client.query(`
