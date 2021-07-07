@@ -27,6 +27,31 @@ pool.connect(function (err, client, done) {
   stream.on('finish', done)
   fileStream.pipe(stream)
 })
+
+
+
+{
+  '#OPTION::=TYPE': 'OPTION',
+  SYMBOL: '.TSLA210723P1100',
+  COUNTRY: 'US',
+  OPOL: 'BATO',
+  EXCHANGES: 'BATO;C2OX;EDGO;EMLD;GMNI;MCRY;MPRL;XASE;XBOX;XBXO;XCBO;XISX;XMIO;XNDQ;XPHO;XPSE',
+  CURRENCY: 'USD',
+  CFI: 'OPASPS',
+  MULTIPLIER: '100',
+  UNDERLYING: 'TSLA',
+  SPC: '100',
+  ADDITIONAL_UNDERLYINGS: '',
+  MMY: '20210723',
+  EXPIRATION: '2021-07-23',
+  LAST_TRADE: '2021-07-23',
+  STRIKE: '1100',
+  OPTION_TYPE: 'SDO',
+  EXPIRATION_STYLE: 'Weeklys',
+  SETTLEMENT_STYLE: 'Close',
+  PRICE_INCREMENTS: '0.01 3; 0.05',
+  TRADING_HOURS: 'OPRA()'
+}
 */
 
 const startTime = new Date().getTime()
