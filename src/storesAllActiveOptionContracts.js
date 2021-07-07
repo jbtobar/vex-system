@@ -16,7 +16,7 @@ pool.connect(async function (err, client, done) {
   const startTime = new Date().getTime()
   logger.info(`START: storesAllActiveOptionContracts - ${timenow()}`,{ function: 'storesAllActiveOptionContracts' })
 
-  await client.query(`CREATE TABLE ipf_opt_tmp LIKE ipf_opt`)
+  await client.query(`CREATE TABLE ipf_opt_tmp (LIKE ipf_opt)`)
   await client.query(`DROP MATERIALED VIEW ipf_diff`)
   const streamQ = client.query(copyFrom("COPY ipf_opt_tmp FROM STDIN WITH CSV DELIMITER ',' QUOTE '\"'"))
 
