@@ -5,7 +5,7 @@
  */
 const { query } = require('../db');
 
-(async () => {
+const getTable = async () => {
   const startTime = new Date().getTime()
   let queryText = `SELECT
     rootsymbol as symbol,
@@ -34,4 +34,8 @@ const { query } = require('../db');
   FROM tasc group by rootsymbol;`
   const data = await query(queryText)
   console.log(`Duration: ${new Date().getTime() - startTime}`)
-})();
+}
+
+setInterval(() => {
+  getTable()
+},2000)
