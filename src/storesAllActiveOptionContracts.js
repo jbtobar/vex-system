@@ -18,6 +18,8 @@ pool.connect(async function (err, client, done) {
 
   await client.query(`DROP TABLE IF EXISTS ipf_opt_tmp`)
   await client.query(`CREATE TABLE ipf_opt_tmp (LIKE ipf_opt)`)
+  const ts = new Date().getTime();
+  await client.query(`INSERT INTO ipf_diff_hist (SELECT *,${ts} AS up_at FROM ipf_diff);`)
   await client.query(`DROP TABLE IF EXISTS ipf_diff`)
 
   const streamQ = client.query(copyFrom("COPY ipf_opt_tmp FROM STDIN WITH CSV DELIMITER ',' QUOTE '\"'"))
@@ -56,6 +58,14 @@ pool.connect(async function (err, client, done) {
           await client.query(`ALTER TABLE ipf_opt_tmp RENAME TO ipf_opt;`)
           await client.query(`DROP TABLE ipf_opt_old;`)
           await client.query('COMMIT')
+
+          await client.query('BEGIN')
+          await client.query(`DROP TABLE IF EXISTS ipf_symb`)
+          await client.query(`CREATE TABLE ipf_symb AS (
+            SELECT DISTINCT underlying FROM ipf_opt
+          )`)
+          await client.query('COMMIT')
+
           logger.info(`DONE: storesAllActiveOptionContracts:table replace - t: ${new Date().getTime() - startTime} - ${timenow()}`,{ function: 'storesAllActiveOptionContracts' })
           done()
           logger.info(`FINISH: storesAllActiveOptionContracts - t: ${new Date().getTime() - startTime} - ${timenow()}`,{ function: 'storesAllActiveOptionContracts' })
