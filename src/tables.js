@@ -50,7 +50,18 @@ const getTable = async () => {
   for (var i = 0; i < categories.length; i++) {
     const item = categories[i]
     const startTimeI = new Date().getTime()
-    tables[item] = (await query(queryMaker(item))).rows
+    // tables[item] = (await query(queryMaker(item))).rows
+    const {rows,fields} = (await query({
+      text:queryMaker(item),
+      rowMode:'array'
+    }))
+    await set([
+      `FLOW:${item}`,
+      JSON.stringify({
+        rows,
+        fields:fields.map(d => d.name)
+      })
+    ])
     console.log(`Dur (${item}): ${new Date().getTime() - startTimeI}`)
   }
   console.log(`Duration: ${new Date().getTime() - startTime}`)
