@@ -4,6 +4,7 @@
  * @author Juan Bernardo Tobar <jbtobar.io@gmail.com>
  */
 const { query } = require('../db');
+const { set } = require('../redis');
 
 const queryMaker = (interval) => {
   // const ts = new Date().getTime();
