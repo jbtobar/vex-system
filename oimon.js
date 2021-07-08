@@ -7,6 +7,7 @@ const checkStatus = () => {
     console.log(`${Number(res[0])} - ${timenow()}`)
   })
 }
+checkStatus()
 setInterval(() => {
   checkStatus()
 },1000*60*10)
