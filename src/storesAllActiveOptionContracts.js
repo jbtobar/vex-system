@@ -18,7 +18,7 @@ pool.connect(async function (err, client, done) {
   await client.query(`DROP TABLE IF EXISTS ipf_opt_tmp`)
   await client.query(`CREATE TABLE ipf_opt_tmp (LIKE ipf_opt)`)
   const ts = new Date().getTime();
-  await client.query(`INSERT INTO ipf_diff_hist (SELECT *,${ts} AS up_at FROM ipf_diff);`)
+  // await client.query(`INSERT INTO ipf_diff_hist (SELECT *,${ts} AS up_at FROM ipf_diff);`)
   await client.query(`DROP TABLE IF EXISTS ipf_diff`)
 
   const streamQ = client.query(copyFrom("COPY ipf_opt_tmp FROM STDIN WITH CSV DELIMITER ',' QUOTE '\"'"))
