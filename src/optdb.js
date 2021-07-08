@@ -50,7 +50,7 @@ const optdb = async () => {
   console.log(data[0])
   console.log(`DUR [ 2 ] : ${new Date().getTime() - startTime}`)
   startTime = new Date().getTime()
-  const top10 = data.sort((a,b) => Number(a[dayVolume]) - Number(b[dayVolume])).filter((d,i) => i <10)
+  const top10 = data.sort((b,a) => Number(a[dayVolume]) - Number(b[dayVolume])).filter((d,i) => i <10)
 
   console.log(top10)
   console.log(`DUR [ 3 ] : ${new Date().getTime() - startTime}`)
