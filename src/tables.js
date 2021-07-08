@@ -9,11 +9,11 @@ const queryMaker = (interval) => {
   // const ts = new Date().getTime();
   const ts = 1625774356312
   let whereText = ``
-  if (interval === 'H1') ts = `WHERE time > ${ts-1000*60*60}`
-  if (interval === 'M30') ts = `WHERE time > ${ts-1000*60*30}`
-  if (interval === 'M15') ts = `WHERE time > ${ts-1000*60*15}`
-  if (interval === 'M10') ts = `WHERE time > ${ts-1000*60*10}`
-  if (interval === 'M5') ts = `WHERE time > ${ts-1000*60*5}`
+  if (interval === 'H1') whereText = `WHERE time > ${ts-1000*60*60}`
+  if (interval === 'M30') whereText = `WHERE time > ${ts-1000*60*30}`
+  if (interval === 'M15') whereText = `WHERE time > ${ts-1000*60*15}`
+  if (interval === 'M10') whereText = `WHERE time > ${ts-1000*60*10}`
+  if (interval === 'M5') whereText = `WHERE time > ${ts-1000*60*5}`
   return `SELECT
     rootsymbol as symbol,
     SUM(size*price*100) as value,
