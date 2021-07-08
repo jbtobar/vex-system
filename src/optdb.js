@@ -25,13 +25,13 @@ const names = [
   'dayVolume',
   'dayTurnover',
   'changePct',
-  'dayOpenPrice',
-  'dayHighPrice',
-  'dayLowPrice',
-  'dayClosePrice',
-  'prevDayClosePrice',
-  'prevDayVolume',
-  'openInterest'
+  // 'dayOpenPrice',
+  // 'dayHighPrice',
+  // 'dayLowPrice',
+  // 'dayClosePrice',
+  // 'prevDayClosePrice',
+  // 'prevDayVolume',
+  // 'openInterest'
 ]
 
 const optdb = async () => {
