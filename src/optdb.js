@@ -33,6 +33,7 @@ const names = [
   // 'prevDayVolume',
   // 'openInterest'
 ]
+const dayVolume = names.findIndex(d => d === 'dayVolume')
 
 const optdb = async () => {
   let startTime = new Date().getTime()
@@ -44,8 +45,12 @@ const optdb = async () => {
   ).rows
   console.log(`DUR [ 1 ] - length: ${optioncodes.length} : ${new Date().getTime() - startTime}`)
   startTime = new Date().getTime()
-  const data = await runBatchMini(optioncodes,names)
+  const data = await runBatchMini(optioncodes,names,true)
   console.log(`DUR [ 2 ] : ${new Date().getTime() - startTime}`)
+  startTime = new Date().getTime()
+  const top10 = data.sort((a,b) => Number(a[dayVolume]) - Number(b[dayVolume])).filter((d,i) => i < 10)
+  console.log(top10)
+  console.log(`DUR [ 3 ] : ${new Date().getTime() - startTime}`)
   optdb()
 }
 optdb()
