@@ -5,9 +5,16 @@
  */
 const { query } = require('../db');
 
-const getTable = async () => {
-  const startTime = new Date().getTime()
-  let queryText = `SELECT
+const queryMaker = (interval) => {
+  // const ts = new Date().getTime();
+  const ts = 1625774356312
+  let whereText = ``
+  if (interval === 'H1') ts = `WHERE time > ${ts-1000*60*60}`
+  if (interval === 'M30') ts = `WHERE time > ${ts-1000*60*30}`
+  if (interval === 'M15') ts = `WHERE time > ${ts-1000*60*15}`
+  if (interval === 'M10') ts = `WHERE time > ${ts-1000*60*10}`
+  if (interval === 'M5') ts = `WHERE time > ${ts-1000*60*5}`
+  return `SELECT
     rootsymbol as symbol,
     SUM(size*price*100) as value,
     SUM(CASE flag WHEN 'C' THEN size ELSE 0 END) AS callvolume,
@@ -31,11 +38,23 @@ const getTable = async () => {
     SUM(
       CASE WHEN (flag = 'P' AND aggressorside = 'SELL') THEN size*price*100 ELSE 0 END
     ) AS valuesellp
-  FROM tasc group by rootsymbol;`
-  const data = await query(queryText)
+  FROM tasc ${whereText} group by rootsymbol;`
+}
+
+const tables = {
+
+}
+const categories = ['ALL','H1','M30','M15','M10','M5']
+const getTable = async () => {
+  const startTime = new Date().getTime()
+  for (var i = 0; i < categories.length; i++) {
+    const item = categories[i]
+    tables[item] = (await query(queryMaker(item))).rows
+  }
   console.log(`Duration: ${new Date().getTime() - startTime}`)
+
 }
 
 setInterval(() => {
   getTable()
-},2000)
+},5000)
