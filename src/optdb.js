@@ -44,6 +44,7 @@ const optdb = async () => {
   ).rows
   console.log(`DUR [ 1 ] - length: ${optioncodes.length} : ${new Date().getTime() - startTime}`)
   startTime = new Date().getTime()
+  console.log(names)
   const data = await runBatchMini(optioncodes,names)
   console.log(data[0])
   console.log(`DUR [ 2 ] : ${new Date().getTime() - startTime}`)
