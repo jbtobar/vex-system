@@ -46,6 +46,42 @@ const tables = {
 
 }
 const categories = ['ALL','H1','M30','M15','M10','M5']
+// const getTable = async () => {
+//   const startTime = new Date().getTime()
+//   for (var i = 0; i < categories.length; i++) {
+//     const item = categories[i]
+//     const startTimeI = new Date().getTime()
+//     // tables[item] = (await query(queryMaker(item))).rows
+//     const {rows,fields} = (await query({
+//       text:queryMaker(item),
+//       rowMode:'array'
+//     }))
+//     await set([
+//       `FLOW:${item}`,
+//       JSON.stringify({
+//         rows,
+//         fields:fields.map(d => d.name)
+//       })
+//     ])
+//     console.log(`Dur (${item}): ${new Date().getTime() - startTimeI}`)
+//   }
+//   console.log(`Duration: ${new Date().getTime() - startTime}`)
+//
+// }
+const fieldNames = [
+  'symbol',
+  'value',
+  'callvolume',
+  'putvolume',
+  'optionvolume',
+  'bullflow',
+  'bearflow',
+  'valuebuyc',
+  'valuesellc',
+  'valuebuyp',
+  'valuesellp',
+]
+set(['FLOW::FIELDS',...fieldNames])
 const getTable = async () => {
   const startTime = new Date().getTime()
   for (var i = 0; i < categories.length; i++) {
@@ -56,12 +92,10 @@ const getTable = async () => {
       text:queryMaker(item),
       rowMode:'array'
     }))
+
     await set([
-      `FLOW:${item}`,
-      JSON.stringify({
-        rows,
-        fields:fields.map(d => d.name)
-      })
+      `FLOW::${item}`,
+      JSON.stringify(rows)
     ])
     console.log(`Dur (${item}): ${new Date().getTime() - startTimeI}`)
   }
