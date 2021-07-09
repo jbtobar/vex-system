@@ -100,9 +100,11 @@ const getTable = async () => {
     console.log(`Dur (${item}): ${new Date().getTime() - startTimeI}`)
   }
   console.log(`Duration: ${new Date().getTime() - startTime}`)
+  getTable()
 
 }
 
-setInterval(() => {
-  getTable()
-},5000)
+getTable()
+// setInterval(() => {
+//   getTable()
+// },5000)
