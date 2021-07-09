@@ -8,7 +8,7 @@ const { set,sadd } = require('../redis');
 
 const queryMaker = (interval) => {
   // const ts = new Date().getTime();
-  const ts = 1625774356312
+  const ts = 1625860833239
   let whereText = ``
   if (interval === 'H1') whereText = `WHERE time > ${ts-1000*60*60}`
   if (interval === 'M30') whereText = `WHERE time > ${ts-1000*60*30}`
