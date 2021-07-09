@@ -4,7 +4,7 @@
  * @author Juan Bernardo Tobar <jbtobar.io@gmail.com>
  */
 const { query } = require('../db');
-const { set } = require('../redis');
+const { set,sadd } = require('../redis');
 
 const queryMaker = (interval) => {
   // const ts = new Date().getTime();
@@ -81,7 +81,7 @@ const fieldNames = [
   'valuebuyp',
   'valuesellp',
 ]
-set(['FLOW::FIELDS',...fieldNames])
+sadd(['FLOW::FIELDS',...fieldNames])
 const getTable = async () => {
   const startTime = new Date().getTime()
   for (var i = 0; i < categories.length; i++) {
