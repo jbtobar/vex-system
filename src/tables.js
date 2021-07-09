@@ -93,10 +93,30 @@ const getTable = async () => {
       rowMode:'array'
     }))
 
-    await set([
-      `FLOW::${item}`,
-      JSON.stringify(rows)
-    ])
+    for (var j = 1; j < fields.length; j++) {
+
+      //asc
+
+      await set([
+        `FLOW::${fields[j]}::asc`,
+        JSON.stringify(rows.sort((a, b) => (a[j]===null)-(b[j]===null) || +(a[j]>b[j])||-(a[j]<b[j])))
+      ])
+
+      await set([
+        `FLOW::${fields[j]}::desc`,
+        JSON.stringify(rows.sort((a, b) => (a[j]===null)-(b[j]===null) || -(a[j]>b[j])||+(a[j]<b[j])))
+      ])
+
+
+
+
+    }
+
+
+    // await set([
+    //   `FLOW::${item}`,
+    //   JSON.stringify(rows)
+    // ])
     console.log(`Dur (${item}): ${new Date().getTime() - startTimeI}`)
   }
   console.log(`Duration: ${new Date().getTime() - startTime}`)
