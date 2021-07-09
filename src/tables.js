@@ -98,12 +98,12 @@ const getTable = async () => {
       //asc
 
       await set([
-        `FLOW::${fieldNames[j]}::asc`,
+        `FLOW::${item}::${fieldNames[j]}::asc`,
         JSON.stringify(rows.sort((a, b) => (a[j]===null)-(b[j]===null) || +(a[j]>b[j])||-(a[j]<b[j])))
       ])
 
       await set([
-        `FLOW::${fieldNames[j]}::desc`,
+        `FLOW::${item}::${fieldNames[j]}::desc`,
         JSON.stringify(rows.sort((a, b) => (a[j]===null)-(b[j]===null) || -(a[j]>b[j])||+(a[j]<b[j])))
       ])
 
