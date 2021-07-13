@@ -46,7 +46,7 @@ const tables = {
 
 }
 // const categories = ['ALL','H1','M30','M15','M10','M5']
-const categories = ['H1','M30','M15','M10','M5']
+const categories = ['M30','M15','M10','M5']
 // const getTable = async () => {
 //   const startTime = new Date().getTime()
 //   for (var i = 0; i < categories.length; i++) {
@@ -120,8 +120,13 @@ const getTable = async () => {
     // ])
     console.log(`Dur (${item}): ${new Date().getTime() - startTimeI}`)
   }
-  console.log(`Duration: ${new Date().getTime() - startTime}`)
-  getTable()
+  const duration = new Date().getTime() - startTime
+  console.log(`Duration: ${duration}`)
+  if (duration < 1000) {
+    setTimeout(() => {
+      getTable()
+    },1000-duration)
+  } else getTable()
 
 }
 

@@ -120,8 +120,14 @@ const getTable = async () => {
     // ])
     console.log(`Dur (${item}): ${new Date().getTime() - startTimeI}`)
   }
-  console.log(`Duration: ${new Date().getTime() - startTime}`)
-  getTable()
+  const duration = new Date().getTime() - startTime
+  console.log(`Duration: ${duration}`)
+  if (duration < 1000) {
+    setTimeout(() => {
+      getTable()
+    },1000-duration)
+  } else getTable()
+
 
 }
 
