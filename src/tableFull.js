@@ -11,7 +11,9 @@ const queryMaker = (interval) => {
   const minus = {
     H1:ts-1000*60*60,
     M30:ts-1000*60*30,
-    M15:ts-1000*60*15
+    M15:ts-1000*60*15,
+    M10:ts-1000*60*10,
+    M5:ts-1000*60*5,
   }
   // const ts = 1625860833239
   let whereText = ``
@@ -22,7 +24,15 @@ const queryMaker = (interval) => {
   // if (interval === 'M5') whereText = `WHERE time > ${ts-1000*60*5}`
   return `SELECT
     rootsymbol as symbol,
-    (CASE when time > ${minus.H1} then 'H1' else 'all' end) as interval,
+    (CASE
+      when time > ${minus.H1} then 'H1'
+      when time > ${minus.M30} then 'M30'
+      when time > ${minus.M15} then 'M15'
+      when time > ${minus.M10} then 'M10'
+      when time > ${minus.M5} then 'M5'
+      else 'all'
+      end
+    ) as interval,
     SUM(size*price*100) as value,
     SUM(CASE flag WHEN 'C' THEN size ELSE 0 END) AS callvolume,
     SUM(CASE flag WHEN 'P' THEN size ELSE 0 END) AS putvolume,
