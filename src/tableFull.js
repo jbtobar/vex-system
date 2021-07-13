@@ -7,7 +7,12 @@ const { query } = require('../db');
 const { set,sadd } = require('../redis');
 
 const queryMaker = (interval) => {
-  // const ts = new Date().getTime();
+  const ts = new Date().getTime();
+  const minus = {
+    H1:ts-1000*60*60,
+    M30:ts-1000*60*30,
+    M15:ts-1000*60*15
+  }
   // const ts = 1625860833239
   let whereText = ``
   // if (interval === 'H1') whereText = `WHERE time > ${ts-1000*60*60}`
@@ -17,6 +22,7 @@ const queryMaker = (interval) => {
   // if (interval === 'M5') whereText = `WHERE time > ${ts-1000*60*5}`
   return `SELECT
     rootsymbol as symbol,
+    (CASE when time > ${minus.H1} then 'H1' else 'all' end) as interval,
     SUM(size*price*100) as value,
     SUM(CASE flag WHEN 'C' THEN size ELSE 0 END) AS callvolume,
     SUM(CASE flag WHEN 'P' THEN size ELSE 0 END) AS putvolume,
@@ -39,7 +45,7 @@ const queryMaker = (interval) => {
     SUM(
       CASE WHEN (flag = 'P' AND aggressorside = 'SELL') THEN size*price*100 ELSE 0 END
     ) AS valuesellp
-  FROM tasc ${whereText} group by rootsymbol;`
+  FROM tasc  group by rootsymbol,interval;`
 }
 
 
