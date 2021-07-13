@@ -7,8 +7,8 @@ const { query } = require('../db');
 const { set,sadd } = require('../redis');
 
 const queryMaker = (interval) => {
-  // const ts = new Date().getTime();
-  const ts = 1625860833239
+  const ts = new Date().getTime();
+  // const ts = 1625860833239
   let whereText = ``
   if (interval === 'H1') whereText = `WHERE time > ${ts-1000*60*60}`
   if (interval === 'M30') whereText = `WHERE time > ${ts-1000*60*30}`
@@ -46,7 +46,7 @@ const tables = {
 
 }
 // const categories = ['ALL','H1','M30','M15','M10','M5']
-const categories = ['ALL']
+const categories = ['H1','M30','M15','M10','M5']
 // const getTable = async () => {
 //   const startTime = new Date().getTime()
 //   for (var i = 0; i < categories.length; i++) {
