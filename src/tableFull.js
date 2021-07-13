@@ -52,14 +52,14 @@ const queryMaker = (interval) => {
 const getTable = async () => {
   const startTime = new Date().getTime()
 
-  // const {rows,fields} = (await query({
-  //   text:queryMaker(''),
-  //   rowMode:'array'
-  // }))
-  const data = await (await query({
-    text:'SELECT * FROM tasc;',
+  const {rows,fields} = (await query({
+    text:queryMaker(''),
     rowMode:'array'
   }))
+  // const data = await (await query({
+  //   text:'SELECT * FROM tasc;',
+  //   rowMode:'array'
+  // }))
 
   const duration = new Date().getTime() - startTime
 
