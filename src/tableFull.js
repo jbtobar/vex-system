@@ -55,7 +55,7 @@ const queryMaker = (interval) => {
     SUM(
       CASE WHEN (flag = 'P' AND aggressorside = 'SELL') THEN size*price*100 ELSE 0 END
     ) AS valuesellp
-  FROM tasc where time > ${minus.H1} group by rootsymbol,interval;`
+  FROM tasc where group by rootsymbol,interval;`
 }
 
 
