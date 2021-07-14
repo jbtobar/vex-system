@@ -169,96 +169,97 @@ setInterval(async () => {
 
     const temp = {}
     for (var i = 0; i < 61; i++) {
+      if (minutes[minute-i]) {
+        Object.keys(minutes[minute-i]).forEach((symbol) => {
+          if (!temp[symbol]) temp[symbol] = generateEmptyObject()
 
-      Object.keys(minutes[minute-i]).forEach((symbol) => {
-        if (!temp[symbol]) temp[symbol] = generateEmptyObject()
+          temp[symbol].value += minutes[minute-i][symbol].value
+          temp[symbol].volm += minutes[minute-i][symbol].volm
+          temp[symbol].count += minutes[minute-i][symbol].count
 
-        temp[symbol].value += minutes[minute-i][symbol].value
-        temp[symbol].volm += minutes[minute-i][symbol].volm
-        temp[symbol].count += minutes[minute-i][symbol].count
+          temp[symbol].valuecall += minutes[minute-i][symbol].valuecall
+          temp[symbol].volmcall += minutes[minute-i][symbol].volmcall
+          temp[symbol].countcall += minutes[minute-i][symbol].countcall
 
-        temp[symbol].valuecall += minutes[minute-i][symbol].valuecall
-        temp[symbol].volmcall += minutes[minute-i][symbol].volmcall
-        temp[symbol].countcall += minutes[minute-i][symbol].countcall
+          temp[symbol].valueput += minutes[minute-i][symbol].valueput
+          temp[symbol].volmput += minutes[minute-i][symbol].volmput
+          temp[symbol].countput += minutes[minute-i][symbol].countput
 
-        temp[symbol].valueput += minutes[minute-i][symbol].valueput
-        temp[symbol].volmput += minutes[minute-i][symbol].volmput
-        temp[symbol].countput += minutes[minute-i][symbol].countput
+          //
 
-        //
+          temp[symbol].valuebuycall += minutes[minute-i][symbol].valuebuycall
+          temp[symbol].volmbuycall += minutes[minute-i][symbol].volmbuycall
+          temp[symbol].countbuycall += minutes[minute-i][symbol].countbuycall
 
-        temp[symbol].valuebuycall += minutes[minute-i][symbol].valuebuycall
-        temp[symbol].volmbuycall += minutes[minute-i][symbol].volmbuycall
-        temp[symbol].countbuycall += minutes[minute-i][symbol].countbuycall
+          temp[symbol].valuesellcall += minutes[minute-i][symbol].value
+          temp[symbol].volmsellcall += minutes[minute-i][symbol].value
+          temp[symbol].countsellcall += minutes[minute-i][symbol].value
 
-        temp[symbol].valuesellcall += minutes[minute-i][symbol].value
-        temp[symbol].volmsellcall += minutes[minute-i][symbol].value
-        temp[symbol].countsellcall += minutes[minute-i][symbol].value
+          temp[symbol].valueundcall += minutes[minute-i][symbol].value
+          temp[symbol].volmundcall += minutes[minute-i][symbol].value
+          temp[symbol].countundcall += minutes[minute-i][symbol].value
 
-        temp[symbol].valueundcall += minutes[minute-i][symbol].value
-        temp[symbol].volmundcall += minutes[minute-i][symbol].value
-        temp[symbol].countundcall += minutes[minute-i][symbol].value
+          //
 
-        //
+          temp[symbol].valuebuyput += minutes[minute-i][symbol].value
+          temp[symbol].volmbuyput += minutes[minute-i][symbol].value
+          temp[symbol].countbuyput += minutes[minute-i][symbol].value
 
-        temp[symbol].valuebuyput += minutes[minute-i][symbol].value
-        temp[symbol].volmbuyput += minutes[minute-i][symbol].value
-        temp[symbol].countbuyput += minutes[minute-i][symbol].value
+          temp[symbol].valuesellput += minutes[minute-i][symbol].value
+          temp[symbol].volmsellput += minutes[minute-i][symbol].value
+          temp[symbol].countsellput += minutes[minute-i][symbol].value
 
-        temp[symbol].valuesellput += minutes[minute-i][symbol].value
-        temp[symbol].volmsellput += minutes[minute-i][symbol].value
-        temp[symbol].countsellput += minutes[minute-i][symbol].value
+          temp[symbol].valueundput += minutes[minute-i][symbol].value
+          temp[symbol].volmundput += minutes[minute-i][symbol].value
+          temp[symbol].countundput += minutes[minute-i][symbol].value
+        });
 
-        temp[symbol].valueundput += minutes[minute-i][symbol].value
-        temp[symbol].volmundput += minutes[minute-i][symbol].value
-        temp[symbol].countundput += minutes[minute-i][symbol].value
-      });
-
-      if (i === 5) {
-        await set([
-          `FLOWALLM5::`,
-          JSON.stringify(Object.keys(temp).map(symbol => {
-            return {
-              symbol,
-              ...temp[symbol]
-            }
-          }))
-        ])
+        if (i === 5) {
+          await set([
+            `FLOWALLM5::`,
+            JSON.stringify(Object.keys(temp).map(symbol => {
+              return {
+                symbol,
+                ...temp[symbol]
+              }
+            }))
+          ])
+        }
+        if (i === 10) {
+          await set([
+            `FLOWALLM10::`,
+            JSON.stringify(Object.keys(temp).map(symbol => {
+              return {
+                symbol,
+                ...temp[symbol]
+              }
+            }))
+          ])
+        }
+        if (i === 15) {
+          await set([
+            `FLOWALLM15::`,
+            JSON.stringify(Object.keys(temp).map(symbol => {
+              return {
+                symbol,
+                ...temp[symbol]
+              }
+            }))
+          ])
+        }
+        if (i === 30) {
+          await set([
+            `FLOWALLM30::`,
+            JSON.stringify(Object.keys(temp).map(symbol => {
+              return {
+                symbol,
+                ...temp[symbol]
+              }
+            }))
+          ])
+        }
+  
       }
-      if (i === 10) {
-        await set([
-          `FLOWALLM10::`,
-          JSON.stringify(Object.keys(temp).map(symbol => {
-            return {
-              symbol,
-              ...temp[symbol]
-            }
-          }))
-        ])
-      }
-      if (i === 15) {
-        await set([
-          `FLOWALLM15::`,
-          JSON.stringify(Object.keys(temp).map(symbol => {
-            return {
-              symbol,
-              ...temp[symbol]
-            }
-          }))
-        ])
-      }
-      if (i === 30) {
-        await set([
-          `FLOWALLM30::`,
-          JSON.stringify(Object.keys(temp).map(symbol => {
-            return {
-              symbol,
-              ...temp[symbol]
-            }
-          }))
-        ])
-      }
-
 
     }
     // Object.keys(total).forEach((item, i) => {
