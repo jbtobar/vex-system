@@ -6,6 +6,8 @@
 const redis = require('redis');
 const publisher = redis.createClient();
 
+const timenow = () => new Date().toLocaleString("en-US", {timeZone: "America/New_York"})
+
 const generateEmptyObject = () => {
   return {
 
@@ -149,7 +151,7 @@ const handleTAS = payload => {
 
 }
 
-setInterval(() => {
+setInterval(async () => {
   try {
     const startTime = new Date().getTime();
     const minute = Math.floor(startTime/60000)
@@ -261,7 +263,7 @@ setInterval(() => {
     // Object.keys(total).forEach((item, i) => {
     //
     // });
-    console.log(`Duration ${new Date().getTime() - startTime}`)
+    console.log(`Done: ${timenow()} - Duration ${new Date().getTime() - startTime}`)
 
   } catch (e) {
     console.error(e)
