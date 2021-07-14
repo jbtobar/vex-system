@@ -272,10 +272,10 @@ setInterval(() => {
 publisher.on('message', (channel, message) => {
   const payload = JSON.parse(message)
   switch (channel) {
-    case 'TAS':
+    case 'TASER':
       handleTAS(payload)
       break;
     default:
   }
 })
-publisher.subscribe('TAS')
+publisher.subscribe('TASER')
