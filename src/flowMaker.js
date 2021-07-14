@@ -4,6 +4,7 @@
  * @author Juan Bernardo Tobar <jbtobar.io@gmail.com>
  */
 const redis = require('redis');
+const { set } = require('../redis')
 const publisher = redis.createClient();
 
 const timenow = () => new Date().toLocaleString("en-US", {timeZone: "America/New_York"})
