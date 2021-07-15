@@ -27,11 +27,20 @@ const yesterday5PM = () => Math.floor(new Date().getTime()/8.64e7)*8.64e7+ 1000*
 //   Math.floor(new Date().getTime()/8.64e7)*8.64e7+ 1000*60*60*4
 // ).toLocaleString("en-US", {timeZone: "America/New_York"})
 
+let timeId = 0;
+(async () => {
+  timeId = Number(await get('LAST_FUT')) + 1
+  console.log('firsttime',{timeId})
+})
+
 
 const subCommand = async () => {
+
+
   console.log(`\n`)
   console.log(`---------------------------------------------------------------`)
   console.log(`subbing TASFUT ${timenow()}`)
+  console.log({timeId})
   const optioncodes = (
     await query({
       text: `SELECT optioncode from futchainx;`,
@@ -41,8 +50,7 @@ const subCommand = async () => {
   console.log(optioncodes.length,optioncodes[0])
 
   // let timeId = yesterday5PM()
-  let timeId = Number(await get('LAST_FUT')) + 1
-  console.log({timeId})
+
   // let lastTrade = Number((await query(`SELECT MAX(time) from tasc_fut;`)).rows[0].max)
   // console.log({lastTrade})
   // if (lastTrade > timeId) {
