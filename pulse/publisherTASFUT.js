@@ -29,8 +29,11 @@ const yesterday5PM = () => Math.floor(new Date().getTime()/8.64e7)*8.64e7+ 1000*
 
 let timeId = 0;
 (async () => {
-  timeId = Number(await get('LAST_FUT')) + 1
+  const lastFut = await get('LAST_FUT')
+  console.log(lastFut)
+  timeId =  + 1
   console.log('firsttime',{timeId})
+  process.exit()
 })();
 
 
