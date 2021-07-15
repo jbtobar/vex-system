@@ -66,6 +66,7 @@ const subCommand = async () => {
     const symbolLoad = optioncodes.splice(0,2500)
     symbolLoad.forEach((item, i) => {
       subbed[item] = true
+      client_redis.hmset(item,{pub:new Date().getTime()})
     });
 
     client_redis.publish('cometTASFUT',JSON.stringify({"addTimeSeries":{
