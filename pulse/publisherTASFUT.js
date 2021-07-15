@@ -5,7 +5,7 @@
  */
 const redis = require('redis');
 const client_redis = redis.createClient();
-const { query } = require('./db');
+const { query } = require('../db');
 
 function wait(milliseconds) {
   return new Promise(resolve => setTimeout(resolve, milliseconds));
