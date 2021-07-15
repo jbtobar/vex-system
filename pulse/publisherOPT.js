@@ -19,7 +19,7 @@ const subCommand = async () => {
   const timeStart = new Date().getTime();
   console.log(`subbing ${timenow()}`)
   const codes = (
-    await queryInt({
+    await query({
       text: `SELECT symbol from ipf_opt;`,
       rowMode: 'array',
     })
@@ -43,7 +43,7 @@ const subCommand = async () => {
   }
 
   codes = (
-    await queryInt({
+    await query({
       text: `SELECT distinct symbol from ipf_opt;`,
       rowMode: 'array',
     })
