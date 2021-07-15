@@ -31,7 +31,7 @@ let timeId = 0;
 (async () => {
   timeId = Number(await get('LAST_FUT')) + 1
   console.log('firsttime',{timeId})
-})
+})();
 
 
 const subCommand = async () => {
