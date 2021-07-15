@@ -43,6 +43,7 @@ const subCommand = async () => {
   console.log(`\n`)
   console.log(`---------------------------------------------------------------`)
   console.log(`subbing TASFUT ${timenow()}`)
+  const timeStart = new Date().getTime();
   console.log({timeId})
   const optioncodes = (
     await query({
