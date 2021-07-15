@@ -16,7 +16,7 @@ const subbed = {}
 
 const get = (args) => {
   return new Promise((resolve, reject) => {
-    client.get(args,(err,res) => {
+    client_redis.get(args,(err,res) => {
       if (err) reject(err)
       else resolve(res)
     })
