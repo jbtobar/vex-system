@@ -22,6 +22,8 @@ const yesterday5PM = () => Math.floor(new Date().getTime()/8.64e7)*8.64e7+ 1000*
 
 
 const subCommand = async () => {
+  console.log(`\n`)
+  console.log(`---------------------------------------------------------------`)
   console.log(`subbing TASFUT ${timenow()}`)
   const optioncodes = (
     await query({
@@ -52,7 +54,9 @@ const subCommand = async () => {
     await wait(500);
     // process.exit()
   }
-  console.log('done')
+  console.log(`done - Duration: ${new Date().getTime() - timeStart}`)
+  console.log(`---------------------------------------------------------------`)
+  console.log(`\n`)
 }
 
 subCommand()
