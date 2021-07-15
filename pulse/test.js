@@ -3,7 +3,7 @@
  * jbtobar.io@gmail.com
  * @author Juan Bernardo Tobar <jbtobar.io@gmail.com>
  */
-const client_redis = redis.createClient();
+const { runBatchMini } = require('../redis')
 const { query } = require('../db');
 
 
@@ -12,6 +12,6 @@ const { query } = require('../db');
       await query(`SELECT symbol as optioncode,underlying,strike,expiration,mmy from ipf_opt;`)
     ).rows
   const startTime = new Date().getTime()
-  const batch = runBatchMini(codes.map(d => d.optioncode),['dayVolume'])
+  const batch = await runBatchMini(codes.map(d => d.optioncode),['dayVolume'])
   console.log(`Duration: ${new Date().getTime() - startTime}`)
 })();
