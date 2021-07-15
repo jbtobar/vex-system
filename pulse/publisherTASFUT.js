@@ -31,9 +31,9 @@ let timeId = 0;
 (async () => {
   const lastFut = await get('LAST_FUT')
   console.log(lastFut)
-  timeId =  + 1
+  timeId = Number(lastFut) + 1
   console.log('firsttime',{timeId})
-  process.exit()
+  // process.exit()
 })();
 
 
