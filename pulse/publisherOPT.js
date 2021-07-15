@@ -32,7 +32,7 @@ const subCommand = async () => {
       subbed[item] = true
     });
 
-    client_redis.publish('CometPub',JSON.stringify({"add":{
+    client_redis.publish('cometOPT',JSON.stringify({"add":{
       "Greeks": symbolLoad,
       "Quote": symbolLoad,
       "Trade": symbolLoad,
