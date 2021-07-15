@@ -26,28 +26,28 @@ const subCommand = async () => {
   let codes = (
     await query(`SELECT symbol as optioncode,underlying,strike,expiration,mmy from ipf_opt;`)
   ).rows.filter(d => !subbed[d.optioncode])
-  console.log(codes.length,codes[0])
+  console.log('line - 29',codes.length,codes[0])
 
-  while (codes.length > 0) {
-    const symbolLoad = codes.splice(0,2000)
-
-    symbolLoad.forEach((item, i) => {
-      subbed[item.optioncode] = true
-      client_redis.hmset(item.optioncode,item)
-    });
-
-    client_redis.publish('cometOPT',JSON.stringify({"add":{
-      "Greeks": symbolLoad.map(d => d.optioncode),
-      "Quote": symbolLoad.map(d => d.optioncode),
-      "Trade": symbolLoad.map(d => d.optioncode),
-      "Summary": symbolLoad.map(d => d.optioncode),
-    }}))
-    await wait(500);
-    // process.exit()
-  }
+  // while (codes.length > 0) {
+  //   const symbolLoad = codes.splice(0,2000)
+  //
+  //   symbolLoad.forEach((item, i) => {
+  //     subbed[item.optioncode] = true
+  //     client_redis.hmset(item.optioncode,item)
+  //   });
+  //
+  //   client_redis.publish('cometOPT',JSON.stringify({"add":{
+  //     "Greeks": symbolLoad.map(d => d.optioncode),
+  //     "Quote": symbolLoad.map(d => d.optioncode),
+  //     "Trade": symbolLoad.map(d => d.optioncode),
+  //     "Summary": symbolLoad.map(d => d.optioncode),
+  //   }}))
+  //   await wait(500);
+  //   // process.exit()
+  // }
 
   codes = [...new Set(codes.map(d => d.underlying))].filter(d => !subbed[d])
-  console.log(codes.length,codes[0])
+  console.log('line50',codes.length,codes[0])
 
 
   while (codes.length > 0) {
@@ -102,8 +102,8 @@ const subCommand = async () => {
   // }
   // console.log(futures,futs)
   codes = [...new Set([
-    ...(await queryInt(`select * from futuresdir`)).rows.map(d => ({name:d.name,symbol:d.dxsymbol})).map(d => d.symbol),
-    ...(await queryInt(`select * from futdirx;`)).rows.map(d => ({
+    ...(await query(`select * from futuresdir`)).rows.map(d => ({name:d.name,symbol:d.dxsymbol})).map(d => d.symbol),
+    ...(await query(`select * from futdirx;`)).rows.map(d => ({
       name:d.symbol,
       symbol:d.symbol.slice(0, d.symbol.length-1) + "2" + d.symbol.slice(d.symbol.length-1)+':'+d.dxcode
     })).map(d => d.symbol)
