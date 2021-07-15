@@ -163,7 +163,7 @@ setInterval(async () => {
       }
     })
     await set([
-      `FLO::ALL::`,
+      `FLOWALL::`,
       JSON.stringify(FullTable)
     ])
 
@@ -216,7 +216,7 @@ setInterval(async () => {
 
         if (i === 5) {
           await set([
-            `FLO::M5::`,
+            `FLO::M5::F`,
             JSON.stringify(Object.keys(temp).map(symbol => {
               return {
                 symbol,
@@ -227,7 +227,7 @@ setInterval(async () => {
         }
         if (i === 10) {
           await set([
-            `FLO::M10::`,
+            `FLO::M10::F`,
             JSON.stringify(Object.keys(temp).map(symbol => {
               return {
                 symbol,
@@ -238,7 +238,7 @@ setInterval(async () => {
         }
         if (i === 15) {
           await set([
-            `FLO::M15::`,
+            `FLO::M15::F`,
             JSON.stringify(Object.keys(temp).map(symbol => {
               return {
                 symbol,
@@ -249,7 +249,7 @@ setInterval(async () => {
         }
         if (i === 30) {
           await set([
-            `FLO::M30::`,
+            `FLO::M30::F`,
             JSON.stringify(Object.keys(temp).map(symbol => {
               return {
                 symbol,
@@ -261,7 +261,7 @@ setInterval(async () => {
 
         if (i === 60) {
           await set([
-            `FLO::H1::`,
+            `FLO::H1::F`,
             JSON.stringify(Object.keys(temp).map(symbol => {
               return {
                 symbol,
@@ -288,10 +288,10 @@ setInterval(async () => {
 publisher.on('message', (channel, message) => {
   const payload = JSON.parse(message)
   switch (channel) {
-    case 'TASER':
+    case 'TASERFUT':
       handleTAS(payload)
       break;
     default:
   }
 })
-publisher.subscribe('TASER')
+publisher.subscribe('TASERFUT')

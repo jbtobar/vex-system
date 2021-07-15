@@ -6,6 +6,7 @@
 const schedule = require('node-schedule');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
+const { query } = require('../db')
 
 const timenow = () => new Date().toLocaleString("en-US", {timeZone: "America/New_York"})
 
@@ -17,6 +18,10 @@ async function theManager() {
   try {
 
     console.log(`Starting theManager - ${timenow()}`)
+
+
+    await query(`INSERT INTO tasc_hist (SELECT * FROM tasc);`)
+    await query(`TRUNCATE TABLE tasc;`)
 
 
     await exec('pm2 restart tokenRefresh')
