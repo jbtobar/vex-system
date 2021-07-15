@@ -16,7 +16,8 @@ const subbed = {}
 const subbbedUND = {}
 
 const subCommand = async () => {
-
+  console.log(`\n`)
+  console.log(`---------------------------------------------------------------`)
   const timeStart = new Date().getTime();
   console.log(`subbing ${timenow()}`)
 
@@ -27,6 +28,8 @@ const subCommand = async () => {
     await query(`SELECT symbol as optioncode,underlying,strike,expiration,mmy from ipf_opt;`)
   ).rows.filter(d => !subbed[d.optioncode])
   console.log('line - 29',codes.length,codes[0])
+
+  let underlyings = [...new Set(codes.map(d => d.underlying))].filter(d => !subbed[d])
 
   while (codes.length > 0) {
     const symbolLoad = codes.splice(0,2000)
@@ -45,8 +48,9 @@ const subCommand = async () => {
     await wait(500);
     // process.exit()
   }
+  codes = [...underlyings]
+  underlyings = null
 
-  codes = [...new Set(codes.map(d => d.underlying))].filter(d => !subbed[d])
   console.log('line50',codes.length,codes[0])
 
 
@@ -128,6 +132,8 @@ const subCommand = async () => {
 
 
   console.log(`done - Duration: ${new Date().getTime() - timeStart}`)
+  console.log(`---------------------------------------------------------------`)
+  console.log(`\n`)
 }
 
 subCommand()
