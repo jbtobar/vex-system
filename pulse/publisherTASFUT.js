@@ -23,6 +23,7 @@ const get = (args) => {
   });
 }
 const yesterday5PM = () => Math.floor(new Date().getTime()/8.64e7)*8.64e7+ 1000*60*60*4
+const today5pm = () => Math.floor(new Date().getTime()/8.64e7)*8.64e7+1000*60*60*22
 // new Date(
 //   Math.floor(new Date().getTime()/8.64e7)*8.64e7+ 1000*60*60*4
 // ).toLocaleString("en-US", {timeZone: "America/New_York"})
@@ -31,7 +32,7 @@ let timeId = 0;
 (async () => {
   const lastFut = await get('LAST_FUT')
   console.log(lastFut)
-  timeId = Number(lastFut) + 1
+  timeId = today5pm()+1000
   console.log('firsttime',{timeId})
   // process.exit()
 })();
