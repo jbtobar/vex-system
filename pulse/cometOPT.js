@@ -4,7 +4,7 @@
  * @author Juan Bernardo Tobar <jbtobar.io@gmail.com>
  */
 const redis = require('redis');
-const connectedComet = require('./comet');
+const connectedComet = require('../comet');
 const { SUBSCRIPTION_CHANNEL, DATA_CHANNEL } = require('./comet/constants')
 
 const client_redis = redis.createClient();
