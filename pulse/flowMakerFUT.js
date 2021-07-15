@@ -163,7 +163,7 @@ setInterval(async () => {
       }
     })
     await set([
-      `FLOWALL::`,
+      `FLO::ALL::F`,
       JSON.stringify(FullTable)
     ])
 
