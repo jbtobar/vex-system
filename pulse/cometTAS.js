@@ -50,13 +50,13 @@ pool.connect(async function (err, client, done) {
     const handeTimeSeriesChannel = async msg => {
       try {
         // console.log(msg)
-        client_redis.set('cometTASFUT',new Date().getTime())
+        client_redis.set('cometTAS',new Date().getTime())
         messageNum+=1;
         const [payloadType,payload] = msg.data
          if (payload.length > 0) {
            if (payloadType === 'TimeAndSale' || payloadType[0] === 'TimeAndSale') {
              // console.log('istands')
-             const stream = client.query(copyFrom("COPY tasc_fut FROM STDIN WITH CSV DELIMITER ',' QUOTE '\"'"))
+             const stream = client.query(copyFrom("COPY tasc FROM STDIN WITH CSV DELIMITER ',' QUOTE '\"'"))
              const readable = new Stream.Readable()
              readable._read = () => {}
              while (payload.length > 0) {
@@ -90,7 +90,7 @@ pool.connect(async function (err, client, done) {
                  singleLoad[20],
                  ...context
                ])
-               client_redis.publish('TASERFUT',json)
+               client_redis.publish('TASER',json)
                readable.push(json.substring(1, json.length-1)+'\n')
              }
              readable.push(null)
@@ -130,7 +130,7 @@ pool.connect(async function (err, client, done) {
         default:
       }
     })
-    publisher.subscribe('cometTASFUT')
+    publisher.subscribe('cometTAS')
 
 
 
@@ -139,7 +139,7 @@ pool.connect(async function (err, client, done) {
 
 
     setInterval(() => {
-      console.log('cometTASFUT',{messageNum,okNum,time:timenow()})
+      console.log('cometTAS',{messageNum,okNum,time:timenow()})
     },1000*30)
   } catch (e) {
     console.error(e)
