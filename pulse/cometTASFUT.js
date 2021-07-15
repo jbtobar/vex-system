@@ -90,6 +90,7 @@ pool.connect(async function (err, client, done) {
                  singleLoad[20],
                  ...context
                ])
+               client_redis.set('LAST_FUT',singleLoad[3])
                client_redis.publish('TASERFUT',json)
                readable.push(json.substring(1, json.length-1)+'\n')
              }
