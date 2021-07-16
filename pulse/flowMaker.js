@@ -4,7 +4,7 @@
  * @author Juan Bernardo Tobar <jbtobar.io@gmail.com>
  */
 const redis = require('redis');
-const { set } = require('../redis')
+const { set, runBatchMini } = require('../redis')
 const publisher = redis.createClient();
 
 const timenow = () => new Date().toLocaleString("en-US", {timeZone: "America/New_York"})
@@ -229,14 +229,42 @@ const handleTAS = payload => {
 
 }
 
+const getUnderlyingValues = async (totalKeys) => {
+  try {
+    const vals = await runBatchMini(totalKeys,['dayVolume','price','change','callVolume','putVolume','volatility','frontVolatility','backVolatility'],true)
+    let obj = {}
+    vals.forEach((item, i) => {
+      obj[item[0]] = {
+        dayVolume:Number(item[1]),
+        price:Number(item[2]),
+        change:Number(item[3]),
+        callVolume:Number(item[4]),
+        putVolume:Number(item[5]),
+        volatility:Number(item[6]),
+        frontVolatility:Number(item[7]),
+        backVolatility:Number(item[8]),
+      }
+    });
+    return obj
+  } catch (e) {
+    console.error('getUnderlyingValues',e)
+    return {}
+  }
+}
+
 setInterval(async () => {
   try {
     const startTime = new Date().getTime();
     const minute = Math.floor(startTime/60000)
-    const FullTable = Object.keys(totals).map(symbol => {
+    const totalKeys = Object.keys(totals)
+    const underlyingValues = await getUnderlyingValues(totalKeys)
+    console.log(`underlyingValues Duration ${new Date().getTime() - startTime}`)
+
+    const FullTable = totalKeys.map(symbol => {
       return {
         symbol,
-        ...totals[symbol]
+        ...totals[symbol],
+        ...underlyingValues[symbol]
       }
     })
     await set([
@@ -303,7 +331,8 @@ setInterval(async () => {
             JSON.stringify(Object.keys(temp).map(symbol => {
               return {
                 symbol,
-                ...temp[symbol]
+                ...temp[symbol],
+                ...underlyingValues[symbol]
               }
             }))
           ])
@@ -314,7 +343,8 @@ setInterval(async () => {
             JSON.stringify(Object.keys(temp).map(symbol => {
               return {
                 symbol,
-                ...temp[symbol]
+                ...temp[symbol],
+                ...underlyingValues[symbol]
               }
             }))
           ])
@@ -325,7 +355,8 @@ setInterval(async () => {
             JSON.stringify(Object.keys(temp).map(symbol => {
               return {
                 symbol,
-                ...temp[symbol]
+                ...temp[symbol],
+                ...underlyingValues[symbol]
               }
             }))
           ])
@@ -336,7 +367,8 @@ setInterval(async () => {
             JSON.stringify(Object.keys(temp).map(symbol => {
               return {
                 symbol,
-                ...temp[symbol]
+                ...temp[symbol],
+                ...underlyingValues[symbol]
               }
             }))
           ])
@@ -348,7 +380,8 @@ setInterval(async () => {
             JSON.stringify(Object.keys(temp).map(symbol => {
               return {
                 symbol,
-                ...temp[symbol]
+                ...temp[symbol],
+                ...underlyingValues[symbol]
               }
             }))
           ])
