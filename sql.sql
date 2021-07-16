@@ -49,6 +49,10 @@ CREATE TABLE tasc (
   volatility real,
   rootSymbol varchar(10),
   expirydate varchar(10),
+  delta real,
+  gamma real,
+  vega real,
+  theta real,
   dayid smallint GENERATED ALWAYS AS (time/86400000) STORED,
   flag char(1) GENERATED ALWAYS AS (substring(eventSymbol FROM '(?<=\d)[A-Z]{1}(?=\d)')) STORED
 );

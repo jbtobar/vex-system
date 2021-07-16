@@ -27,7 +27,7 @@ const subCommand = async () => {
   let codes = (
     await query(`SELECT symbol as optioncode,underlying,strike,expiration,mmy from ipf_opt;`)
   ).rows.filter(d => !subbed[d.optioncode])
-  console.log('line - 29',codes.length,codes[0])
+  console.log('line29',codes.length,codes[0])
 
   let underlyings = [...new Set(codes.map(d => d.underlying))].filter(d => !subbed[d])
 
@@ -64,6 +64,7 @@ const subCommand = async () => {
       "Quote": symbolLoad,
       "Trade": symbolLoad,
       "Summary": symbolLoad,
+      "Underlying": symbolLoad,
     }}))
     await wait(500);
     // process.exit()
@@ -125,6 +126,7 @@ const subCommand = async () => {
       "Quote": symbolLoad,
       "Trade": symbolLoad,
       "Summary": symbolLoad,
+      "Underlying": symbolLoad,
     }}))
     await wait(500);
     // process.exit()

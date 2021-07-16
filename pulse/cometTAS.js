@@ -23,7 +23,7 @@ const fixNum = (val) => isNaN(val) ? 0 : Number(val);
 const contextForContract = (ctc) => {
   return new Promise(function(resolve, reject) {
     // console.log({ctc});
-    client_redis.hmget([ctc,'underlying','volatility','mmy'],(err,res) => {
+    client_redis.hmget([ctc,'underlying','volatility','mmy','delta','gamma','vega','theta'],(err,res) => {
       // console.log({res});
       if (err) console.error(err)
       if (res[0]) {
@@ -34,7 +34,11 @@ const contextForContract = (ctc) => {
             fixNum(r[0]),
             fixNum(res[1]),
             res[0],
-            fixNum(res[2])
+            fixNum(res[2]),
+            fixNum(res[3]),
+            fixNum(res[4]),
+            fixNum(res[5]),
+            fixNum(res[6])
           ])
         })
       } else {
@@ -42,7 +46,11 @@ const contextForContract = (ctc) => {
           fixNum(0),
           fixNum(res[1]),
           res[0],
-          fixNum(res[2])
+          fixNum(res[2]),
+          fixNum(res[3]),
+          fixNum(res[4]),
+          fixNum(res[5]),
+          fixNum(res[6])
         ])
       }
 
@@ -71,7 +79,7 @@ pool.connect(async function (err, client, done) {
          if (payload.length > 0) {
            if (payloadType === 'TimeAndSale' || payloadType[0] === 'TimeAndSale') {
              // console.log('istands')
-             const stream = client.query(copyFrom("COPY tasc_fut FROM STDIN WITH CSV DELIMITER ',' QUOTE '\"'"))
+             const stream = client.query(copyFrom("COPY tasc FROM STDIN WITH CSV DELIMITER ',' QUOTE '\"'"))
              const readable = new Stream.Readable()
              readable._read = () => {}
              while (payload.length > 0) {
@@ -138,8 +146,8 @@ pool.connect(async function (err, client, done) {
           comet.publish(SUBSCRIPTION_CHANNEL,payload,ack => {
             if (!ack.successful) {
               console.log('sub fail',ack)
-              processReceived(payload)
             } else {
+              processReceived(payload)
               okNum+=1
             }
           })
