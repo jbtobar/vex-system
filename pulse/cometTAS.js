@@ -26,16 +26,26 @@ const contextForContract = (ctc) => {
     client_redis.hmget([ctc,'underlying','volatility','mmy'],(err,res) => {
       // console.log({res});
       if (err) console.error(err)
-      client_redis.hmget([res[0],'price'],(e,r) => {
-        // console.log({r});
-        if (e) console.error(e)
+      if (res[0]) {
+        client_redis.hmget([res[0],'price'],(e,r) => {
+          // console.log({r});
+          if (e) console.error(e)
+          resolve([
+            fixNum(r[0]),
+            fixNum(res[1]),
+            res[0],
+            fixNum(res[2])
+          ])
+        })
+      } else {
         resolve([
-          fixNum(r[0]),
+          fixNum(0),
           fixNum(res[1]),
           res[0],
           fixNum(res[2])
         ])
-      })
+      }
+
     })
   });;
 }
@@ -43,6 +53,11 @@ const contextForContract = (ctc) => {
 let messageNum = 0
 let okNum = 0
 
+const processReceived = (payload) => {
+  payload.addTimeSeries.TimeAndSale.forEach((item, i) => {
+    client_redis.hmset(item.eventSymbol,{pubok:new Date().getTime()})
+  });
+}
 
 
 pool.connect(async function (err, client, done) {
@@ -56,7 +71,7 @@ pool.connect(async function (err, client, done) {
          if (payload.length > 0) {
            if (payloadType === 'TimeAndSale' || payloadType[0] === 'TimeAndSale') {
              // console.log('istands')
-             const stream = client.query(copyFrom("COPY tasc FROM STDIN WITH CSV DELIMITER ',' QUOTE '\"'"))
+             const stream = client.query(copyFrom("COPY tasc_fut FROM STDIN WITH CSV DELIMITER ',' QUOTE '\"'"))
              const readable = new Stream.Readable()
              readable._read = () => {}
              while (payload.length > 0) {
@@ -90,6 +105,7 @@ pool.connect(async function (err, client, done) {
                  singleLoad[20],
                  ...context
                ])
+               client_redis.set('LAST_TAS',singleLoad[3])
                client_redis.publish('TASER',json)
                readable.push(json.substring(1, json.length-1)+'\n')
              }
@@ -118,10 +134,11 @@ pool.connect(async function (err, client, done) {
       // console.log(message)
       // console.log(payload)
       switch (channel) {
-        case 'cometTASFUT':
+        case 'cometTAS':
           comet.publish(SUBSCRIPTION_CHANNEL,payload,ack => {
             if (!ack.successful) {
               console.log('sub fail',ack)
+              processReceived(payload)
             } else {
               okNum+=1
             }
