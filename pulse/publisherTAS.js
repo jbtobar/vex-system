@@ -46,7 +46,7 @@ const subCommand = async () => {
   const timeStart = new Date().getTime();
   console.log(`subbing TAS ${timenow()}`)
   const optioncodes = (
-    await queryInt({
+    await query({
       text: `SELECT symbol from ipf_opt;`,
       rowMode: 'array',
     })
