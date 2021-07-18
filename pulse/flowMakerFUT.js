@@ -405,7 +405,7 @@ const flowMaker = async () => {
     console.error(e)
   }
 }
-
+flowMaker()
 
 publisher.on('message', (channel, message) => {
   const payload = JSON.parse(message)
