@@ -23,7 +23,7 @@ const fixNum = (val) => isNaN(val) ? 0 : Number(val);
 const contextForContract = (ctc) => {
   return new Promise(function(resolve, reject) {
     // console.log({ctc});
-    client_redis.hmget([ctc,'underlying','volatility','mmy','delta'],(err,res) => {
+    client_redis.hmget([ctc,'underlying','volatility','mmy','delta','gamma','vega','theta'],(err,res) => {
       // console.log({res});
       if (err) console.error(err)
       if (res[0]) {
@@ -35,7 +35,10 @@ const contextForContract = (ctc) => {
             fixNum(res[1]),
             res[0],
             fixNum(res[2]),
-            fixNum(res[3])
+            fixNum(res[3]),
+            fixNum(res[4]),
+            fixNum(res[5]),
+            fixNum(res[6])
           ])
         })
       } else {
@@ -44,7 +47,10 @@ const contextForContract = (ctc) => {
           fixNum(res[1]),
           res[0],
           fixNum(res[2]),
-          fixNum(res[3])
+          fixNum(res[3]),
+          fixNum(res[4]),
+          fixNum(res[5]),
+          fixNum(res[6])
         ])
       }
 
@@ -67,7 +73,7 @@ pool.connect(async function (err, client, done) {
     const handeTimeSeriesChannel = async msg => {
       try {
         // console.log(msg)
-        client_redis.set('cometTASFUT',new Date().getTime())
+        client_redis.set('cometTAS',new Date().getTime())
         messageNum+=1;
         const [payloadType,payload] = msg.data
          if (payload.length > 0) {
