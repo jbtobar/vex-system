@@ -59,6 +59,42 @@ CREATE TABLE tasc (
 
 GRANT ALL PRIVILEGES ON TABLE tasc TO convex3;
 
+CREATE TABLE tasc_fut (
+  eventSymbol varchar,
+  -- eventTime bigint,
+  -- eventFlags int,
+  index bigint,
+  time bigint,
+  -- timeNanoPart int,
+  sequence int,
+  exchangeCode char(1),
+  price real,
+  size int,
+  bidPrice real,
+  askPrice real,
+  exchangeSaleConditions varchar,
+  tradeThroughExempt char(1),
+  aggressorSide varchar,
+  spreadLeg boolean,
+  extendedTradingHours boolean,
+  validTick boolean,
+  type varchar,
+  buyer varchar,
+  seller varchar,
+  spot real,
+  volatility real,
+  rootSymbol varchar,
+  expirydate varchar(10),
+  delta real,
+  gamma real,
+  vega real,
+  theta real,
+  dayid smallint GENERATED ALWAYS AS (time/86400000) STORED,
+  flag char(1) GENERATED ALWAYS AS (substring(eventSymbol FROM '(?<=\d)[A-Z]{1}(?=\d)')) STORED
+);
+
+GRANT ALL PRIVILEGES ON TABLE tasc_fut TO convex3;
+
 
 CREATE TABLE tasc_fut (
   eventSymbol varchar,
