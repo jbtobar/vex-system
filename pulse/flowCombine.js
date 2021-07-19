@@ -12,7 +12,7 @@ const timenow = () => new Date().toLocaleString("en-US", {timeZone: "America/New
 const flowCombiner = async () => {
   try {
     const startTime = new Date().getTime();
-    const duration = new Date().getTime() - startTime
+
 
     const cats = [
       `FLO::ALL::`,
@@ -34,7 +34,7 @@ const flowCombiner = async () => {
       ])
     }
 
-
+    const duration = new Date().getTime() - startTime
     console.log(`Done: ${timenow()} - Duration flowCombiner ${duration}`)
     if (duration < 1000) {
       setTimeout(() => {
