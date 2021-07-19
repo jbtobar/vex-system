@@ -7,7 +7,7 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
 (async () => {
-  await exec(`node test.js`)
+  await exec(`node pulse/test.js`)
 })();
 // const futuresMarketOpen = async () => {
 //   `pm2 start`
