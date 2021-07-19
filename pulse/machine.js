@@ -32,7 +32,7 @@ function runScript(scriptPath, callback) {
 }
 
 // Now we can run a script and invoke a callback when complete, e.g.
-runScript('./test.js', function (err) {
+runScript('pulse/test.js', function (err) {
     if (err) throw err;
     console.log('finished running some-script.js');
 });
