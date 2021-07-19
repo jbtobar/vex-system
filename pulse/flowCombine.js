@@ -22,25 +22,42 @@ const flowCombiner = async () => {
       `FLO::M30::`,
       `FLO::H1::`
     ]
+    let batch = client.batch();
     for (var i = 0; i < cats.length; i++) {
-      const stockList = await get(cats[i])
-      const futList = await get(`${cats[i]}F`)
-      await set([
-        `${cats[i]}C`,
-        JSON.stringify([
-          ...stockList,
-          ...futList
-        ])
-      ])
-    }
 
-    const duration = new Date().getTime() - startTime
-    console.log(`Done: ${timenow()} - Duration flowCombiner ${duration}`)
-    if (duration < 1000) {
-      setTimeout(() => {
-        flowCombiner()
-      },1000 - duration)
-    } else flowCombiner()
+      batch.get(cats[i])
+      batch.get(`${cats[i]}F`)
+
+    }
+    batch.exec((err, resp)=> {
+
+      batch = client.batch();
+      for (var i = 0; i < cats.length; i++) {
+        batch.set([
+          `${cats[i]}C`,
+          JSON.stringify([
+            ...JSON.parse(resp[(i*2)]),
+            ...JSON.parse(resp[(i*2)+1]),
+          ])
+        ])
+      }
+      batch.exec((err, resp)=> {
+        if (err) console.error(err)
+        const duration = new Date().getTime() - startTime
+        console.log(`Done: ${timenow()} - Duration flowCombiner ${duration}`)
+        if (duration < 1000) {
+          setTimeout(() => {
+            flowCombiner()
+          },1000 - duration)
+        } else flowCombiner()
+      });
+
+    });
+
+
+
+
+
 
   } catch (e) {
     console.error(e)
