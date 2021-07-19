@@ -407,11 +407,22 @@ const flowMaker = async () => {
 }
 flowMaker()
 
+const handleRootTAS = (payload) => {
+  try {
+    const [symbol,code] = payload[0].split(':')
+    payload[0] = `${symbol.slice(0,-3)}:${code}`
+    handleTAS(payload)
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 publisher.on('message', (channel, message) => {
   const payload = JSON.parse(message)
   switch (channel) {
     case 'TASERFUT':
       handleTAS(payload)
+      handleRootTAS([...payload])
       break;
     default:
   }
