@@ -4,7 +4,7 @@
  * @author Juan Bernardo Tobar <jbtobar.io@gmail.com>
  */
 const redis = require('redis');
-const { set, runBatchMini } = require('../redis')
+const { set, runBatchMini, client } = require('../redis')
 const publisher = redis.createClient();
 
 const timenow = () => new Date().toLocaleString("en-US", {timeZone: "America/New_York"})
@@ -267,7 +267,8 @@ const flowMaker = async () => {
         ...underlyingValues[symbol]
       }
     })
-    await set([
+    const batch = client.batch();
+    batch.set([
       `FLO::ALL::`,
       JSON.stringify(FullTable)
     ])
@@ -326,7 +327,7 @@ const flowMaker = async () => {
         });
 
         if (i === 5) {
-          await set([
+          batch.set([
             `FLO::M5::`,
             JSON.stringify(Object.keys(temp).map(symbol => {
               return {
@@ -338,7 +339,7 @@ const flowMaker = async () => {
           ])
         }
         if (i === 10) {
-          await set([
+          batch.set([
             `FLO::M10::`,
             JSON.stringify(Object.keys(temp).map(symbol => {
               return {
@@ -350,7 +351,7 @@ const flowMaker = async () => {
           ])
         }
         if (i === 15) {
-          await set([
+          batch.set([
             `FLO::M15::`,
             JSON.stringify(Object.keys(temp).map(symbol => {
               return {
@@ -362,7 +363,7 @@ const flowMaker = async () => {
           ])
         }
         if (i === 30) {
-          await set([
+          batch.set([
             `FLO::M30::`,
             JSON.stringify(Object.keys(temp).map(symbol => {
               return {
@@ -375,7 +376,7 @@ const flowMaker = async () => {
         }
 
         if (i === 60) {
-          await set([
+          batch.set([
             `FLO::H1::`,
             JSON.stringify(Object.keys(temp).map(symbol => {
               return {
@@ -390,16 +391,21 @@ const flowMaker = async () => {
       }
 
     }
+    batch.exec((err, resp) => {
+      if (err) console.error(err)
+
+      const duration = new Date().getTime() - startTime
+      console.log(`Done: ${timenow()} - Duration flowMaker ${duration}`)
+      if (duration < 1000) {
+        setTimeout(() => {
+          flowMaker()
+        },1000 - duration)
+      } else flowMaker()
+    })
     // Object.keys(total).forEach((item, i) => {
     //
     // });
-    const duration = new Date().getTime() - startTime
-    console.log(`Done: ${timenow()} - Duration flowMaker ${duration}`)
-    if (duration < 1000) {
-      setTimeout(() => {
-        flowMaker()
-      },1000 - duration)
-    } else flowMaker()
+
   } catch (e) {
     console.error(e)
   }
