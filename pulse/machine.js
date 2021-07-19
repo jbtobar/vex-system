@@ -3,8 +3,8 @@
  * jbtobar.io@gmail.com
  * @author Juan Bernardo Tobar <jbtobar.io@gmail.com>
  */
-// const util = require('util');
-// const exec = util.promisify(require('child_process').exec);
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 const childProcess = require('child_process');
 
 const run = (scriptPath) => {
@@ -48,7 +48,7 @@ const run = (scriptPath) => {
 
 
 (async () => {
-  const m = await run(`pulse/test.js`)
+  const m = await exec(`node pulse/test.js`)
   console.log(m)
 })();
 // const futuresMarketOpen = async () => {
