@@ -3,7 +3,7 @@
  * jbtobar.io@gmail.com
  * @author Juan Bernardo Tobar <jbtobar.io@gmail.com>
  */
-const run = require('../utils/childrun')
+const run = require('../utils/childrun');
 
 (async () => {
   const m = await run(`pulse/test.js`)
