@@ -46,7 +46,7 @@ let timeId = 0;
 (async () => {
   const lastFut = await get('LAST_FUT')
   console.log(lastFut)
-  timeId = today510pm()
+  timeId = today500pm()
   // timeId = today300pm()
   console.log('firsttime',{timeId})
   // process.exit()
