@@ -252,7 +252,7 @@ const getUnderlyingValues = async (totalKeys) => {
   }
 }
 
-setInterval(async () => {
+const flowMaker = async () => {
   try {
     const startTime = new Date().getTime();
     const minute = Math.floor(startTime/60000)
@@ -393,12 +393,18 @@ setInterval(async () => {
     // Object.keys(total).forEach((item, i) => {
     //
     // });
-    console.log(`Done: ${timenow()} - Duration ${new Date().getTime() - startTime}`)
-
+    const duration = new Date().getTime() - startTime
+    console.log(`Done: ${timenow()} - Duration flowMaker ${duration}`)
+    if (duration < 1000) {
+      setTimeout(() => {
+        flowMaker()
+      },1000 - duration)
+    } else flowMaker()
   } catch (e) {
     console.error(e)
   }
-},1000)
+}
+flowMaker()
 
 
 publisher.on('message', (channel, message) => {
