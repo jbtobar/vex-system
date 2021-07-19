@@ -35,7 +35,7 @@ const get = (args) => {
 }
 const yesterday5PM = () => Math.floor(new Date().getTime()/8.64e7)*8.64e7+ 1000*60*60*4
 // const today545pm = () => Math.floor(new Date().getTime()/8.64e7)*8.64e7+(1000*60*60*22+1000*60*45)
-const today510pm = () => Math.floor(new Date().getTime()/8.64e7)*8.64e7+(1000*60*60*22+1000*60*10)
+const today510pm = () => Math.floor(new Date().getTime()/8.64e7)*8.64e7+(1000*60*60*21+1000*60*10)
 // const today300pm = () => Math.floor(new Date().getTime()/8.64e7)*8.64e7+(1000*60*60*20)
 // new Date(
 //   Math.floor(new Date().getTime()/8.64e7)*8.64e7+ 1000*60*60*4
