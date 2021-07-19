@@ -10,6 +10,7 @@ const { query } = require('../db');
 (async () => {
   await set(['johnytable','table'])
   console.log('ista johny table')
+  process.exit();
   // const codes = (
   //     await query(`SELECT symbol as optioncode,underlying,strike,expiration,mmy from ipf_opt;`)
   //   ).rows
