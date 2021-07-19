@@ -409,8 +409,8 @@ flowMaker()
 
 const handleRootTAS = (payload) => {
   try {
-    const [symbol,code] = payload[0].split(':')
-    payload[0] = `${symbol.slice(0,-3)}:${code}`
+    const [symbol,code] = payload[20].split(':')
+    payload[20] = `${symbol.slice(0,-3)}:${code}`
     handleTAS(payload)
   } catch (e) {
     console.error(e);
