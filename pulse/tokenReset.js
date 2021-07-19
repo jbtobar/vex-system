@@ -11,5 +11,7 @@ const { set } = require('../redis');
   if (!TastyWorks) return reject('No TastyWorks');
   let streamerD = await TastyWorks.streamer()
   await set(['token',streamerD.token])
+  await set(['tokenResetTS',new Date().getTime()])
   console.log(streamerD.token)
+  process.exit();
 })();

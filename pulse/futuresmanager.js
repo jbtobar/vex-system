@@ -7,4 +7,5 @@ const GET_ALL_FUTURES_AND_OPTIONS = require('../src/GET_ALL_FUTURES_AND_OPTIONS'
 
 (async () => {
   await GET_ALL_FUTURES_AND_OPTIONS()
+  process.exit()
 })()

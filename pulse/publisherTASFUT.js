@@ -11,6 +11,17 @@ function wait(milliseconds) {
   return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
 const timenow = () => new Date().toLocaleString("en-US", {timeZone: "America/New_York"})
+console.log('-----------------------------------------------------------------')
+console.log('-----------------------------------------------------------------')
+console.log('-----------------------------------------------------------------')
+console.log('-----------------------------------------------------------------')
+console.log('-----------------------------------------------------------------')
+console.log(`publisherTASFUT - start - ${timenow()}`)
+console.log('-----------------------------------------------------------------')
+console.log('-----------------------------------------------------------------')
+console.log('-----------------------------------------------------------------')
+console.log('-----------------------------------------------------------------')
+console.log('-----------------------------------------------------------------')
 
 const subbed = {}
 
@@ -23,8 +34,8 @@ const get = (args) => {
   });
 }
 const yesterday5PM = () => Math.floor(new Date().getTime()/8.64e7)*8.64e7+ 1000*60*60*4
-// const today545pm = () => Math.floor(new Date().getTime()/8.64e7)*8.64e7+(1000*60*60*22+1000*60*45)
-const today300pm = () => Math.floor(new Date().getTime()/8.64e7)*8.64e7+(1000*60*60*20)
+const today545pm = () => Math.floor(new Date().getTime()/8.64e7)*8.64e7+(1000*60*60*22+1000*60*45)
+// const today300pm = () => Math.floor(new Date().getTime()/8.64e7)*8.64e7+(1000*60*60*20)
 // new Date(
 //   Math.floor(new Date().getTime()/8.64e7)*8.64e7+ 1000*60*60*4
 // ).toLocaleString("en-US", {timeZone: "America/New_York"})
@@ -33,8 +44,8 @@ let timeId = 0;
 (async () => {
   const lastFut = await get('LAST_FUT')
   console.log(lastFut)
-  // timeId = today545pm()
-  timeId = today300pm()
+  timeId = today545pm()
+  // timeId = today300pm()
   console.log('firsttime',{timeId})
   // process.exit()
 })();

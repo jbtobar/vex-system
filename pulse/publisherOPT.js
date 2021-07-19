@@ -11,6 +11,17 @@ function wait(milliseconds) {
   return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
 const timenow = () => new Date().toLocaleString("en-US", {timeZone: "America/New_York"})
+console.log('-----------------------------------------------------------------')
+console.log('-----------------------------------------------------------------')
+console.log('-----------------------------------------------------------------')
+console.log('-----------------------------------------------------------------')
+console.log('-----------------------------------------------------------------')
+console.log(`publisherOPT - start - ${timenow()}`)
+console.log('-----------------------------------------------------------------')
+console.log('-----------------------------------------------------------------')
+console.log('-----------------------------------------------------------------')
+console.log('-----------------------------------------------------------------')
+console.log('-----------------------------------------------------------------')
 
 const subbed = {}
 const subbbedUND = {}
@@ -24,56 +35,14 @@ const subCommand = async () => {
 
 
 
+
+
+
+
   let codes = (
-    await query(`SELECT symbol as optioncode,underlying,strike,expiration,mmy from ipf_opt;`)
-  ).rows.filter(d => !subbed[d.optioncode])
-  console.log('line29',codes.length,codes[0])
-
-  let underlyings = [...new Set(codes.map(d => d.underlying))].filter(d => !subbed[d])
-
-  while (codes.length > 0) {
-    const symbolLoad = codes.splice(0,2000)
-
-    symbolLoad.forEach((item, i) => {
-      subbed[item.optioncode] = true
-      client_redis.hmset(item.optioncode,item)
-    });
-
-    client_redis.publish('cometOPT',JSON.stringify({"add":{
-      "Greeks": symbolLoad.map(d => d.optioncode),
-      "Quote": symbolLoad.map(d => d.optioncode),
-      "Trade": symbolLoad.map(d => d.optioncode),
-      "Summary": symbolLoad.map(d => d.optioncode),
-    }}))
-    await wait(500);
-    // process.exit()
-  }
-  codes = [...underlyings]
-  underlyings = null
-
-  console.log('line50',codes.length,codes[0])
-
-
-  while (codes.length > 0) {
-    const symbolLoad = codes.splice(0,2000)
-    symbolLoad.forEach((item, i) => {
-      subbed[item] = true
-    });
-
-    client_redis.publish('cometOPT',JSON.stringify({"add":{
-      "Quote": symbolLoad,
-      "Trade": symbolLoad,
-      "Summary": symbolLoad,
-      "Underlying": symbolLoad,
-    }}))
-    await wait(500);
-    // process.exit()
-  }
-
-  codes = (
     await query(`select optioncode,underlying_symbol,rootsymbol as underlying,replace(expirydate,'-','') as mmy,strike,expirydate as expiration from futchainx;`)
   ).rows.filter(d => !subbed[d.optioncode])
-  console.log('line71',codes.length,codes[0])
+  console.log('step1',codes.length,codes[0])
   while (codes.length > 0) {
     const symbolLoad = codes.splice(0,2000)
     symbolLoad.forEach((item, i) => {
@@ -113,7 +82,7 @@ const subCommand = async () => {
       symbol:d.symbol.slice(0, d.symbol.length-1) + "2" + d.symbol.slice(d.symbol.length-1)+':'+d.dxcode
     })).map(d => d.symbol)
   ])].filter(d => !subbed[d])
-  console.log('line111',codes.length,codes[0])
+  console.log('step2',codes.length,codes[0])
 
   while (codes.length > 0) {
     const symbolLoad = codes.splice(0,4000)
@@ -131,6 +100,74 @@ const subCommand = async () => {
     await wait(500);
     // process.exit()
   }
+
+
+
+
+
+
+  // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+
+
+
+
+  codes = (
+    await query(`SELECT symbol as optioncode,underlying,strike,expiration,mmy from ipf_opt;`)
+  ).rows.filter(d => !subbed[d.optioncode])
+  console.log('step3',codes.length,codes[0])
+
+  let underlyings = [...new Set(codes.map(d => d.underlying))].filter(d => !subbed[d])
+
+  while (codes.length > 0) {
+    const symbolLoad = codes.splice(0,2000)
+
+    symbolLoad.forEach((item, i) => {
+      subbed[item.optioncode] = true
+      client_redis.hmset(item.optioncode,item)
+    });
+
+    client_redis.publish('cometOPT',JSON.stringify({"add":{
+      "Greeks": symbolLoad.map(d => d.optioncode),
+      "Quote": symbolLoad.map(d => d.optioncode),
+      "Trade": symbolLoad.map(d => d.optioncode),
+      "Summary": symbolLoad.map(d => d.optioncode),
+    }}))
+    await wait(500);
+    // process.exit()
+  }
+  codes = [...underlyings]
+  underlyings = null
+
+  console.log('step4s',codes.length,codes[0])
+
+  // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+
+
+  while (codes.length > 0) {
+    const symbolLoad = codes.splice(0,2000)
+    symbolLoad.forEach((item, i) => {
+      subbed[item] = true
+    });
+
+    client_redis.publish('cometOPT',JSON.stringify({"add":{
+      "Quote": symbolLoad,
+      "Trade": symbolLoad,
+      "Summary": symbolLoad,
+      "Underlying": symbolLoad,
+    }}))
+    await wait(500);
+    // process.exit()
+  }
+
+  // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+
+
 
 
   console.log(`done - Duration: ${new Date().getTime() - timeStart}`)
