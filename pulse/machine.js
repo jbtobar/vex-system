@@ -3,6 +3,7 @@
  * jbtobar.io@gmail.com
  * @author Juan Bernardo Tobar <jbtobar.io@gmail.com>
  */
+const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
 (async () => {
