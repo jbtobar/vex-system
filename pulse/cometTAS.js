@@ -95,7 +95,7 @@ pool.connect(async function (err, client, done) {
              readable._read = () => {}
              while (payload.length > 0) {
                const singleLoad = payload.splice(0,CHANNEL_DATA_LENGTHS['TimeAndSale'])
-               // console.log(singleLoad)
+               console.log(singleLoad)
                if (singleLoad[13] === '\x00') singleLoad[13] =  0
                if (singleLoad[7] === '\u0000') singleLoad[7] =  0
 
