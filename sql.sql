@@ -123,7 +123,7 @@ CREATE TABLE tasc_fut (
   gamma real,
   vega real,
   theta real,
-  dayid smallint GENERATED ALWAYS AS (time/86400000) STORED,
+  dayid smallint GENERATED ALWAYS AS ((time+10800000)/86400000) STORED,
   flag char(1) GENERATED ALWAYS AS (substring(eventSymbol FROM '(?<=\d)[A-Z]{1}(?=\d)')) STORED
 );
 
@@ -156,7 +156,7 @@ GRANT ALL PRIVILEGES ON TABLE tasc_fut TO convex3;
 --   volatility real,
 --   rootSymbol varchar,
 --   expirydate varchar(10),
---   dayid smallint GENERATED ALWAYS AS ((time+14400000)/86400000) STORED,
+--   dayid smallint GENERATED ALWAYS AS ((time+10800000)/86400000) STORED,
 --   flag char(1) GENERATED ALWAYS AS (substring(eventSymbol FROM '(?<=\d)[A-Z]{1}(?=\d)')) STORED
 -- );
 CREATE TABLE tasc_fut_hist (
