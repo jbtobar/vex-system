@@ -12,7 +12,9 @@ const enhanceMetrics = (data) => {
   return data.map((d) => {
     try {
       d.callbuysharecall = Number((d.valuebuycall/d.valuecall).toFixed(2))
+      if (isNaN(d.callbuysharecall)) d.callbuysharecall = 0
       d.callbuysharetotal = Number((d.valuebuycall/d.value).toFixed(2))
+      if (isNaN(d.callbuysharetotal)) d.callbuysharetotal = 0
       d.flowratio = Number(((d.valuebuycall+d.valuesellput)/(d.valuebuyput+d.valuesellcall)).toFixed(2))
       d.changepct = Number(((d.change/(d.price-d.change))*100).toFixed(2))
 
