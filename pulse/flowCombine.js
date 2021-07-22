@@ -16,8 +16,8 @@ const timenow = () => new Date().toLocaleString("en-US", {timeZone: "America/New
 const enhanceMetrics = (data) => {
   return data.map((d) => {
     try {
-      d.callbuysharecall = onlyNum(Number((d.valuebuycall/d.valuecall).toFixed(2)))
-      d.callbuysharetotal = onlyNum(Number((d.valuebuycall/d.value).toFixed(2)))
+      d.callbuysharecall = onlyNum(Number(((d.valuebuycall/d.valuecall)*100).toFixed(2)))
+      d.callbuysharetotal = onlyNum(Number(((d.valuebuycall/d.value)*100).toFixed(2)))
       if (isNaN(d.callbuysharetotal)) d.callbuysharetotal = 0
       d.flowratio = onlyNum(Number(((d.valuebuycall+d.valuesellput)/(d.valuebuyput+d.valuesellcall)).toFixed(2)))
       d.changepct = onlyNum(Number(((d.change/(d.price-d.change))*100).toFixed(2)))
