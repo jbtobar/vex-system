@@ -13,7 +13,7 @@ const enhanceMetrics = (data) => {
     try {
       d.callbuyshare = Number((d.valuebuycall/d.valuecall).toFixed(2))
       d.flowratio = Number(((d.valuebuycall+d.valuesellput)/(d.valuebuyput+d.valuesellcall)).toFixed(2))
-      d.changepct = d.change/(d.price-d.change)
+      d.changepct = Number(((d.change/(d.price-d.change))*100).toFixed(2))
       return d
     } catch (e) {
       return d
