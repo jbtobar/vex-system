@@ -5,23 +5,27 @@
  */
 const { set,get, runBatchMini, client } = require('../redis')
 
+const onlyNum = (val) => {
+  if (val === null) return 0
+  if (isNaN(val)) return 0
+  return val
+}
 
 const timenow = () => new Date().toLocaleString("en-US", {timeZone: "America/New_York"})
 
 const enhanceMetrics = (data) => {
   return data.map((d) => {
     try {
-      d.callbuysharecall = Number((d.valuebuycall/d.valuecall).toFixed(2))
-      if (isNaN(d.callbuysharecall)) d.callbuysharecall = 0
-      d.callbuysharetotal = Number((d.valuebuycall/d.value).toFixed(2))
+      d.callbuysharecall = onlyNum(Number((d.valuebuycall/d.valuecall).toFixed(2)))
+      d.callbuysharetotal = onlyNum(Number((d.valuebuycall/d.value).toFixed(2)))
       if (isNaN(d.callbuysharetotal)) d.callbuysharetotal = 0
-      d.flowratio = Number(((d.valuebuycall+d.valuesellput)/(d.valuebuyput+d.valuesellcall)).toFixed(2))
-      d.changepct = Number(((d.change/(d.price-d.change))*100).toFixed(2))
+      d.flowratio = onlyNum(Number(((d.valuebuycall+d.valuesellput)/(d.valuebuyput+d.valuesellcall)).toFixed(2)))
+      d.changepct = onlyNum(Number(((d.change/(d.price-d.change))*100).toFixed(2)))
 
-      d.sumdelta = Number((d.sumdelta*100).toFixed(2))
-      d.sumgamma = Number((d.sumgamma*100).toFixed(2))
-      d.sumvega = Number((d.sumvega*100).toFixed(2))
-      d.sumtheta = Number((d.sumtheta*100).toFixed(2))
+      d.sumdelta = onlyNum(Number((d.sumdelta*100).toFixed(2)))
+      d.sumgamma = onlyNum(Number((d.sumgamma*100).toFixed(2)))
+      d.sumvega = onlyNum(Number((d.sumvega*100).toFixed(2)))
+      d.sumtheta = onlyNum(Number((d.sumtheta*100).toFixed(2)))
 
       return d;
     } catch (e) {
