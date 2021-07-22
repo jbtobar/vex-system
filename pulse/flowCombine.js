@@ -8,6 +8,19 @@ const { set,get, runBatchMini, client } = require('../redis')
 
 const timenow = () => new Date().toLocaleString("en-US", {timeZone: "America/New_York"})
 
+const enhanceMetrics = (data) => {
+  return data.map((d) => {
+    try {
+      d.callbuyshare = Number((d.valuebuycall/d.valuecall).toFixed(2))
+      d.flowratio = Number(((d.valuebuycall+d.valuesellput)/(d.valuebuyput+d.valuesellcall)).toFixed(2))
+      d.changepct = d.change/(d.price-d.change)
+      return d
+    } catch (e) {
+      return d
+    }
+  })
+}
+
 
 const flowCombiner = async () => {
   try {
@@ -36,8 +49,8 @@ const flowCombiner = async () => {
         batch.set([
           `${cats[i]}C`,
           JSON.stringify([
-            ...JSON.parse(resp[(i*2)]),
-            ...JSON.parse(resp[(i*2)+1]),
+            ...enhanceMetrics(JSON.parse(resp[(i*2)])),
+            ...enhanceMetrics(JSON.parse(resp[(i*2)+1])),
           ])
         ])
       }

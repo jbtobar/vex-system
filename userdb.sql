@@ -15,3 +15,4 @@ CREATE TABLE users (
     username character varying(30),
     date_created timestamp DEFAULT NOW()
 );
+ALTER TABLE users add column ftp json;
