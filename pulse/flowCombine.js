@@ -14,9 +14,15 @@ const enhanceMetrics = (data) => {
       d.callbuyshare = Number((d.valuebuycall/d.valuecall).toFixed(2))
       d.flowratio = Number(((d.valuebuycall+d.valuesellput)/(d.valuebuyput+d.valuesellcall)).toFixed(2))
       d.changepct = Number(((d.change/(d.price-d.change))*100).toFixed(2))
-      return d
+
+      d.sumdelta = Number((d.sumdelta*100).toFixed(2))
+      d.sumgamma = Number((d.sumgamma*100).toFixed(2))
+      d.sumvega = Number((d.sumvega*100).toFixed(2))
+      d.sumtheta = Number((d.sumtheta*100).toFixed(2))
+
+      return d;
     } catch (e) {
-      return d
+      return d;
     }
   })
 }
