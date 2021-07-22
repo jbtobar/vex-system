@@ -74,10 +74,10 @@ const handleDataChannel = msg => {
 
 
     client_redis.hmset(item[0],payloadObj)
-    // client_redis.publish(
-    //   name,
-    //   JSON.stringify({eventSymbol:item[0],...payloadObj})
-    // )
+    client_redis.publish(
+      name,
+      JSON.stringify({eventSymbol:item[0],...payloadObj})
+    )
 
   }
 
