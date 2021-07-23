@@ -26,10 +26,10 @@ const storeChains = (codes) => {
       for (var j = 0; j < expirations.length; j++) {
         batch.sadd(`${underlyings[i]}_EXP`,expirations[j])
         const expirycontracts = contracts.filter(d => d.expiration === expirations[j])
-        const strikes = [...new Set(expirycontracts.map(d => d.strike))].sort((a,b) => a - b)
+        const strikes = [...new Set(expirycontracts.map(d => d.strike))].sort((a,b) => Number(a) - Number(b))
         strikes.forEach((item) => {
           batch.sadd(`${underlyings[i]}_${expirations[j]}`,item)
-          const strikecontracts = expirycontracts.filter(d => d.strike === item).map(d => d.optioncode)
+          const strikecontracts = expirycontracts.filter(d => d.strike === item).map(d => d.optioncode).sort()
           strikecontracts.forEach((stk) => {
             batch.sadd(`${underlyings[i]}_${expirations[j]}_${item}`,stk)
           });
