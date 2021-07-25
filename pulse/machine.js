@@ -81,9 +81,9 @@ const futuresMarketOpen = async () => {
 
 
 const marketCloseRule = new schedule.RecurrenceRule();
-marketCloseRule.dayOfWeek = [new schedule.Range(1, 4)];
+marketCloseRule.dayOfWeek = [new schedule.Range(1, 5)];
 marketCloseRule.hour = 17;
-marketCloseRule.minute = 0;
+marketCloseRule.minute = 15;
 marketCloseRule.tz = 'America/New_York';
 schedule.scheduleJob(marketCloseRule,marketClose)
 
