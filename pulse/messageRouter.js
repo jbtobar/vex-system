@@ -14,7 +14,7 @@ subber.on('message', (channel, message) => {
         break;
       default:
         // console.log(`${payload.eventSymbol}::${channel}`)
-        if (`${payload.eventSymbol}::${channel}` === 'SPY:Quote') console.log(`${payload.eventSymbol}::${channel}`)
+        if (payload.eventSymbol === 'SPY') console.log(`${payload.eventSymbol}::${channel}`)
         publisher.publish(`${payload.eventSymbol}::${channel}`,message)
     }
   } catch (e) {
