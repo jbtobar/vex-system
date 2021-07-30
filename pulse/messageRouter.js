@@ -13,7 +13,7 @@ subber.on('message', (channel, message) => {
         publisher.publish(`${payload[0]}::TAS`,message)
         break;
       default:
-        console.log(`${payload.eventSymbol}::${channel}`)
+        // console.log(`${payload.eventSymbol}::${channel}`)
         publisher.publish(`${payload.eventSymbol}::${channel}`,message)
     }
   } catch (e) {
