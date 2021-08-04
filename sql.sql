@@ -387,3 +387,10 @@ COPY futuresdir FROM stdin with DELIMITER '|';
 
 create table tasc_fut (like tasc);
 GRANT ALL PRIVILEGES ON TABLE tasc_fut TO convex3;
+
+
+
+create table opt_db as (SELECT symbol optioncode,underlying,strike,expiration,mmy from ipf_opt);
+GRANT ALL PRIVILEGES ON TABLE opt_db TO convex3;
+
+CREATE INDEX optioncode_ix ON opt_db(optioncode);
