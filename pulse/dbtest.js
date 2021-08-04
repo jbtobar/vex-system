@@ -8,6 +8,12 @@ const { query } = require('../db')
 const subber = redis.createClient();
 
 
+const fixNum = (val) => {
+  if (val === Infinity) return null;
+  if (val === -Infinity) return null;
+  if (isNaN(val)) return null;
+  return Number(val)
+}
 
 subber.on('message', (channel, message) => {
   try {
@@ -17,14 +23,14 @@ subber.on('message', (channel, message) => {
         case 'Greeks':
           query(
             `UPDATE opt_db set
-              eventTimeG = ${payload.eventTime},
-              gprice = ${payload.price},
-              volatility = ${payload.volatility},
-              delta = ${payload.delta},
-              gamma = ${payload.gamma},
-              theta = ${payload.theta},
-              rho = ${payload.rho},
-              vega = ${payload.vega}
+              eventTimeG = ${fixNum(payload.eventTime)},
+              gprice = ${fixNum(payload.price)},
+              volatility = ${fixNum(payload.volatility)},
+              delta = ${fixNum(payload.delta)},
+              gamma = ${fixNum(payload.gamma)},
+              theta = ${fixNum(payload.theta)},
+              rho = ${fixNum(payload.rho)},
+              vega = ${fixNum(payload.vega)}
               WHERE optioncode = '${payload.eventSymbol}'
             `
           )
@@ -32,15 +38,15 @@ subber.on('message', (channel, message) => {
         case 'Quote':
           query(
             `UPDATE opt_db set
-              eventTimeQ = ${payload.eventTime},
-              bidTime = ${payload.bidTime},
+              eventTimeQ = ${fixNum(payload.eventTime)},
+              bidTime = ${fixNum(payload.bidTime)},
               bidExchangeCode = '${payload.bidExchangeCode}',
-              bidPrice = ${payload.bidPrice},
-              bidSize = ${payload.bidSize},
-              askTime = ${payload.askTime},
+              bidPrice = ${fixNum(payload.bidPrice)},
+              bidSize = ${fixNum(payload.bidSize)},
+              askTime = ${fixNum(payload.askTime)},
               askExchangeCode = '${payload.askExchangeCode}',
-              askPrice = ${payload.askPrice},
-              askSize = ${payload.askSize}
+              askPrice = ${fixNum(payload.askPrice)},
+              askSize = ${fixNum(payload.askSize)}
               WHERE optioncode = '${payload.eventSymbol}'
             `
           )
@@ -48,13 +54,13 @@ subber.on('message', (channel, message) => {
         case 'Trade':
           query(
             `UPDATE opt_db set
-              eventTimeT = ${payload.eventTime},
-              price = ${payload.price},
-              change = ${payload.change},
-              size = ${payload.size},
-              dayVolume = ${payload.dayVolume},
-              dayTurnover = ${payload.dayTurnover},
-              tickDirection = ${payload.tickDirection},
+              eventTimeT = ${fixNum(payload.eventTime)},
+              price = ${fixNum(payload.price)},
+              change = ${fixNum(payload.change)},
+              size = ${fixNum(payload.size)},
+              dayVolume = ${fixNum(payload.dayVolume)},
+              dayTurnover = ${fixNum(payload.dayTurnover)},
+              tickDirection = ${fixNum(payload.tickDirection)},
               extendedTradingHours = ${payload.extendedTradingHours}
               WHERE optioncode = '${payload.eventSymbol}'
             `
@@ -63,18 +69,18 @@ subber.on('message', (channel, message) => {
         case 'Summary':
           query(
             `UPDATE opt_db set
-              eventTimeS = ${payload.eventTime},
-              dayId = ${payload.dayId},
-              dayOpenPrice = ${payload.dayOpenPrice},
-              dayHighPrice = ${payload.dayHighPrice},
-              dayLowPrice = ${payload.dayLowPrice},
-              dayClosePrice = ${payload.dayClosePrice},
+              eventTimeS = ${fixNum(payload.eventTime)},
+              dayId = ${fixNum(payload.dayId)},
+              dayOpenPrice = ${fixNum(payload.dayOpenPrice)},
+              dayHighPrice = ${fixNum(payload.dayHighPrice)},
+              dayLowPrice = ${fixNum(payload.dayLowPrice)},
+              dayClosePrice = ${fixNum(payload.dayClosePrice)},
               dayClosePriceType = '${payload.dayClosePriceType}',
-              prevDayId = ${payload.prevDayId},
-              prevDayClosePrice = ${payload.prevDayClosePrice},
+              prevDayId = ${fixNum(payload.prevDayId)},
+              prevDayClosePrice = ${fixNum(payload.prevDayClosePrice)},
               prevDayClosePriceType = '${payload.prevDayClosePriceType}',
-              prevDayVolume = ${payload.prevDayVolume},
-              openInterest = ${payload.openInterest}
+              prevDayVolume = ${fixNum(payload.prevDayVolume)},
+              openInterest = ${fixNum(payload.openInterest)}
               WHERE optioncode = '${payload.eventSymbol}'
             `
           )
