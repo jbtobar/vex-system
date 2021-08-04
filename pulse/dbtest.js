@@ -32,12 +32,20 @@ const printTime = (t) => {
   let timeStart = new Date().getTime()
   const codes = (
       await query({
-        text:`SELECT symbol as optioncode,underlying,strike,expiration,mmy from ipf_opt;`,
-        rowMode:'array'
+        // text:`SELECT symbol as optioncode,underlying,strike,expiration,mmy from ipf_opt;`,
+        text:`SELECT optioncode from ipf_opt;`,
+        // rowMode:'array'
       })
-    ).rows
+    ).rows.map(d => d.optioncode)
   console.log(`codes queried   - ${printTime(timeStart)}`)
   timeStart = new Date().getTime()
-  const values = await runBatchMini(codes,['dayVolume','delta','gamma','vega','theta'])
+  const values = await runBatchMini(codes,['dayVolume','delta','gamma','vega','theta','change','changePct','openInterest'])
   console.log(`values obtained - ${printTime(timeStart)}`)
+  // timeStart = new Date().getTime()
+  //
+  // await client.query('BEGIN')
+  // await client.query(`ALTER TABLE opt_db RENAME TO ipf_opt_old;`)
+  // await client.query(`ALTER TABLE ipf_opt_tmp RENAME TO ipf_opt;`)
+  // await client.query(`DROP TABLE ipf_opt_old;`)
+  // await client.query('COMMIT')
 })();
