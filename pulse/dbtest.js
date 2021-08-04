@@ -23,6 +23,10 @@ const queryInsert = async () => {
       await query(queryText)
       console.log( new Date().getTime()- timeStart)
       queryInsert()
+    } else {
+      setTimeout(() => {
+        queryInsert()
+      },1000)
     }
   } catch (e) {
     console.error(e)
@@ -47,7 +51,7 @@ subber.on('message', (channel, message) => {
   try {
     const payload = JSON.parse(message)
     if (payload.eventSymbol?.charAt(0) === '.') {
-      console.log(payload)
+      // console.log(payload)
       switch (channel) {
         case 'Greeks':
           queryAppend(
