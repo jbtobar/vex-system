@@ -33,11 +33,11 @@ const printTime = (t) => {
   const codes = (
       await query({
         // text:`SELECT symbol as optioncode,underlying,strike,expiration,mmy from ipf_opt;`,
-        text:`SELECT optioncode from ipf_opt;`,
+        text:`SELECT symbol from ipf_opt;`,
         // rowMode:'array'
       })
-    ).rows.map(d => d.optioncode)
-  console.log(`codes queried   - ${printTime(timeStart)}`)
+    ).rows.map(d => d.symbol)
+  console.log(`codes queried   - ${printTime(timeStart)} - ${codes[0]}`)
   timeStart = new Date().getTime()
   const values = await runBatchMini(codes,['dayVolume','delta','gamma','vega','theta','change','changePct','openInterest'])
   console.log(`values obtained - ${printTime(timeStart)}`)
