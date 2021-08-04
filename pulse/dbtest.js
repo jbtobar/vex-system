@@ -188,6 +188,7 @@ subber.subscribe('Quote')
 // ALTER TABLE opt_db add column prevDayClosePriceType varchar;
 // ALTER TABLE opt_db add column prevDayVolume bigint;
 // ALTER TABLE opt_db add column openInterest bigint;
+// ALTER TABLE opt_db add column rootsymbol varchar;
 
 // subber.subscribe('Underlying')
 // subber.subscribe('Series')

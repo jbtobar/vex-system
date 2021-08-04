@@ -395,4 +395,4 @@ GRANT ALL PRIVILEGES ON TABLE opt_db TO convex3;
 
 CREATE INDEX optioncode_ix ON opt_db(optioncode);
 
-insert into opt_db(optioncode,expirydate,strike,flag) (select optioncode,expirydate,strike,flag from futchainx)
+insert into opt_db(optioncode,expirydate,strike,flag,rootsymbol) ( select optioncode,expirydate,strike,flag,rootsymbol from futchainx)
