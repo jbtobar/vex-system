@@ -19,9 +19,11 @@ const queryInsert = async () => {
   try {
     if (queryText) {
       const timeStart  = new Date().getTime();
+      const queryTextToSend = queryText
       queryText = ''
-      await query(queryText)
-      console.log( new Date().getTime()- timeStart)
+      await query(queryTextToSend)
+
+      console.log( new Date().getTime()- timeStart,queryTextToSend)
       queryInsert()
     } else {
       setTimeout(() => {
