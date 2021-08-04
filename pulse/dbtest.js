@@ -8,6 +8,28 @@ const { query } = require('../db')
 const subber = redis.createClient();
 
 
+
+let queryText = ''
+
+const queryAppend = (q) => {
+  queryText+=`;${q}`
+}
+
+const queryInsert = async () => {
+  try {
+    if (queryText) {
+      const timeStart  = new Date().getTime();
+      queryText = ''
+      await query(queryText)
+      console.log( new Date().getTime()- timeStart)
+      queryInsert()
+    }
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+
 const fixNum = (val) => {
   if (val === Infinity) return null;
   if (val === -Infinity) return null;
@@ -27,7 +49,7 @@ subber.on('message', (channel, message) => {
     if (payload.eventSymbol?.charAt(0) === '.') {
       switch (channel) {
         case 'Greeks':
-          query(
+          queryAppend(
             `UPDATE opt_db set
               eventTimeG = ${fixNum(payload.eventTime)},
               theo = ${fixNum(payload.theo)},
@@ -39,20 +61,21 @@ subber.on('message', (channel, message) => {
               vega = ${fixNum(payload.vega)}
               WHERE optioncode = '${payload.eventSymbol}'
             `
-          ).catch(e => console.error(e,channel, message,`UPDATE opt_db set
-            eventTimeG = ${fixNum(payload.eventTime)},
-            gprice = ${fixNum(payload.price)},
-            volatility = ${fixNum(payload.volatility)},
-            delta = ${fixNum(payload.delta)},
-            gamma = ${fixNum(payload.gamma)},
-            theta = ${fixNum(payload.theta)},
-            rho = ${fixNum(payload.rho)},
-            vega = ${fixNum(payload.vega)}
-            WHERE optioncode = '${payload.eventSymbol}'
-          `))
+          )
+          // .catch(e => console.error(e,channel, message,`UPDATE opt_db set
+          //   eventTimeG = ${fixNum(payload.eventTime)},
+          //   gprice = ${fixNum(payload.price)},
+          //   volatility = ${fixNum(payload.volatility)},
+          //   delta = ${fixNum(payload.delta)},
+          //   gamma = ${fixNum(payload.gamma)},
+          //   theta = ${fixNum(payload.theta)},
+          //   rho = ${fixNum(payload.rho)},
+          //   vega = ${fixNum(payload.vega)}
+          //   WHERE optioncode = '${payload.eventSymbol}'
+          // `))
           break;
         case 'Quote':
-          query(
+          queryAppend(
             `UPDATE opt_db set
               eventTimeQ = ${fixNum(payload.eventTime)},
               bidTime = ${fixNum(payload.bidTime)},
@@ -65,21 +88,22 @@ subber.on('message', (channel, message) => {
               askSize = ${fixNum(payload.askSize)}
               WHERE optioncode = '${payload.eventSymbol}'
             `
-          ).catch(e => console.error(e,channel, message,`UPDATE opt_db set
-            eventTimeQ = ${fixNum(payload.eventTime)},
-            bidTime = ${fixNum(payload.bidTime)},
-            bidExchangeCode = '${payload.bidExchangeCode}',
-            bidPrice = ${fixNum(payload.bidPrice)},
-            bidSize = ${fixNum(payload.bidSize)},
-            askTime = ${fixNum(payload.askTime)},
-            askExchangeCode = '${payload.askExchangeCode}',
-            askPrice = ${fixNum(payload.askPrice)},
-            askSize = ${fixNum(payload.askSize)}
-            WHERE optioncode = '${payload.eventSymbol}'
-          `))
+          )
+          // .catch(e => console.error(e,channel, message,`UPDATE opt_db set
+          //   eventTimeQ = ${fixNum(payload.eventTime)},
+          //   bidTime = ${fixNum(payload.bidTime)},
+          //   bidExchangeCode = '${payload.bidExchangeCode}',
+          //   bidPrice = ${fixNum(payload.bidPrice)},
+          //   bidSize = ${fixNum(payload.bidSize)},
+          //   askTime = ${fixNum(payload.askTime)},
+          //   askExchangeCode = '${payload.askExchangeCode}',
+          //   askPrice = ${fixNum(payload.askPrice)},
+          //   askSize = ${fixNum(payload.askSize)}
+          //   WHERE optioncode = '${payload.eventSymbol}'
+          // `))
           break;
         case 'Trade':
-          query(
+          queryAppend(
             `UPDATE opt_db set
               eventTimeT = ${fixNum(payload.eventTime)},
               price = ${fixNum(payload.price)},
@@ -92,20 +116,21 @@ subber.on('message', (channel, message) => {
               changePct = ${fixNum(payload.changePct)}
               WHERE optioncode = '${payload.eventSymbol}'
             `
-          ).catch(e => console.error(e,channel, message,`UPDATE opt_db set
-            eventTimeT = ${fixNum(payload.eventTime)},
-            price = ${fixNum(payload.price)},
-            change = ${fixNum(payload.change)},
-            size = ${fixNum(payload.size)},
-            dayVolume = ${fixNum(payload.dayVolume)},
-            dayTurnover = ${fixNum(payload.dayTurnover)},
-            tickDirection = ${fixNum(payload.tickDirection)},
-            extendedTradingHours = ${payload.extendedTradingHours}
-            WHERE optioncode = '${payload.eventSymbol}'
-          `))
+          )
+          // .catch(e => console.error(e,channel, message,`UPDATE opt_db set
+          //   eventTimeT = ${fixNum(payload.eventTime)},
+          //   price = ${fixNum(payload.price)},
+          //   change = ${fixNum(payload.change)},
+          //   size = ${fixNum(payload.size)},
+          //   dayVolume = ${fixNum(payload.dayVolume)},
+          //   dayTurnover = ${fixNum(payload.dayTurnover)},
+          //   tickDirection = ${fixNum(payload.tickDirection)},
+          //   extendedTradingHours = ${payload.extendedTradingHours}
+          //   WHERE optioncode = '${payload.eventSymbol}'
+          // `))
           break;
         case 'Summary':
-          query(
+          queryAppend(
             `UPDATE opt_db set
               eventTimeS = ${fixNum(payload.eventTime)},
               dayId = ${fixNum(payload.dayId)},
@@ -121,21 +146,22 @@ subber.on('message', (channel, message) => {
               openInterest = ${fixNum(payload.openInterest)}
               WHERE optioncode = '${payload.eventSymbol}'
             `
-          ).catch(e => console.error(e,channel, message,`UPDATE opt_db set
-            eventTimeS = ${fixNum(payload.eventTime)},
-            dayId = ${fixNum(payload.dayId)},
-            dayOpenPrice = ${fixNum(payload.dayOpenPrice)},
-            dayHighPrice = ${fixNum(payload.dayHighPrice)},
-            dayLowPrice = ${fixNum(payload.dayLowPrice)},
-            dayClosePrice = ${fixNum(payload.dayClosePrice)},
-            dayClosePriceType = '${payload.dayClosePriceType}',
-            prevDayId = ${fixNum(payload.prevDayId)},
-            prevDayClosePrice = ${fixNum(payload.prevDayClosePrice)},
-            prevDayClosePriceType = '${payload.prevDayClosePriceType}',
-            prevDayVolume = ${fixNum(payload.prevDayVolume)},
-            openInterest = ${fixNum(payload.openInterest)}
-            WHERE optioncode = '${payload.eventSymbol}'
-          `))
+          )
+          // .catch(e => console.error(e,channel, message,`UPDATE opt_db set
+          //   eventTimeS = ${fixNum(payload.eventTime)},
+          //   dayId = ${fixNum(payload.dayId)},
+          //   dayOpenPrice = ${fixNum(payload.dayOpenPrice)},
+          //   dayHighPrice = ${fixNum(payload.dayHighPrice)},
+          //   dayLowPrice = ${fixNum(payload.dayLowPrice)},
+          //   dayClosePrice = ${fixNum(payload.dayClosePrice)},
+          //   dayClosePriceType = '${payload.dayClosePriceType}',
+          //   prevDayId = ${fixNum(payload.prevDayId)},
+          //   prevDayClosePrice = ${fixNum(payload.prevDayClosePrice)},
+          //   prevDayClosePriceType = '${payload.prevDayClosePriceType}',
+          //   prevDayVolume = ${fixNum(payload.prevDayVolume)},
+          //   openInterest = ${fixNum(payload.openInterest)}
+          //   WHERE optioncode = '${payload.eventSymbol}'
+          // `))
           break;
         default:
 
