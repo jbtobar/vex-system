@@ -390,7 +390,9 @@ GRANT ALL PRIVILEGES ON TABLE tasc_fut TO convex3;
 
 
 
-create table opt_db as (SELECT symbol optioncode,underlying,strike,expiration,mmy from ipf_opt);
+create table opt_db as (SELECT symbol as optioncode,expiration as expirydate,strike,(substring(symbol FROM '(?<=\d)[A-Z]{1}(?=\d)')) as flag from ipf_opt);
 GRANT ALL PRIVILEGES ON TABLE opt_db TO convex3;
 
 CREATE INDEX optioncode_ix ON opt_db(optioncode);
+
+insert into opt_db(optioncode,expirydate,strike,flag) (select optioncode,expirydate,strike,flag from futchainx)

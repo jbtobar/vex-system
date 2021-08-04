@@ -6,6 +6,7 @@
 const redis = require('redis');
 const { set, runBatchMini } = require('../redis')
 const publisher = redis.createClient();
+const client_redis = redis.createClient();
 
 const timenow = () => new Date().toLocaleString("en-US", {timeZone: "America/New_York"})
 console.log('-----------------------------------------------------------------')
@@ -165,18 +166,44 @@ const getBreakdown = (payload) => {
     Number(payload[22]), // delta
     Number(payload[23]), // gamma
     Number(payload[24]), // vega
-    Number(payload[25]), // theta
+    Number(payload[25]), // theta,
+    payload[0] // eventSymbol
   ]
 }
 
-
+const processedContracts = {}
+const handleTASOption = (eventSymbol,side,value,volm) => {
+  try {
+    switch (side) {
+      case 'buy':
+        client_redis.hincrbyfloat(eventSymbol,'valuebuy',value)
+        client_redis.hincrby(eventSymbol,'volmbuy',volm)
+        client_redis.hincrby(eventSymbol,'countbuy',1)
+        break;
+      case 'sell':
+        client_redis.hincrbyfloat(eventSymbol,'valuesell',value)
+        client_redis.hincrby(eventSymbol,'volmsell',volm)
+        client_redis.hincrby(eventSymbol,'countsell',1)
+        break;
+      default:
+        client_redis.hincrbyfloat(eventSymbol,'valueund',value)
+        client_redis.hincrby(eventSymbol,'volmund',volm)
+        client_redis.hincrby(eventSymbol,'countund',1)
+        break;
+    }
+  } catch(err) {
+    console.error(err)
+  }
+}
 
 const handleTAS = payload => {
-  const [rootsymbol,minute,flag,side,value,volm,delta,gamma,vega,theta] = getBreakdown(payload)
+  const [rootsymbol,minute,flag,side,value,volm,delta,gamma,vega,theta,eventSymbol] = getBreakdown(payload)
   const sumDelta = fixNum(volm*delta)
   const sumGamma = fixNum(volm*gamma)
   const sumVega = fixNum(volm*vega)
   const sumTheta = fixNum(volm*theta)
+
+  handleTASOption(eventSymbol,side,value,volm)
 
   if (!totals[rootsymbol]) totals[rootsymbol] = generateEmptyObject()
   if (!minutes[minute]) minutes[minute] = {}

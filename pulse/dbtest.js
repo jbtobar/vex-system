@@ -15,6 +15,12 @@ const fixNum = (val) => {
   return Number(val)
 }
 
+const cleanString = (val) => {
+  if (val.toString() === '\x00') return null;
+  return val
+}
+
+
 subber.on('message', (channel, message) => {
   try {
     const payload = JSON.parse(message)
@@ -50,11 +56,11 @@ subber.on('message', (channel, message) => {
             `UPDATE opt_db set
               eventTimeQ = ${fixNum(payload.eventTime)},
               bidTime = ${fixNum(payload.bidTime)},
-              bidExchangeCode = '${payload.bidExchangeCode}',
+              bidExchangeCode = '${cleanString(payload.bidExchangeCode)}',
               bidPrice = ${fixNum(payload.bidPrice)},
               bidSize = ${fixNum(payload.bidSize)},
               askTime = ${fixNum(payload.askTime)},
-              askExchangeCode = '${payload.askExchangeCode}',
+              askExchangeCode = '${cleanString(payload.askExchangeCode)}',
               askPrice = ${fixNum(payload.askPrice)},
               askSize = ${fixNum(payload.askSize)}
               WHERE optioncode = '${payload.eventSymbol}'
@@ -106,10 +112,10 @@ subber.on('message', (channel, message) => {
               dayHighPrice = ${fixNum(payload.dayHighPrice)},
               dayLowPrice = ${fixNum(payload.dayLowPrice)},
               dayClosePrice = ${fixNum(payload.dayClosePrice)},
-              dayClosePriceType = '${payload.dayClosePriceType}',
+              dayClosePriceType = '${cleanString(payload.dayClosePriceType)}',
               prevDayId = ${fixNum(payload.prevDayId)},
               prevDayClosePrice = ${fixNum(payload.prevDayClosePrice)},
-              prevDayClosePriceType = '${payload.prevDayClosePriceType}',
+              prevDayClosePriceType = '${cleanString(payload.prevDayClosePriceType)}',
               prevDayVolume = ${fixNum(payload.prevDayVolume)},
               openInterest = ${fixNum(payload.openInterest)}
               WHERE optioncode = '${payload.eventSymbol}'
@@ -144,7 +150,7 @@ subber.subscribe('Trade')
 subber.subscribe('Greeks')
 subber.subscribe('Summary')
 subber.subscribe('Quote')
-
+//
 // ALTER TABLE opt_db add column eventTimeG bigint;
 // ALTER TABLE opt_db add column gprice real;
 // ALTER TABLE opt_db add column volatility real;
