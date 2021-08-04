@@ -38,6 +38,6 @@ const printTime = (t) => {
     ).rows
   console.log(`codes queried   - ${printTime(timeStart)}`)
   timeStart = new Date().getTime()
-  const values = await runBatchMini(codes,['dayVolume'])
+  const values = await runBatchMini(codes,['dayVolume','delta','gamma','vega','theta'])
   console.log(`values obtained - ${printTime(timeStart)}`)
 })();
