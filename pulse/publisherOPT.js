@@ -123,11 +123,27 @@ const subCommand = async () => {
 
 
   codes = (
-    await query(`SELECT symbol as optioncode,underlying,strike,expiration,mmy from ipf_opt;`)
+    await query(`SELECT symbol as optioncode,underlying,strike,expiration,mmy,underlying,(substring(symbol FROM '(?<=\d)[A-Z]{1}(?=\d)')) as flag, from ipf_opt;`)
   ).rows.filter(d => !subbed[d.optioncode])
   console.log('step3',codes.length,codes[0])
 
   let underlyings = [...new Set(codes.map(d => d.underlying))].filter(d => !subbed[d])
+  const commitTimeStart = new Date().getTime()
+  if (codes.length > 0) {
+    await query('BEGIN')
+    for (var i = 0; i < codes.length; i++) {
+      await query(`INSERT INTO opt_db(optioncode,expirydate,strike,flag,rootsymbol) values($1,$2,$3,$4,$5)`,[
+        codes[i].optioncode,
+        codes[i].expiration,
+        codes[i].strike,
+        codes[i].flag,
+        codes[i].underlying
+      ])
+    }
+    await query('COMMIT')
+    // SELECT symbol as optioncode,expiration as expirydate,strike,(substring(symbol FROM '(?<=\d)[A-Z]{1}(?=\d)')) as flag from ipf_opt
+  }
+  console.log(`commit finised - ${new Date().getTime()-commitTimeStart}`)
 
   while (codes.length > 0) {
     const symbolLoad = codes.splice(0,2000)

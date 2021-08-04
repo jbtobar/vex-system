@@ -37,7 +37,7 @@ const optionsMarketOpen = async () => {
     console.log(`pm2 start flowMaker - ${timenow()}`)
 
     await wait(1000)
-
+    await query(`DELETE FROM opt_db where substring(optioncode,1,2) != './'`)
     await exec('pm2 start publisherTAS')
     console.log(`pm2 start publisherTAS - ${timenow()}`)
   } catch (e) {
