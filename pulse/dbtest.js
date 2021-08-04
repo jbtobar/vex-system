@@ -30,7 +30,7 @@ subber.on('message', (channel, message) => {
           query(
             `UPDATE opt_db set
               eventTimeG = ${fixNum(payload.eventTime)},
-              gprice = ${fixNum(payload.price)},
+              theo = ${fixNum(payload.theo)},
               volatility = ${fixNum(payload.volatility)},
               delta = ${fixNum(payload.delta)},
               gamma = ${fixNum(payload.gamma)},
@@ -88,7 +88,8 @@ subber.on('message', (channel, message) => {
               dayVolume = ${fixNum(payload.dayVolume)},
               dayTurnover = ${fixNum(payload.dayTurnover)},
               tickDirection = ${fixNum(payload.tickDirection)},
-              extendedTradingHours = ${payload.extendedTradingHours}
+              extendedTradingHours = ${payload.extendedTradingHours},
+              changePct = ${fixNum(payload.changePct)}
               WHERE optioncode = '${payload.eventSymbol}'
             `
           ).catch(e => console.error(e,channel, message,`UPDATE opt_db set
@@ -189,6 +190,8 @@ subber.subscribe('Quote')
 // ALTER TABLE opt_db add column prevDayVolume bigint;
 // ALTER TABLE opt_db add column openInterest bigint;
 // ALTER TABLE opt_db add column rootsymbol varchar;
+// ALTER TABLE opt_db add column changePct real;
+
 
 // subber.subscribe('Underlying')
 // subber.subscribe('Series')
