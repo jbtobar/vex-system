@@ -53,7 +53,7 @@ const futuresMarketOpen = async () => {
       console.log(`getting  GET_ALL_FUTURES_AND_OPTIONS - ${timenow()}`)
       await GET_ALL_FUTURES_AND_OPTIONS()
       console.log(`finished GET_ALL_FUTURES_AND_OPTIONS - ${timenow()}`)
-      await query(`DELETE FROM opt_db where substring(optioncode,1,2) === './'`)
+      await query(`DELETE FROM opt_db where substring(optioncode,1,2) = './'`)
       await query(`insert into opt_db(optioncode,expirydate,strike,flag,rootsymbol) ( select optioncode,expirydate,strike,flag,rootsymbol from futchainx)`)
       console.log(`pruned opt_db - ${timenow()}`)
 
