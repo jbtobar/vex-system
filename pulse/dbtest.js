@@ -25,7 +25,7 @@ subber.on('message', (channel, message) => {
               theta = ${payload.theta},
               rho = ${payload.rho},
               vega = ${payload.vega}
-              WHERE optioncode = ${payload.eventSymbol}
+              WHERE optioncode = '${payload.eventSymbol}'
             `
           )
           break;
@@ -34,14 +34,14 @@ subber.on('message', (channel, message) => {
             `UPDATE opt_db set
               eventTimeQ = ${payload.eventTime},
               bidTime = ${payload.bidTime},
-              bidExchangeCode = ${payload.bidExchangeCode},
+              bidExchangeCode = '${payload.bidExchangeCode}',
               bidPrice = ${payload.bidPrice},
               bidSize = ${payload.bidSize},
               askTime = ${payload.askTime},
-              askExchangeCode = ${payload.askExchangeCode},
+              askExchangeCode = '${payload.askExchangeCode}',
               askPrice = ${payload.askPrice},
               askSize = ${payload.askSize}
-              WHERE optioncode = ${payload.eventSymbol}
+              WHERE optioncode = '${payload.eventSymbol}'
             `
           )
           break;
@@ -56,7 +56,7 @@ subber.on('message', (channel, message) => {
               dayTurnover = ${payload.dayTurnover},
               tickDirection = ${payload.tickDirection},
               extendedTradingHours = ${payload.extendedTradingHours}
-              WHERE optioncode = ${payload.eventSymbol}
+              WHERE optioncode = '${payload.eventSymbol}'
             `
           )
           break;
@@ -69,13 +69,13 @@ subber.on('message', (channel, message) => {
               dayHighPrice = ${payload.dayHighPrice},
               dayLowPrice = ${payload.dayLowPrice},
               dayClosePrice = ${payload.dayClosePrice},
-              dayClosePriceType = ${payload.dayClosePriceType},
+              dayClosePriceType = '${payload.dayClosePriceType}',
               prevDayId = ${payload.prevDayId},
               prevDayClosePrice = ${payload.prevDayClosePrice},
-              prevDayClosePriceType = ${payload.prevDayClosePriceType},
+              prevDayClosePriceType = '${payload.prevDayClosePriceType}',
               prevDayVolume = ${payload.prevDayVolume},
               openInterest = ${payload.openInterest}
-              WHERE optioncode = ${payload.eventSymbol}
+              WHERE optioncode = '${payload.eventSymbol}'
             `
           )
           break;
