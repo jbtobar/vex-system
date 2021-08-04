@@ -29,6 +29,7 @@ const printTime = (t) => {
 }
 
 (async () => {
+  let timeStart = new Date().getTime()
   const codes = (
       await query({
         text:`SELECT symbol as optioncode,underlying,strike,expiration,mmy from ipf_opt;`,
@@ -36,6 +37,7 @@ const printTime = (t) => {
       })
     ).rows
   console.log(`codes queried   - ${printTime(timeStart)}`)
+  timeStart = new Date().getTime()
   const values = await runBatchMini(codes,['dayVolume'])
   console.log(`values obtained - ${printTime(timeStart)}`)
 })();
