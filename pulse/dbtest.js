@@ -52,6 +52,9 @@ subber.on('message', (channel, message) => {
     const payload = JSON.parse(message)
     if (payload.eventSymbol?.charAt(0) === '.') {
       // console.log(payload)
+      if (payload.eventSymbol === './EW1Q21P4385:XCME') {
+        console.log(payload)
+      }
       switch (channel) {
         case 'Greeks':
           queryAppend(
