@@ -33,7 +33,7 @@ subber.on('message', (channel, message) => {
               vega = ${fixNum(payload.vega)}
               WHERE optioncode = '${payload.eventSymbol}'
             `
-          ).catch(err => console.error(e,channel, message))
+          ).catch(e => console.error(e,channel, message))
           break;
         case 'Quote':
           query(
@@ -49,7 +49,7 @@ subber.on('message', (channel, message) => {
               askSize = ${fixNum(payload.askSize)}
               WHERE optioncode = '${payload.eventSymbol}'
             `
-          ).catch(err => console.error(e,channel, message))
+          ).catch(e => console.error(e,channel, message))
           break;
         case 'Trade':
           query(
@@ -64,7 +64,7 @@ subber.on('message', (channel, message) => {
               extendedTradingHours = ${payload.extendedTradingHours}
               WHERE optioncode = '${payload.eventSymbol}'
             `
-          ).catch(err => console.error(e,channel, message))
+          ).catch(e => console.error(e,channel, message))
           break;
         case 'Summary':
           query(
@@ -83,7 +83,7 @@ subber.on('message', (channel, message) => {
               openInterest = ${fixNum(payload.openInterest)}
               WHERE optioncode = '${payload.eventSymbol}'
             `
-          ).catch(err => console.error(e,channel, message))
+          ).catch(e => console.error(e,channel, message))
           break;
         default:
 
