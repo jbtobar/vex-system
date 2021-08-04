@@ -23,6 +23,7 @@ const storeChains = (codes) => {
     for (var i = 0; i < underlyings.length; i++) {
       const contracts = codes.filter(d => d.underlying === underlyings[i])
       const expirations = [...new Set(contracts.map(d => d.expiration))].sort((a,b) => new Date(a) - new Date(b))
+      batch.del(`${underlyings[i]}_EXP`)
       for (var j = 0; j < expirations.length; j++) {
         batch.sadd(`${underlyings[i]}_EXP`,expirations[j])
         const expirycontracts = contracts.filter(d => d.expiration === expirations[j])

@@ -49,6 +49,15 @@ const subCommand = async () => {
       subbed[item.optioncode] = true
       client_redis.hmset(item.optioncode,{
         ...item,
+        valuebuy:0,
+        volmbuy:0,
+        countbuy:0,
+        valuesell:0,
+        volmsell:0,
+        countsell:0,
+        valueund:0,
+        volmund:0,
+        countund:0,
         underlying:item.underlying_symbol.slice(0, item.underlying_symbol.length-1) + '2' + item.underlying_symbol.slice(item.underlying_symbol.length-1) +":"+item.optioncode.split(':')[1]
       })
     });
