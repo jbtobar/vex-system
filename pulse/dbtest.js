@@ -90,7 +90,7 @@ subber.on('message', (channel, message) => {
       }
     }
   } catch (e) {
-    console.error(e)
+    console.error(e,channel, message)
   }
 })
 subber.subscribe('TASER')
