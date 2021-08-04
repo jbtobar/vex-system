@@ -28,7 +28,7 @@ const queryInsert = async () => {
     console.error(e)
   }
 }
-
+queryInsert()
 
 const fixNum = (val) => {
   if (val === Infinity) return null;
@@ -47,6 +47,7 @@ subber.on('message', (channel, message) => {
   try {
     const payload = JSON.parse(message)
     if (payload.eventSymbol?.charAt(0) === '.') {
+      console.log(payload)
       switch (channel) {
         case 'Greeks':
           queryAppend(
