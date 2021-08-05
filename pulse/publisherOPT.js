@@ -123,7 +123,7 @@ const subCommand = async () => {
 
 
   codes = (
-    await query(`SELECT symbol as optioncode,underlying,strike,expiration,mmy,underlying,(substring(symbol FROM '(?<=\d)[A-Z]{1}(?=\d)')) as flag from ipf_opt;`)
+    await query(`SELECT symbol as optioncode,underlying,strike,expiration,mmy,underlying,(substring(symbol FROM '(?<=\\d)[A-Z]{1}(?=\\d)')) as flag from ipf_opt;`)
   ).rows.filter(d => !subbed[d.optioncode])
   console.log('step3',codes.length,codes[0])
 
