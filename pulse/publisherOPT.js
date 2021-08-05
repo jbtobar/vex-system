@@ -150,7 +150,11 @@ const subCommand = async () => {
 
     symbolLoad.forEach((item, i) => {
       subbed[item.optioncode] = true
-      client_redis.hmset(item.optioncode,item)
+      try {
+        client_redis.hmset(item.optioncode,item)
+      } catch (e) {
+        console.error(e,item)
+      }
     });
 
     client_redis.publish('cometOPT',JSON.stringify({"add":{
