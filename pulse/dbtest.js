@@ -14,7 +14,7 @@ const subber = redis.createClient();
 // const queryAppend = (q) => {
 //   queryText+=`;${q}`
 // }
-const contracts = {}
+let contracts = {}
 
 const queryInsert = async () => {
   try {
