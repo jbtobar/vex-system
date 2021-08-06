@@ -35,7 +35,7 @@ const queryInsert = async () => {
     // //     WHERE optioncode = '${payload.eventSymbol}'
     Object.keys(contractsCopy).forEach((k) => {
       queryText+=`UPDATE opt_db set `
-      Object.keys(k).forEach((c,i) => {
+      Object.keys(contractsCopy[k]).forEach((c,i) => {
         const value = contractsCopy[k][c]
         if (i === 0) {
           if (typeof value === 'string') queryText+=`${c} = '${value}' `
