@@ -49,7 +49,7 @@ const queryInsert = async () => {
 
     if (queryText) {
       const timeStart  = new Date().getTime();
-      await query(queryTextToSend)
+      await query(queryText)
       console.log( new Date().getTime()- timeStart)
       queryInsert()
     } else {
