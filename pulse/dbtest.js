@@ -19,8 +19,9 @@ let contracts = {}
 const queryInsert = async () => {
 
   let queryText = ''
+  const contractsCopy = {...contracts}
   try {
-    const contractsCopy = {...contracts}
+
     contracts = {}
     // UPDATE opt_db set
     // //     eventTimeG = ${fixNum(payload.eventTime)},
