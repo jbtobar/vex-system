@@ -37,11 +37,11 @@ const queryInsert = async () => {
       Object.keys(k).forEach((c,i) => {
         const value = contractsCopy[k][c]
         if (i === 0) {
-          if (typeof value === 'string') queryText+=`${k} = '${value}' `
-          else queryText+=`${k} = ${value} `
+          if (typeof value === 'string') queryText+=`${c} = '${value}' `
+          else queryText+=`${c} = ${value} `
         } else {
-          if (typeof value === 'string') queryText+=`, ${k} = '${contractsCopy[k][c]}' `
-          else queryText+=`, ${k} = '${contractsCopy[k][c]}' `
+          if (typeof value === 'string') queryText+=`, ${c} = '${contractsCopy[k][c]}' `
+          else queryText+=`, ${c} = '${contractsCopy[k][c]}' `
         }
       });
       queryText+=` WHERE optioncode = '${k}'`
