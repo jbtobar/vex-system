@@ -105,6 +105,7 @@ const subCommand = async () => {
       "Trade": symbolLoad,
       "Summary": symbolLoad,
       "Underlying": symbolLoad,
+      "Series": symbolLoad
     }}))
     await wait(500);
     // process.exit()
@@ -187,6 +188,7 @@ const subCommand = async () => {
       "Trade": symbolLoad,
       "Summary": symbolLoad,
       "Underlying": symbolLoad,
+      "Series": symbolLoad
     }}))
     await wait(500);
     // process.exit()

@@ -33,7 +33,7 @@ const get = (args) => {
     })
   });
 }
-const yesterday5PM = () => Math.floor(new Date().getTime()/8.64e7)*8.64e7+ 1000*60*60*4
+const yesterday545PM = () => Math.floor(new Date().getTime()/8.64e7)*8.64e7- 1000*60*60*3+1000*60*45)
 const today545pm = () => Math.floor(new Date().getTime()/8.64e7)*8.64e7+(1000*60*60*21+1000*60*45)
 // const today510pm = () => Math.floor(new Date().getTime()/8.64e7)*8.64e7+(1000*60*60*21+1000*60*10)
 // const today500pm = () => Math.floor(new Date().getTime()/8.64e7)*8.64e7+(1000*60*60*21+1)
@@ -47,7 +47,8 @@ let timeId = 0;
   const lastFut = await get('LAST_FUT')
   console.log(lastFut)
   // timeId = today500pm()
-  timeId = today545pm()
+  // timeId = today545pm()
+  timeId = yesterday545PM();
   // timeId = today300pm()
   console.log('firsttime',{timeId})
   // process.exit()
