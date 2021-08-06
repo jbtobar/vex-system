@@ -133,23 +133,11 @@ const subCommand = async () => {
   let underlyings = [...new Set(codes.map(d => d.underlying))].filter(d => !subbed[d])
   const commitTimeStart = new Date().getTime()
   if (codes.length > 0) {
-    const optdb = (await query('SELECT optioncode from opt_db')).rows.map(d => d.optioncode)
-    await query('BEGIN')
-    let inserted = 0
-    for (var i = 0; i < codes.length; i++) {
-      if (!optdb.includes(codes[i].optioncode)) {
-        inserted+=1
-        await query(`INSERT INTO opt_db(optioncode,expirydate,strike,flag,rootsymbol) values($1,$2,$3,$4,$5)`,[
-          codes[i].optioncode,
-          codes[i].expiration,
-          codes[i].strike,
-          codes[i].flag,
-          codes[i].underlying
-        ])
-      }
-
-    }
-    await query('COMMIT')
+    query (`INSERT into opt_db(optioncode,expirydate,strike,flag,rootsymbol)
+    (SELECT symbol as optioncode,expiration as expirydate,strike,(substring(symbol FROM '(?<=\d)[A-Z]{1}(?=\d)')) as flag,underlying as rootsymbol from ipf_opt l
+    where not exists (
+      select from opt_db where optioncode = l.symbol
+    ));`)
     // SELECT symbol as optioncode,expiration as expirydate,strike,(substring(symbol FROM '(?<=\d)[A-Z]{1}(?=\d)')) as flag from ipf_opt
   }
   console.log(`commit finised - inserted ${inserted} - ${new Date().getTime()-commitTimeStart}`)
