@@ -140,7 +140,7 @@ const subCommand = async () => {
     ));`)
     // SELECT symbol as optioncode,expiration as expirydate,strike,(substring(symbol FROM '(?<=\d)[A-Z]{1}(?=\d)')) as flag from ipf_opt
   }
-  console.log(`commit finised - inserted ${inserted} - ${new Date().getTime()-commitTimeStart}`)
+  console.log(`commit finised - - ${new Date().getTime()-commitTimeStart}`)
 
   while (codes.length > 0) {
     const symbolLoad = codes.splice(0,2000)
