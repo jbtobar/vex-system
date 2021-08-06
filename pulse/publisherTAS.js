@@ -61,7 +61,7 @@ const subCommand = async () => {
       text: `SELECT symbol from ipf_opt;`,
       rowMode: 'array',
     })
-  ).rows.map(d => d[0]).filter(d => !subbed[d])
+  ).rows.map(d => d[0]).filter(d => d[0] && d[0].length>0).filter(d => !subbed[d])
   console.log(optioncodes.length,optioncodes[0])
 
   // let timeId = yesterday5PM()
