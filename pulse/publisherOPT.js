@@ -39,6 +39,8 @@ const subCommand = async () => {
 
 
 
+
+
   let codes = (
     await query(`select optioncode,underlying_symbol,rootsymbol as underlying,replace(expirydate,'-','') as mmy,strike,expirydate as expiration from futchainx;`)
   ).rows.filter(d => !subbed[d.optioncode])
@@ -131,20 +133,26 @@ const subCommand = async () => {
   let underlyings = [...new Set(codes.map(d => d.underlying))].filter(d => !subbed[d])
   const commitTimeStart = new Date().getTime()
   if (codes.length > 0) {
+    const optdb = (await query('SELECT optioncode from opt_db')).rows.map(d => d.optioncode)
     await query('BEGIN')
+    let inserted = 0
     for (var i = 0; i < codes.length; i++) {
-      await query(`INSERT INTO opt_db(optioncode,expirydate,strike,flag,rootsymbol) values($1,$2,$3,$4,$5)`,[
-        codes[i].optioncode,
-        codes[i].expiration,
-        codes[i].strike,
-        codes[i].flag,
-        codes[i].underlying
-      ])
+      if (!optdb.includes(codes[i].optioncode)) {
+        inserted+=1
+        await query(`INSERT INTO opt_db(optioncode,expirydate,strike,flag,rootsymbol) values($1,$2,$3,$4,$5)`,[
+          codes[i].optioncode,
+          codes[i].expiration,
+          codes[i].strike,
+          codes[i].flag,
+          codes[i].underlying
+        ])
+      }
+
     }
     await query('COMMIT')
     // SELECT symbol as optioncode,expiration as expirydate,strike,(substring(symbol FROM '(?<=\d)[A-Z]{1}(?=\d)')) as flag from ipf_opt
   }
-  console.log(`commit finised - ${new Date().getTime()-commitTimeStart}`)
+  console.log(`commit finised - inserted ${inserted} - ${new Date().getTime()-commitTimeStart}`)
 
   while (codes.length > 0) {
     const symbolLoad = codes.splice(0,2000)
