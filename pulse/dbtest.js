@@ -45,7 +45,7 @@ const queryInsert = async () => {
           else queryText+=`, ${c} = '${contractsCopy[k][c]}' `
         }
       });
-      queryText+=` WHERE optioncode = '${k}'`
+      queryText+=` WHERE optioncode = '${k}'; `
     });
 
 
@@ -61,7 +61,7 @@ const queryInsert = async () => {
     }
   } catch (e) {
 
-    console.error(e)
+    console.error(e,queryText)
     // console.log(contractsCopy)
   }
 }
