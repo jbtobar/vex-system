@@ -17,10 +17,11 @@ const subber = redis.createClient();
 let contracts = {}
 
 const queryInsert = async () => {
+
+  let queryText = ''
   try {
     const contractsCopy = {...contracts}
     contracts = {}
-    let queryText = ''
     // UPDATE opt_db set
     // //     eventTimeG = ${fixNum(payload.eventTime)},
     // //     theo = ${fixNum(payload.theo)},
@@ -58,7 +59,7 @@ const queryInsert = async () => {
       },1000)
     }
   } catch (e) {
-    console.error(e)
+    console.error(e,queryText)
   }
 }
 queryInsert()
