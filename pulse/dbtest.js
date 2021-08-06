@@ -18,7 +18,7 @@ const contracts = {}
 
 const queryInsert = async () => {
   try {
-    const contractsCopy = {....contracts}
+    const contractsCopy = {...contracts}
     contracts = {}
     let queryText = ''
     // UPDATE opt_db set
