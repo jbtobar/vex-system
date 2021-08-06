@@ -59,7 +59,9 @@ const queryInsert = async () => {
       },1000)
     }
   } catch (e) {
+
     console.error(e,queryText)
+    console.log(contractsCopy)
   }
 }
 queryInsert()
