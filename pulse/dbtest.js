@@ -38,11 +38,29 @@ const queryInsert = async () => {
       Object.keys(contractsCopy[k]).forEach((c,i) => {
         const value = contractsCopy[k][c]
         if (i === 0) {
-          if (typeof value === 'string') queryText+=`${c} = '${value}' `
-          else queryText+=`${c} = ${value} `
+          switch (c) {
+            case 'bidExchangeCode':
+            case 'askExchangeCode':
+            case 'dayClosePriceType':
+            case 'prevDayClosePriceType':
+              queryText+=`${c} = '${value}' `
+              break;
+            default:
+              queryText+=`${c} = ${value} `
+
+          }
         } else {
-          if (typeof value === 'string') queryText+=`, ${c} = '${contractsCopy[k][c]}' `
-          else queryText+=`, ${c} = '${contractsCopy[k][c]}' `
+          switch (c) {
+            case 'bidExchangeCode':
+            case 'askExchangeCode':
+            case 'dayClosePriceType':
+            case 'prevDayClosePriceType':
+              queryText+=`, ${c} = '${contractsCopy[k][c]}' `
+              break;
+            default:
+              queryText+=`, ${c} = '${contractsCopy[k][c]}' `
+
+          }
         }
       });
       queryText+=` WHERE optioncode = '${k}'; `
@@ -61,7 +79,8 @@ const queryInsert = async () => {
     }
   } catch (e) {
 
-    console.error(e)
+    console.error(e
+    )
     // console.log(contractsCopy)
   }
 }
