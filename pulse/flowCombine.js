@@ -31,6 +31,7 @@ const enhanceMetrics = (data) => {
 
       return d;
     } catch (e) {
+      console.error(e)
       return d;
     }
   })

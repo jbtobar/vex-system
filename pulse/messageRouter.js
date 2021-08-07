@@ -9,6 +9,14 @@ const onlyNum = (val) => {
   return val
 }
 
+const storeAndPublish = (values) => {
+  publisher.publish(`${payload[0]}::TASVAL`,JSON.stringify(values))
+  publisher.hmset(values.eventSymbol,{
+    valuebs:values.valuebuy-values.valuesell,
+    countbs:values.countbuy-values.countsell,
+    volmbs:values.volmbuy-values.volmsell,
+  })
+}
 
 const getValues = (eventSymbol) => {
   subber.hmget([
@@ -25,18 +33,20 @@ const getValues = (eventSymbol) => {
     'countsell',
     'countund',
   ],(err,res) => {
-    publisher.publish(`${payload[0]}::TASVAL`,JSON.stringify({
-      eventSymbol,
-      valuebuy:onlyNum(res[0]),
-      valuesell:onlyNum(res[1]),
-      valueund:onlyNum(res[2]),
-      volmbuy:onlyNum(res[3]),
-      volmsell:onlyNum(res[4]),
-      volmund:onlyNum(res[5]),
-      countbuy:onlyNum(res[6]),
-      countsell:onlyNum(res[7]),
-      countund:onlyNum(res[8])
-    }))
+    if (!err) {
+      storeAndPublish({
+        eventSymbol,
+        valuebuy:onlyNum(res[0]),
+        valuesell:onlyNum(res[1]),
+        valueund:onlyNum(res[2]),
+        volmbuy:onlyNum(res[3]),
+        volmsell:onlyNum(res[4]),
+        volmund:onlyNum(res[5]),
+        countbuy:onlyNum(res[6]),
+        countsell:onlyNum(res[7]),
+        countund:onlyNum(res[8])
+      })
+    }
   })
 }
 
