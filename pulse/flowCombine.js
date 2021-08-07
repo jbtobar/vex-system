@@ -27,6 +27,8 @@ const enhanceMetrics = (data) => {
       d.sumvega = onlyNum(Number((d.sumvega*100).toFixed(2)))
       d.sumtheta = onlyNum(Number((d.sumtheta*100).toFixed(2)))
 
+      d.putcallratio = onlyNum(onlyNum(Number(d.putVolume))/onlyNum(Number(d.callVolume)))
+
       return d;
     } catch (e) {
       return d;
