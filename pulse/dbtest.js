@@ -61,7 +61,7 @@ const queryInsert = async () => {
     }
   } catch (e) {
 
-    console.error(e,queryText)
+    console.error(e)
     // console.log(contractsCopy)
   }
 }
