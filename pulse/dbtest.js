@@ -58,7 +58,7 @@ const queryInsert = async () => {
               queryText+=`, ${c} = '${contractsCopy[k][c]}' `
               break;
             default:
-              queryText+=`, ${c} = '${contractsCopy[k][c]}' `
+              queryText+=`, ${c} = ${contractsCopy[k][c]} `
 
           }
         }
@@ -79,8 +79,7 @@ const queryInsert = async () => {
     }
   } catch (e) {
 
-    console.error(e,queryText
-    )
+    console.error(queryText,e)
     // console.log(contractsCopy)
   }
 }
