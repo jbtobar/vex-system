@@ -7,6 +7,8 @@ const { set,get, runBatchMini, client } = require('../redis')
 
 const onlyNum = (val) => {
   if (val === null) return 0
+  if (val === Infinity) return 0
+  if (val === -Infinity) return 0
   if (isNaN(val)) return 0
   return val
 }
