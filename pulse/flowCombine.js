@@ -19,7 +19,17 @@ const enhanceMetrics = (data) => {
       d.callbuysharecall = onlyNum(Number(((d.valuebuycall/d.valuecall)*100).toFixed(2)))
       d.callbuysharetotal = onlyNum(Number(((d.valuebuycall/d.value)*100).toFixed(2)))
       if (isNaN(d.callbuysharetotal)) d.callbuysharetotal = 0
-      d.flowratio = onlyNum(Number(((d.valuebuycall+d.valuesellput)/(d.valuebuyput+d.valuesellcall)).toFixed(2)))
+      const bullflow = onlyNum(Number(d.valuebuycall+d.valuesellput))
+      const bearflow = onlyNum((Number(d.valuebuyput+d.valuesellcall)))
+      d.bullflow = Number(bullflow.toFixed(0))
+      d.bearflow = Number(bearflow.toFixed(0))
+      d.flowratio = onlyNum(
+        Number(
+          (
+            bullflow/bearflow
+          ).toFixed(2)
+        )
+      )
       d.changepct = onlyNum(Number(((d.change/(d.price-d.change))*100).toFixed(2)))
 
       d.sumdelta = onlyNum(Number((d.sumdelta*100).toFixed(2)))

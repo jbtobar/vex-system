@@ -32,6 +32,8 @@ const getValues = (eventSymbol) => {
     'countbuy',
     'countsell',
     'countund',
+
+    'value'
   ],(err,res) => {
     if (!err) {
       storeAndPublish({
@@ -44,7 +46,9 @@ const getValues = (eventSymbol) => {
         volmund:onlyNum(res[5]),
         countbuy:onlyNum(res[6]),
         countsell:onlyNum(res[7]),
-        countund:onlyNum(res[8])
+        countund:onlyNum(res[8]),
+
+        value:onlyNum(res[9]),
       })
     }
   })
