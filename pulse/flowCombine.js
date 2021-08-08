@@ -23,13 +23,14 @@ const enhanceMetrics = (data) => {
       const bearflow = onlyNum((Number(d.valuebuyput+d.valuesellcall)))
       d.bullflow = Number(bullflow.toFixed(0))
       d.bearflow = Number(bearflow.toFixed(0))
-      d.flowratio = onlyNum(
-        Number(
-          (
-            bullflow/bearflow
-          ).toFixed(2)
-        )
-      )
+      // d.flowratio = onlyNum(
+      //   Number(
+      //     (
+      //       bullflow/bearflow
+      //     ).toFixed(2)
+      //   )
+      // )
+      d.flowratio = Math.random()
       d.changepct = onlyNum(Number(((d.change/(d.price-d.change))*100).toFixed(2)))
 
       d.sumdelta = onlyNum(Number((d.sumdelta*100).toFixed(2)))
