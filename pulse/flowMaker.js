@@ -182,11 +182,19 @@ const handleTASOption = (eventSymbol,side,value,volm) => {
         client_redis.hincrbyfloat(eventSymbol,'valuebuy',value)
         client_redis.hincrby(eventSymbol,'volmbuy',volm)
         client_redis.hincrby(eventSymbol,'countbuy',1)
+
+        client_redis.hincrbyfloat(eventSymbol,'valuebs',value)
+        client_redis.hincrby(eventSymbol,'volmbs',volm)
+        client_redis.hincrby(eventSymbol,'countbs',1)
         break;
       case 'sell':
         client_redis.hincrbyfloat(eventSymbol,'valuesell',value)
         client_redis.hincrby(eventSymbol,'volmsell',volm)
         client_redis.hincrby(eventSymbol,'countsell',1)
+
+        client_redis.hincrbyfloat(eventSymbol,'valuebs',-value)
+        client_redis.hincrby(eventSymbol,'volmbs',-volm)
+        client_redis.hincrby(eventSymbol,'countbs',-1)
         break;
       default:
         client_redis.hincrbyfloat(eventSymbol,'valueund',value)
