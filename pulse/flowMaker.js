@@ -174,7 +174,7 @@ const getBreakdown = (payload) => {
 const processedContracts = {}
 const handleTASOption = (eventSymbol,side,value,volm) => {
   try {
-    client_redis.hincrby(eventSymbol,'value',value)
+    client_redis.hincrbyfloat(eventSymbol,'value',value)
     client_redis.hincrby(eventSymbol,'volm',volm)
     client_redis.hincrby(eventSymbol,'count',1)
     switch (side) {
