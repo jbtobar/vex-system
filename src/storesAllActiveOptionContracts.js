@@ -36,7 +36,7 @@ pool.connect(async function (err, client, done) {
       rowkeys.shift()
       rowkeys.pop()
       const json = JSON.stringify(rowkeys)
-      console.log(json)
+      // console.log(json)
       readable.push(json.substring(1, json.length-1)+'\n')
     })
     .on('end', rowCount => {
