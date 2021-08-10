@@ -32,8 +32,9 @@ pool.connect(async function (err, client, done) {
   const stream = parse({ headers: true })
     .on('error', error => logger.error(error,{ function: 'storesAllActiveOptionContracts' }))
     .on('data', row => {
-      const rowkeys = Object.values(row)
+      let rowkeys = Object.values(row)
       rowkeys.shift()
+      rowkeys.pop()
       const json = JSON.stringify(rowkeys)
       console.log(json)
       readable.push(json.substring(1, json.length-1)+'\n')
@@ -130,6 +131,7 @@ setInterval(() => {
       .on('data', row => {
         const rowkeys = Object.values(row)
         rowkeys.shift()
+        rowkeys.pop()
         const json = JSON.stringify(rowkeys)
         readable.push(json.substring(1, json.length-1)+'\n')
       })
