@@ -144,8 +144,8 @@ const fixNum = (val) => {
   if (val === undefined) return null;
   if (isNaN(val)) return null;
   const num = Number(val)
-  if (Number(num.countDecimals()) > 36)  {
-    console.log('jjj',val)
+  if (Math.abs(Number(num.countDecimals())) > 36)  {
+    // console.log('jjj',val)
     return Number(num.toFixed(6))
   }
   // const dec = num.toString().split('.')[1]
@@ -153,7 +153,7 @@ const fixNum = (val) => {
   //   return num.toFixed(6)
   // }
   // if (num.toString().length > 15) console.log(num)
-  if (num.toString().includes('e')) console.log(num)
+  // if (num.toString().includes('e')) console.log(num)
   // if (num > 0 && num < 0.00000001) return num.toFixed(6)
   // return num.toFixed(6)
   return num
