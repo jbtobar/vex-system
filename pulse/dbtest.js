@@ -146,9 +146,9 @@ const fixNum = (val) => {
   const num = Number(val)
   if (Number(num.countDecimals()) > 36)  {
     // console.log(val,Number(val.toFixed(6)))
-    return Number(num.toFixed(36))
+    return Number(num.toFixed(6))
   }
-  return num
+  return num.toFixed(6)
 }
 
 const cleanString = (val) => {
