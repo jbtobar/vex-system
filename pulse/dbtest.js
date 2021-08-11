@@ -45,7 +45,27 @@ const queryInsert = async () => {
             case 'prevDayClosePriceType':
               queryText+=`${c} = '${value}' `
               break;
-            default:
+            case 'theo':
+            case 'volatility':
+            case 'delta':
+            case 'gamma':
+            case 'theta':
+            case 'rho':
+            case 'vega':
+            case 'bidprice':
+            case 'askprice':
+            case 'price':
+            case 'change':
+            case 'dayturnover':
+            case 'dayopenprice':
+            case 'dayhighprice':
+            case 'daylowprice':
+            case 'daycloseprice':
+            case 'prevdaycloseprice':
+            case 'changepct':
+              queryText+=`${c} = ${value}::real `
+              break;
+          default:
               queryText+=`${c} = ${value} `
 
           }
@@ -55,10 +75,30 @@ const queryInsert = async () => {
             case 'askExchangeCode':
             case 'dayClosePriceType':
             case 'prevDayClosePriceType':
-              queryText+=`, ${c} = '${contractsCopy[k][c]}' `
+              queryText+=`, ${c} = '${value}' `
+              break;
+            case 'theo':
+            case 'volatility':
+            case 'delta':
+            case 'gamma':
+            case 'theta':
+            case 'rho':
+            case 'vega':
+            case 'bidprice':
+            case 'askprice':
+            case 'price':
+            case 'change':
+            case 'dayturnover':
+            case 'dayopenprice':
+            case 'dayhighprice':
+            case 'daylowprice':
+            case 'daycloseprice':
+            case 'prevdaycloseprice':
+            case 'changepct':
+              queryText+=`, ${c} = ${value}::real `
               break;
             default:
-              queryText+=`, ${c} = ${contractsCopy[k][c]} `
+              queryText+=`, ${c} = ${value} `
 
           }
         }
