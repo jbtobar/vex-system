@@ -7,7 +7,18 @@ const redis = require('redis');
 const { query } = require('../db')
 const subber = redis.createClient();
 
+Number.prototype.countDecimals = function () {
 
+    if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
+
+    var str = this.toString();
+    if (str.indexOf(".") !== -1 && str.indexOf("-") !== -1) {
+        return str.split("-")[1] || 0;
+    } else if (str.indexOf(".") !== -1) {
+        return str.split(".")[1].length || 0;
+    }
+    return str.split("-")[1] || 0;
+}
 
 // let queryText = ''
 //
@@ -129,6 +140,9 @@ const fixNum = (val) => {
   if (val === Infinity) return null;
   if (val === -Infinity) return null;
   if (isNaN(val)) return null;
+  if (num.countDecimals() > 6)  {
+    return Number(num.toFixed(6))
+  }
   return Number(val)
 }
 
