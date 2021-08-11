@@ -143,7 +143,7 @@ const fixNum = (val) => {
   if (val === false) return null;
   if (val === undefined) return null;
   if (isNaN(val)) return null;
-  if (val.countDecimals() > 6)  {
+  if (Number(val).countDecimals() > 6)  {
     return Number(val.toFixed(6))
   }
   return Number(val)
