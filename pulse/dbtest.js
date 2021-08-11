@@ -149,7 +149,8 @@ const fixNum = (val) => {
     return Number(num.toFixed(6))
   }
   // if (num > 0 && num < 0.00000001) return num.toFixed(6)
-  return num.toFixed(6)
+  // return num.toFixed(6)
+  return num.toString()
 }
 
 const cleanString = (val) => {
