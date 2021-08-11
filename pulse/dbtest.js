@@ -152,6 +152,7 @@ const fixNum = (val) => {
   if (dec && (dec.includes('e') || dec.length > 6)) {
     return num.toFixed(6)
   }
+  if (num.toString().length > 15) console.log(num)
   // if (num > 0 && num < 0.00000001) return num.toFixed(6)
   // return num.toFixed(6)
   return num
