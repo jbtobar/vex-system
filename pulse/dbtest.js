@@ -19,7 +19,19 @@ Number.prototype.countDecimals = function () {
     }
     return str.split("-")[1] || 0;
 }
-
+const fixNum = (val) => {
+  if (val === Infinity) return null;
+  if (val === -Infinity) return null;
+  if (val === null) return null;
+  if (val === false) return null;
+  if (val === undefined) return null;
+  if (isNaN(val)) return null;
+  if (Number(Number(val).countDecimals()) > 36)  {
+    // console.log(val,Number(val.toFixed(6)))
+    return Number(val.toFixed(36))
+  }
+  return Number(val)
+}
 // let queryText = ''
 //
 // const queryAppend = (q) => {
@@ -74,7 +86,7 @@ const queryInsert = async () => {
             case 'daycloseprice':
             case 'prevdaycloseprice':
             case 'changepct':
-              queryText+=`${c} = ${value}::real `
+              queryText+=`${c} = ${fixNum(value)}::real `
               break;
           default:
               queryText+=`${c} = ${value} `
@@ -106,7 +118,7 @@ const queryInsert = async () => {
             case 'daycloseprice':
             case 'prevdaycloseprice':
             case 'changepct':
-              queryText+=`, ${c} = ${value}::real `
+              queryText+=`, ${c} = ${fixNum(value)}::real `
               break;
             default:
               queryText+=`, ${c} = ${value} `
@@ -136,19 +148,7 @@ const queryInsert = async () => {
 }
 queryInsert()
 
-const fixNum = (val) => {
-  if (val === Infinity) return null;
-  if (val === -Infinity) return null;
-  if (val === null) return null;
-  if (val === false) return null;
-  if (val === undefined) return null;
-  if (isNaN(val)) return null;
-  if (Number(Number(val).countDecimals()) > 36)  {
-    // console.log(val,Number(val.toFixed(6)))
-    return Number(val.toFixed(36))
-  }
-  return Number(val)
-}
+
 
 const cleanString = (val) => {
   if (val.toString() === '\x00') return null;
