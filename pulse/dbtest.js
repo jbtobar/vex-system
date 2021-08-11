@@ -144,11 +144,11 @@ const fixNum = (val) => {
   if (val === undefined) return null;
   if (isNaN(val)) return null;
   const num = Number(val)
-  if (Number(num.countDecimals()) > 36)  {
+  if (Number(num.countDecimals()) > 6)  {
     // console.log(val,Number(val.toFixed(6)))
     return Number(num.toFixed(6))
   }
-  return num.toFixed(6)
+  return num
 }
 
 const cleanString = (val) => {
