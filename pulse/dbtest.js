@@ -144,7 +144,7 @@ const fixNum = (val) => {
   if (val === undefined) return null;
   if (isNaN(val)) return null;
   const num = Number(val)
-  if (Math.abs(Number(num.countDecimals())) > 6)  {
+  if (Math.abs(Number(Math.abs(num).countDecimals())) > 6)  {
     // console.log('jjj',val)
     return Number(num.toFixed(6))
   }
