@@ -140,8 +140,8 @@ const fixNum = (val) => {
   if (val === Infinity) return null;
   if (val === -Infinity) return null;
   if (isNaN(val)) return null;
-  if (num.countDecimals() > 6)  {
-    return Number(num.toFixed(6))
+  if (val.countDecimals() > 6)  {
+    return Number(val.toFixed(6))
   }
   return Number(val)
 }
