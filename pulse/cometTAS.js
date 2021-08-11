@@ -23,13 +23,39 @@ console.log('-----------------------------------------------------------------')
 console.log('-----------------------------------------------------------------')
 console.log('-----------------------------------------------------------------')
 
+Number.prototype.countDecimals = function () {
+
+    if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
+
+    var str = this.toString();
+    if (str.indexOf(".") !== -1 && str.indexOf("-") !== -1) {
+        return str.split("-")[1] || 0;
+    } else if (str.indexOf(".") !== -1) {
+        return str.split(".")[1].length || 0;
+    }
+    return str.split("-")[1] || 0;
+}
+
 const client_redis = redis.createClient();
 const publisher = redis.createClient();
 
 const LENGTHS = {
 
 }
-const fixNum = (val) => isNaN(val) ? 0 : Number(val);
+// const fixNum = (val) => isNaN(val) ? 0 : Number(val);
+const fixNum = (val) => {
+  if (val === Infinity) return null;
+  if (val === -Infinity) return null;
+  if (val === null) return null;
+  if (val === false) return null;
+  if (val === undefined) return null;
+  if (isNaN(val)) return null;
+  const num = Number(val)
+  if (Math.abs(Number(Math.abs(num).countDecimals())) > 6)  {
+    return Number(num.toFixed(6))
+  }
+  return num
+}
 
 const contextForContract = (ctc) => {
   return new Promise(function(resolve, reject) {
