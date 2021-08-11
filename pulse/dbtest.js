@@ -148,6 +148,7 @@ const fixNum = (val) => {
     // console.log(val,Number(val.toFixed(6)))
     return Number(num.toFixed(6))
   }
+  if (num > 0 && num < 0.00000001) return num.toFixed(6)
   return num
 }
 
