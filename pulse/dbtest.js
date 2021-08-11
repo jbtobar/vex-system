@@ -144,13 +144,17 @@ const fixNum = (val) => {
   if (val === undefined) return null;
   if (isNaN(val)) return null;
   const num = Number(val)
-  if (Number(num.countDecimals()) > 6)  {
-    // console.log(val,Number(val.toFixed(6)))
-    return Number(num.toFixed(6))
+  // if (Number(num.countDecimals()) > 6)  {
+  //   // console.log(val,Number(val.toFixed(6)))
+  //   return Number(num.toFixed(6))
+  // }
+  const dec = num.toString().split('.')[1]
+  if (dec.includes('e') || dec.length > 6) {
+    return num.toFixed(6)
   }
   // if (num > 0 && num < 0.00000001) return num.toFixed(6)
   // return num.toFixed(6)
-  return num.toString()
+  return num
 }
 
 const cleanString = (val) => {
