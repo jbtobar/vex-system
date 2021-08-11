@@ -139,6 +139,9 @@ queryInsert()
 const fixNum = (val) => {
   if (val === Infinity) return null;
   if (val === -Infinity) return null;
+  if (val === null) return null;
+  if (val === false) return null;
+  if (val === undefined) return null;
   if (isNaN(val)) return null;
   if (val.countDecimals() > 6)  {
     return Number(val.toFixed(6))
