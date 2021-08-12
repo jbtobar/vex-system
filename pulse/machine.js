@@ -6,7 +6,7 @@
 const util = require('util');
 const schedule = require('node-schedule');
 const exec = util.promisify(require('child_process').exec);
-const GET_ALL_FUTURES_AND_OPTIONS = require('../src/GET_ALL_FUTURES_AND_OPTIONS')
+// const GET_ALL_FUTURES_AND_OPTIONS = require('../src/GET_ALL_FUTURES_AND_OPTIONS')
 const { query } = require('../db');
 const run = require('../utils/childrun');
 const timenow = () => new Date().toLocaleString("en-US", {timeZone: "America/New_York"})
@@ -65,13 +65,14 @@ const futuresMarketOpen = async () => {
       console.log(`tokenReset - ${timenow()} - ${code}`)
 
       console.log(`getting  GET_ALL_FUTURES_AND_OPTIONS - ${timenow()}`)
-      await GET_ALL_FUTURES_AND_OPTIONS()
+      // await GET_ALL_FUTURES_AND_OPTIONS()
+      code = await run(`pulse/futuresmanager.js`)
       console.log(`finished GET_ALL_FUTURES_AND_OPTIONS - ${timenow()}`)
       await query(`DELETE FROM opt_db where substring(optioncode,1,2) = './'`)
       await query(`insert into opt_db(optioncode,expirydate,strike,flag,rootsymbol) ( select optioncode,expirydate,strike,flag,rootsymbol from futchainx)`)
       console.log(`pruned opt_db - ${timenow()}`)
 
-      code = await run(`pulse/futuresmanager.js`)
+
       console.log(`futuresmanager - ${timenow()} - ${code}`)
 
       await exec('pm2 start cometOPT')
