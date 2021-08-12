@@ -122,37 +122,39 @@ pool.connect(async function (err, client, done) {
              while (payload.length > 0) {
                const singleLoad = payload.splice(0,CHANNEL_DATA_LENGTHS['TimeAndSale'])
                // console.log(singleLoad)
-               if (singleLoad[13] === '\x00') singleLoad[13] =  0
-               if (singleLoad[7] === '\u0000') singleLoad[7] =  0
+               if (Number(singleLoad[0]) > 0 ) {
+                 if (singleLoad[13] === '\x00') singleLoad[13] =  0
+                 if (singleLoad[7] === '\u0000') singleLoad[7] =  0
 
-               const context = await contextForContract(singleLoad[0])
-               const json = JSON.stringify([
-                 singleLoad[0],
-                 // 'eventTime',singleLoad[1],
-                 // 'eventFlags',singleLoad[2],
-                 singleLoad[3],
-                 singleLoad[4],
-                 // 'timeNanoPart',singleLoad[5],
-                 singleLoad[6],
-                 singleLoad[7],
-                 fixNum(singleLoad[8]),
-                 fixNum(singleLoad[9]),
-                 fixNum(singleLoad[10]),
-                 fixNum(singleLoad[11]),
-                 singleLoad[12],
-                 singleLoad[13],
-                 singleLoad[14],
-                 singleLoad[15],
-                 singleLoad[16],
-                 singleLoad[17],
-                 singleLoad[18],
-                 singleLoad[19],
-                 singleLoad[20],
-                 ...context
-               ])
-               client_redis.set('LAST_TAS',singleLoad[3])
-               client_redis.publish('TASER',json)
-               readable.push(json.substring(1, json.length-1)+'\n')
+                 const context = await contextForContract(singleLoad[0])
+                 const json = JSON.stringify([
+                   singleLoad[0],
+                   // 'eventTime',singleLoad[1],
+                   // 'eventFlags',singleLoad[2],
+                   singleLoad[3],
+                   singleLoad[4],
+                   // 'timeNanoPart',singleLoad[5],
+                   singleLoad[6],
+                   singleLoad[7],
+                   fixNum(singleLoad[8]),
+                   fixNum(singleLoad[9]),
+                   fixNum(singleLoad[10]),
+                   fixNum(singleLoad[11]),
+                   singleLoad[12],
+                   singleLoad[13],
+                   singleLoad[14],
+                   singleLoad[15],
+                   singleLoad[16],
+                   singleLoad[17],
+                   singleLoad[18],
+                   singleLoad[19],
+                   singleLoad[20],
+                   ...context
+                 ])
+                 client_redis.set('LAST_TAS',singleLoad[3])
+                 client_redis.publish('TASER',json)
+                 readable.push(json.substring(1, json.length-1)+'\n')
+               }
              }
              readable.push(null)
              // console.log('finished pushing')
