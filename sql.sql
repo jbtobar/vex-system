@@ -303,12 +303,35 @@ CREATE TABLE futchainx (
 GRANT ALL PRIVILEGES ON TABLE futchainx TO convex3;
 
 
+
+CREATE TABLE jkeys (
+  name varchar,
+  t_up timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+  body json
+);
+GRANT ALL PRIVILEGES ON TABLE jkeys TO convex3;
+
+
 CREATE TABLE futuresdir (
     symbol character varying,
     name character varying,
     dxsymbol character varying
 );
 GRANT ALL PRIVILEGES ON TABLE futuresdir TO convex3;
+
+
+
+CREATE MATERIALIZED VIEW flow_aggs as (
+  SELECT
+   sum(size*price*100) as value,
+   sum(size) as volm,
+   count(*) as count,
+   dayid
+   from tasc_hist group by dayid
+);
+GRANT ALL PRIVILEGES ON VIEW flow_aggs TO convex3;
+
+
 
 COPY futuresdir FROM stdin with DELIMITER '|';
 /6A|Australian Dollar Futures|/6A:XCME
@@ -399,132 +422,145 @@ insert into opt_db(optioncode,expirydate,strike,flag,rootsymbol) ( select option
 
 
 
+SELECT eventSymbol,rootSymbol,flag,expirydate, SUM(size),COUNT (*), SUM(price*size*100) as value,
+SUM(case WHEN aggressorside = 'BUY' THEN price*size*100 ELSE 0 END) as buyvalue,
+SUM(case WHEN aggressorside = 'SELL' THEN price*size*100 ELSE 0 END) as sellvalue
+from tasc
+GROUP BY eventSymbol,rootSymbol,flag,expirydate
+ORDER BY SUM(price*size*100) DESC LIMIT 100;
 
 
 
+CREATE TABLE opt_db_hist as (SELECT * FROM opt_db);
+GRANT ALL PRIVILEGES ON TABLE opt_db_hist TO convex3;
 
-  convex1=# \d series
-                              Table "public.series"
-      Column    |            Type             | Collation | Nullable | Default
-  --------------+-----------------------------+-----------+----------+---------
-   eventsymbol  | character varying           |           |          |
-   time         | bigint                      |           |          |
-   expiration   | smallint                    |           |          |
-   volatility   | real                        |           |          |
-   callvolume   | integer                     |           |          |
-   putvolume    | integer                     |           |          |
-   putcallratio | real                        |           |          |
-   forwardprice | real                        |           |          |
-   dividend     | real                        |           |          |
-   interest     | real                        |           |          |
-   optionvolume | bigint                      |           |          |
-   dayid        | smallint                    |           |          |
-   up_at        | timestamp without time zone |           |          | now()
-  Indexes:
-      "series_eventsymbol_expiration_dayid_key" UNIQUE CONSTRAINT, btree (eventsymbol, expiration, dayid)
-      "series_eventsymbol_idx" btree (eventsymbol)
+INSERT INTO opt_db_hist (select * from opt_db);
 
-
-INSERT INTO series(
-  eventsymbol,
-  time,
-  expiration,
-  volatility,
-  callvolume,
-  putvolume,
-  putcallratio,
-  forwardprice,
-  dividend,
-  interest,
-  optionvolume,
-  dayid
-)  (
-  select
-  eventsymbol,
-  time,
-  expiration,
-  volatility,
-  callvolume,
-  putvolume,
-  putcallratio,
-  forwardprice,
-  dividend,
-  interest,
-  optionvolume,
-  dayid
-  from seriesf where dayid < 18751
-);
-
-
-Table "public.seriesf"
-Column    |         Type          | Collation | Nullable |                     Default
---------------+-----------------------+-----------+----------+--------------------------------------------------
-eventsymbol  | character varying(20) |           |          |
-eventtime    | bigint                |           |          |
-eventflags   | integer               |           |          |
-index        | bigint                |           |          |
-time         | bigint                |           |          |
-sequence     | integer               |           |          |
-expiration   | integer               |           |          |
-volatility   | numeric               |           |          |
-callvolume   | bigint                |           |          |
-putvolume    | bigint                |           |          |
-putcallratio | numeric               |           |          |
-forwardprice | numeric               |           |          |
-dividend     | numeric               |           |          |
-interest     | numeric               |           |          |
-optionvolume | bigint                |           |          |
-dayid        | integer               |           |          | generated always as (("time" / 86400000)) stored
-Indexes:
-"seriesf_eventsymbol_expiration_dayid_key" UNIQUE CONSTRAINT, btree (eventsymbol, expiration, dayid)
+--
+--
+--
+--   convex1=# \d series
+--                               Table "public.series"
+--       Column    |            Type             | Collation | Nullable | Default
+--   --------------+-----------------------------+-----------+----------+---------
+--    eventsymbol  | character varying           |           |          |
+--    time         | bigint                      |           |          |
+--    expiration   | smallint                    |           |          |
+--    volatility   | real                        |           |          |
+--    callvolume   | integer                     |           |          |
+--    putvolume    | integer                     |           |          |
+--    putcallratio | real                        |           |          |
+--    forwardprice | real                        |           |          |
+--    dividend     | real                        |           |          |
+--    interest     | real                        |           |          |
+--    optionvolume | bigint                      |           |          |
+--    dayid        | smallint                    |           |          |
+--    up_at        | timestamp without time zone |           |          | now()
+--   Indexes:
+--       "series_eventsymbol_expiration_dayid_key" UNIQUE CONSTRAINT, btree (eventsymbol, expiration, dayid)
+--       "series_eventsymbol_idx" btree (eventsymbol)
+--
+--
+-- INSERT INTO series(
+--   eventsymbol,
+--   time,
+--   expiration,
+--   volatility,
+--   callvolume,
+--   putvolume,
+--   putcallratio,
+--   forwardprice,
+--   dividend,
+--   interest,
+--   optionvolume,
+--   dayid
+-- )  (
+--   select
+--   eventsymbol,
+--   time,
+--   expiration,
+--   volatility,
+--   callvolume,
+--   putvolume,
+--   putcallratio,
+--   forwardprice,
+--   dividend,
+--   interest,
+--   optionvolume,
+--   dayid
+--   from seriesf where dayid < 18751
+-- );
 
 
-
-sudo pg_dump -Fc --host localhost --port 63333 --username "convex2"  --password  --verbose --file "users210807" --table "users" "convex1"
-pg_restore -h localhost -p 5432 -U userdbmgmt -d userdb -v "users210807"
-
-sudo pg_dump -Fc --host localhost --port 63333 --username "convex2"  --password  --verbose --file "user_layouts210807" --table "user_layouts" "convex1"
-pg_restore -h localhost -p 5432 -U userdbmgmt -d userdb -v "user_layouts210807"
-
-
-Table "public.users"
-Column    |            Type             | Collation | Nullable |              Default
---------------+-----------------------------+-----------+----------+-----------------------------------
--- id           | integer                     |           | not null | nextval('users_id_seq'::regclass)
--- oid          | character varying(24)       |           | not null | generate_object_id()
--- email        | text                        |           | not null |
--- password     | text                        |           | not null |
--- status       | text                        |           |          |
-date_created | timestamp without time zone |           |          | now()
-session_id   | text                        |           |          |
--- cus_id       | text                        |           |          |
--- sub_id       | text                        |           |          |
--- passtoken    | text                        |           |          |
--- notes        | text                        |           |          |
--- name         | text                        |           |          |
--- username     | character varying(30)       |           |          |
-Indexes:
-"users_email_key" UNIQUE CONSTRAINT, btree (email)
-"users_oid_key" UNIQUE CONSTRAINT, btree (oid)
-"users_username_key" UNIQUE CONSTRAINT, btree (username)
-
-
-Column    |            Type             | Collation | Nullable |       Default
---------------+-----------------------------+-----------+----------+----------------------
--- oid          | character varying(24)       |           | not null | generate_object_id()
--- email        | text                        |           | not null |
--- password     | text                        |           | not null |
--- status       | text                        |           |          |
--- cus_id       | text                        |           |          |
--- sub_id       | text                        |           |          |
--- passtoken    | text                        |           |          |
--- notes        | text                        |           |          |
--- name         | text                        |           |          |
--- username     | character varying(30)       |           |          |
-date_created | timestamp without time zone |           |          | now()
-apikey       | text                        |           |          |
-ftp          | json                        |           |          |
-session_id   | text                        |           |          |
-Indexes:
-"users_email_key" UNIQUE CONSTRAINT, btree (email)
-"users_oid_key" UNIQUE CONSTRAINT, btree (oid)
+-- Table "public.seriesf"
+-- Column    |         Type          | Collation | Nullable |                     Default
+-- --------------+-----------------------+-----------+----------+--------------------------------------------------
+-- eventsymbol  | character varying(20) |           |          |
+-- eventtime    | bigint                |           |          |
+-- eventflags   | integer               |           |          |
+-- index        | bigint                |           |          |
+-- time         | bigint                |           |          |
+-- sequence     | integer               |           |          |
+-- expiration   | integer               |           |          |
+-- volatility   | numeric               |           |          |
+-- callvolume   | bigint                |           |          |
+-- putvolume    | bigint                |           |          |
+-- putcallratio | numeric               |           |          |
+-- forwardprice | numeric               |           |          |
+-- dividend     | numeric               |           |          |
+-- interest     | numeric               |           |          |
+-- optionvolume | bigint                |           |          |
+-- dayid        | integer               |           |          | generated always as (("time" / 86400000)) stored
+-- Indexes:
+-- "seriesf_eventsymbol_expiration_dayid_key" UNIQUE CONSTRAINT, btree (eventsymbol, expiration, dayid)
+--
+--
+--
+-- sudo pg_dump -Fc --host localhost --port 63333 --username "convex2"  --password  --verbose --file "users210807" --table "users" "convex1"
+-- pg_restore -h localhost -p 5432 -U userdbmgmt -d userdb -v "users210807"
+--
+-- sudo pg_dump -Fc --host localhost --port 63333 --username "convex2"  --password  --verbose --file "user_layouts210807" --table "user_layouts" "convex1"
+-- pg_restore -h localhost -p 5432 -U userdbmgmt -d userdb -v "user_layouts210807"
+--
+--
+-- Table "public.users"
+-- Column    |            Type             | Collation | Nullable |              Default
+-- --------------+-----------------------------+-----------+----------+-----------------------------------
+-- -- id           | integer                     |           | not null | nextval('users_id_seq'::regclass)
+-- -- oid          | character varying(24)       |           | not null | generate_object_id()
+-- -- email        | text                        |           | not null |
+-- -- password     | text                        |           | not null |
+-- -- status       | text                        |           |          |
+-- date_created | timestamp without time zone |           |          | now()
+-- session_id   | text                        |           |          |
+-- -- cus_id       | text                        |           |          |
+-- -- sub_id       | text                        |           |          |
+-- -- passtoken    | text                        |           |          |
+-- -- notes        | text                        |           |          |
+-- -- name         | text                        |           |          |
+-- -- username     | character varying(30)       |           |          |
+-- Indexes:
+-- "users_email_key" UNIQUE CONSTRAINT, btree (email)
+-- "users_oid_key" UNIQUE CONSTRAINT, btree (oid)
+-- "users_username_key" UNIQUE CONSTRAINT, btree (username)
+--
+--
+-- Column    |            Type             | Collation | Nullable |       Default
+-- --------------+-----------------------------+-----------+----------+----------------------
+-- -- oid          | character varying(24)       |           | not null | generate_object_id()
+-- -- email        | text                        |           | not null |
+-- -- password     | text                        |           | not null |
+-- -- status       | text                        |           |          |
+-- -- cus_id       | text                        |           |          |
+-- -- sub_id       | text                        |           |          |
+-- -- passtoken    | text                        |           |          |
+-- -- notes        | text                        |           |          |
+-- -- name         | text                        |           |          |
+-- -- username     | character varying(30)       |           |          |
+-- date_created | timestamp without time zone |           |          | now()
+-- apikey       | text                        |           |          |
+-- ftp          | json                        |           |          |
+-- session_id   | text                        |           |          |
+-- Indexes:
+-- "users_email_key" UNIQUE CONSTRAINT, btree (email)
+-- "users_oid_key" UNIQUE CONSTRAINT, btree (oid)

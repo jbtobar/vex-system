@@ -17,6 +17,7 @@ function wait(milliseconds) {
 const marketClose = async () => {
   try {
     await exec('pm2 stop all')
+    await query(`INSERT INTO opt_db_hist (select * from opt_db);`)
     console.log(`pm2 stop all - ${timenow()}`)
   } catch (e) {
     console.error(`marketClose - ${timenow()}`,e)
@@ -40,6 +41,19 @@ const optionsMarketOpen = async () => {
     await query(`DELETE FROM opt_db where substring(optioncode,1,2) != './'`)
     await exec('pm2 start publisherTAS')
     console.log(`pm2 start publisherTAS - ${timenow()}`)
+
+
+    await wait(30000)
+
+    await exec('pm2 restart cometOPT')
+    console.log(`pm2 restart cometOPT - ${timenow()}`)
+
+    await exec('pm2 restart publisherOPT')
+    console.log(`pm2 restart publisherOPT - ${timenow()}`)
+
+
+
+
   } catch (e) {
     console.error(`optionsMarketOpen - ${timenow()}`,e)
   }
