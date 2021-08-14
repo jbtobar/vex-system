@@ -177,6 +177,7 @@ const handleTASOption = (eventSymbol,side,value,volm) => {
     client_redis.hincrbyfloat(eventSymbol,'value',value)
     client_redis.hincrby(eventSymbol,'volm',volm)
     client_redis.hincrby(eventSymbol,'count',1)
+
     switch (side) {
       case 'buy':
         client_redis.hincrbyfloat(eventSymbol,'valuebuy',value)
@@ -202,6 +203,7 @@ const handleTASOption = (eventSymbol,side,value,volm) => {
         client_redis.hincrby(eventSymbol,'countund',1)
         break;
     }
+    client_redis.publish('CustomUpdate',JSON.stringify({eventSymbol}))
   } catch(err) {
     console.error(err)
   }

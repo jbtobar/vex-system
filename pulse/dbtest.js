@@ -178,6 +178,28 @@ subber.on('message', (channel, message) => {
         contracts[eventSymbol] = {}
       }
       switch (channel) {
+        case 'Custom':
+
+          contracts[eventSymbol].value = fixNum(payload.value)
+          contracts[eventSymbol].volm = fixNum(payload.volm)
+          contracts[eventSymbol].count = fixNum(payload.count)
+          contracts[eventSymbol].valuebuy = fixNum(payload.valuebuy)
+          contracts[eventSymbol].volmbuy = fixNum(payload.volmbuy)
+          contracts[eventSymbol].countbuy = fixNum(payload.countbuy)
+          contracts[eventSymbol].valuebs = fixNum(payload.valuebs)
+          contracts[eventSymbol].volmbs = fixNum(payload.volmbs)
+          contracts[eventSymbol].countbs = fixNum(payload.countbs)
+          contracts[eventSymbol].valuesell = fixNum(payload.valuesell)
+          contracts[eventSymbol].volmsell = fixNum(payload.volmsell)
+          contracts[eventSymbol].countsell = fixNum(payload.countsell)
+          contracts[eventSymbol].valuebs = fixNum(payload.valuebs)
+          contracts[eventSymbol].volmbs = fixNum(payload.volmbs)
+          contracts[eventSymbol].countbs = fixNum(payload.countbs)
+          contracts[eventSymbol].valueund = fixNum(payload.valueund)
+          contracts[eventSymbol].volmund = fixNum(payload.volmund)
+          contracts[eventSymbol].countund = fixNum(payload.countund)
+
+          break;
         case 'Greeks':
 
           contracts[eventSymbol].eventTimeG = fixNum(payload.eventTime)
@@ -346,6 +368,7 @@ subber.subscribe('Trade')
 subber.subscribe('Greeks')
 subber.subscribe('Summary')
 subber.subscribe('Quote')
+subber.subscribe('Custom')
 //
 // ALTER TABLE opt_db add column eventTimeG bigint;
 // ALTER TABLE opt_db add column gprice real;
@@ -387,6 +410,25 @@ subber.subscribe('Quote')
 // ALTER TABLE opt_db add column rootsymbol varchar;
 // ALTER TABLE opt_db add column changePct real;
 
+
+// ALTER TABLE opt_db_hist add column value real;
+// ALTER TABLE opt_db_hist add column volm bigint;
+// ALTER TABLE opt_db_hist add column count int;
+// ALTER TABLE opt_db_hist add column valuebuy real;
+// ALTER TABLE opt_db_hist add column volmbuy bigint;
+// ALTER TABLE opt_db_hist add column countbuy int;
+// ALTER TABLE opt_db_hist add column valuebs real;
+// ALTER TABLE opt_db_hist add column volmbs bigint;
+// ALTER TABLE opt_db_hist add column countbs int;
+// ALTER TABLE opt_db_hist add column valuesell real;
+// ALTER TABLE opt_db_hist add column volmsell bigint;
+// ALTER TABLE opt_db_hist add column countsell int;
+// ALTER TABLE opt_db_hist add column valuebs real;
+// ALTER TABLE opt_db_hist add column volmbs bigint;
+// ALTER TABLE opt_db_hist add column countbs int;
+// ALTER TABLE opt_db_hist add column valueund real;
+// ALTER TABLE opt_db_hist add column volmund bigint;
+// ALTER TABLE opt_db_hist add column countund int;
 
 // subber.subscribe('Underlying')
 // subber.subscribe('Series')
