@@ -6,6 +6,45 @@
 const redis = require('redis');
 const { query } = require('../db')
 const subber = redis.createClient();
+const client_redis = redis.createClient();
+
+
+const fixNum = (val) => {
+  if (val === Infinity) return null;
+  if (val === -Infinity) return null;
+  if (val === null) return null;
+  if (val === false) return null;
+  if (val === undefined) return null;
+  if (isNaN(val)) return null;
+  const num = Number(val)
+  if (Math.abs(Number(Math.abs(num).countDecimals())) > 6)  {
+    // console.log('jjj',val)
+    return Number(num.toFixed(6))
+  }
+  // const dec = num.toString().split('.')[1]
+  // if (dec && (dec.includes('e') || dec.length > 6)) {
+  //   return num.toFixed(6)
+  // }
+  // if (num.toString().length > 15) console.log(num)
+  if (num.toString().includes('e')) console.log(num)
+  // if (num > 0 && num < 0.00000001) return num.toFixed(6)
+  // return num.toFixed(6)
+  return num
+}
+
+const calculateGXOI = (symbol,data) => {
+  client_redis.hmget(symbol,'openInterest',(err,res) => {
+    if (!err) {
+      const openInterest = fixNum(res[0])
+      client_redis.hmset(symbol,{
+        gxoi:openInterest*data.gamma,
+        vxoi:openInterest*data.vega,
+        dxoi:openInterest*data.delta,
+        txoi:openInterest*data.theta
+      })
+    } else console.error(err)
+  })
+}
 
 Number.prototype.countDecimals = function () {
 
@@ -136,28 +175,7 @@ const queryInsert = async () => {
 }
 queryInsert()
 
-const fixNum = (val) => {
-  if (val === Infinity) return null;
-  if (val === -Infinity) return null;
-  if (val === null) return null;
-  if (val === false) return null;
-  if (val === undefined) return null;
-  if (isNaN(val)) return null;
-  const num = Number(val)
-  if (Math.abs(Number(Math.abs(num).countDecimals())) > 6)  {
-    // console.log('jjj',val)
-    return Number(num.toFixed(6))
-  }
-  // const dec = num.toString().split('.')[1]
-  // if (dec && (dec.includes('e') || dec.length > 6)) {
-  //   return num.toFixed(6)
-  // }
-  // if (num.toString().length > 15) console.log(num)
-  if (num.toString().includes('e')) console.log(num)
-  // if (num > 0 && num < 0.00000001) return num.toFixed(6)
-  // return num.toFixed(6)
-  return num
-}
+
 
 const cleanString = (val) => {
   if (val.toString() === '\x00') return null;
@@ -210,6 +228,9 @@ subber.on('message', (channel, message) => {
           contracts[eventSymbol].theta = fixNum(payload.theta)
           contracts[eventSymbol].rho = fixNum(payload.rho)
           contracts[eventSymbol].vega = fixNum(payload.vega)
+          calculateGXOI(eventSymbol,{
+            ...contracts[eventSymbol]
+          })
           // queryAppend(
           //   `UPDATE opt_db set
           //     eventTimeG = ${fixNum(payload.eventTime)},
