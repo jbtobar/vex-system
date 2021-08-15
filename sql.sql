@@ -436,6 +436,41 @@ GRANT ALL PRIVILEGES ON TABLE opt_db_hist TO convex3;
 
 INSERT INTO opt_db_hist (select * from opt_db);
 
+
+
+
+UPDATE opt_db
+SET prevvol = opt_db_hist.volatility,
+  prevoi = opt_db_hist.openInterest
+FROM opt_db_hist
+WHERE opt_db_hist.optioncode = opt_db.optioncode
+AND opt_db_hist.dayid = (select max(dayid) from opt_db);
+
+
+
+
+
+CREATE OR REPLACE FUNCTION calculate_days_to_expiration( expirydate date )
+RETURNS int
+LANGUAGE plpgsql IMMUTABLE
+AS $CODE$
+BEGIN
+    RETURN expirydate - current_date;
+END
+$CODE$;
+
+
+CREATE OR REPLACE FUNCTION extract_dte( expirydate date,dayid smallint )
+RETURNS int
+LANGUAGE plpgsql IMMUTABLE
+AS $CODE$
+BEGIN
+    RETURN (floor(extract(epoch from expirydate)/8.64e4)-dayid);
+END
+$CODE$;
+
+
+
 --
 --
 --

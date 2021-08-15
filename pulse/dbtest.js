@@ -8,6 +8,12 @@ const { query } = require('../db')
 const subber = redis.createClient();
 const client_redis = redis.createClient();
 
+let didUpdateOI = false;
+const timeIs5AM = () => {
+  if (didUpdateOI) return false;
+  return new Date().getHours() === 9
+}
+
 
 const fixNum = (val) => {
   if (val === Infinity) return null;
@@ -158,7 +164,16 @@ const queryInsert = async () => {
 
 
     if (queryText) {
-      const timeStart  = new Date().getTime();
+      const timeStart = new Date().getTime();
+      if (timeIs5AM()) {
+        await query(`UPDATE opt_db
+        SET prevvol = opt_db_hist.volatility,
+          prevoi = opt_db_hist.openInterest
+        FROM opt_db_hist
+        WHERE opt_db_hist.optioncode = opt_db.optioncode
+        AND opt_db_hist.dayid = (select max(dayid) from opt_db);`)
+        didUpdateOI = false;
+      }
       await query(queryText)
       console.log( new Date().getTime()- timeStart)
       queryInsert()
@@ -450,6 +465,16 @@ subber.subscribe('Custom')
 // ALTER TABLE opt_db_hist add column valueund real;
 // ALTER TABLE opt_db_hist add column volmund bigint;
 // ALTER TABLE opt_db_hist add column countund int;
+
+// ALTER TABLE opt_db add column dxoi real GENERATED ALWAYS AS (delta*openInterest*100) STORED;
+// ALTER TABLE opt_db add column gxoi real GENERATED ALWAYS AS (gamma*openInterest*100) STORED;
+// ALTER TABLE opt_db add column vxoi real GENERATED ALWAYS AS (vega*openInterest*100) STORED;
+// ALTER TABLE opt_db add column txoi real GENERATED ALWAYS AS (theta*openInterest*100) STORED;
+//
+// ALTER TABLE opt_db_hist add column dxoi real;
+// ALTER TABLE opt_db_hist add column gxoi real;
+// ALTER TABLE opt_db_hist add column vxoi real;
+// ALTER TABLE opt_db_hist add column txoi real;
 
 // subber.subscribe('Underlying')
 // subber.subscribe('Series')
