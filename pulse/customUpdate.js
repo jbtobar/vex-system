@@ -25,23 +25,23 @@ subber.on('message', (channel, message) => {
     if (eventSymbol) {
       client_redis.hmget(...[
         eventSymbol,
-        'value'
-        'volm'
-        'count'
-        'valuebuy'
-        'volmbuy'
-        'countbuy'
-        'valuebs'
-        'volmbs'
-        'countbs'
-        'valuesell'
-        'volmsell'
-        'countsell'
-        'valuebs'
-        'volmbs'
-        'countbs'
-        'valueund'
-        'volmund'
+        'value',
+        'volm',
+        'count',
+        'valuebuy',
+        'volmbuy',
+        'countbuy',
+        'valuebs',
+        'volmbs',
+        'countbs',
+        'valuesell',
+        'volmsell',
+        'countsell',
+        'valuebs',
+        'volmbs',
+        'countbs',
+        'valueund',
+        'volmund',
         'countund'
       ],(err,res) => {
         if (!err) {
