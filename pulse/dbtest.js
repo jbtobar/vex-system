@@ -8,6 +8,8 @@ const { query } = require('../db')
 const subber = redis.createClient();
 const client_redis = redis.createClient();
 
+const timenow = () => new Date().toLocaleString("en-US", {timeZone: "America/New_York"})
+
 let didUpdateOI = false;
 const timeIs5AM = () => {
   if (didUpdateOI) return false;
@@ -173,6 +175,7 @@ const queryInsert = async () => {
         WHERE opt_db_hist.optioncode = opt_db.optioncode
         AND opt_db_hist.dayid = (select max(dayid) from opt_db);`)
         didUpdateOI = false;
+        console.lo(`Updated OI :: ${timenow()}`)
       }
       await query(queryText)
       console.log( new Date().getTime()- timeStart)
