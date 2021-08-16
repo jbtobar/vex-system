@@ -79,7 +79,6 @@ const queryInsert = async () => {
   let queryText = ''
   const contractsCopy = {...contracts}
   try {
-    const timeStart = new Date().getTime();
 
     contracts = {}
     // UPDATE opt_db set
@@ -92,13 +91,8 @@ const queryInsert = async () => {
     // //     rho = ${fixNum(payload.rho)},
     // //     vega = ${fixNum(payload.vega)}
     // //     WHERE optioncode = '${payload.eventSymbol}'
-    // Object.keys(contractsCopy).forEach((k) => {
-    //
-    // });
-    const ckeys = Object.keys(contractsCopy)
-    for (var i = 0; i < ckeys.length; i++) {
-      const k = ckeys[i]
-      queryText=`UPDATE opt_db set `
+    Object.keys(contractsCopy).forEach((k) => {
+      queryText+=`UPDATE opt_db set `
       Object.keys(contractsCopy[k]).forEach((c,i) => {
         const value = contractsCopy[k][c]
         if (i === 0) {
@@ -168,12 +162,11 @@ const queryInsert = async () => {
         }
       });
       queryText+=` WHERE optioncode = '${k}'; `
-      await query(queryText)
-    }
+    });
 
 
     if (queryText) {
-
+      const timeStart = new Date().getTime();
       // if (timeIs5AM()) {
       //   await query(`UPDATE opt_db
       //   SET prevvol = opt_db_hist.volatility,
