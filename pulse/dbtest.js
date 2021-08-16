@@ -484,6 +484,7 @@ subber.subscribe('Custom')
 // ALTER TABLE opt_db ADD CONSTRAINT optionix UNIQUE (optioncode);
 // ALTER TABLE opt_db
 // DROP CONSTRAINT optionix;
+// ALTER TABLE opt_db SET (fillfactor = 70);
 
 // subber.subscribe('Underlying')
 // subber.subscribe('Series')
