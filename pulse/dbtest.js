@@ -177,9 +177,9 @@ const queryInsert = async () => {
       //   didUpdateOI = true;
       //   console.log(`Updated OI :: ${timenow()}`)
       // }
-      await query('BEGIN')
+      // await query('BEGIN')
       await query(queryText)
-      await query('COMMIT')
+      // await query('COMMIT')
       console.log( new Date().getTime()- timeStart)
       queryInsert()
     } else {
@@ -480,6 +480,10 @@ subber.subscribe('Custom')
 // ALTER TABLE opt_db_hist add column gxoi real;
 // ALTER TABLE opt_db_hist add column vxoi real;
 // ALTER TABLE opt_db_hist add column txoi real;
+
+// ALTER TABLE opt_db ADD CONSTRAINT optionix UNIQUE (optioncode);
+// ALTER TABLE opt_db
+// DROP CONSTRAINT optionix;
 
 // subber.subscribe('Underlying')
 // subber.subscribe('Series')
