@@ -177,7 +177,9 @@ const queryInsert = async () => {
       //   didUpdateOI = true;
       //   console.log(`Updated OI :: ${timenow()}`)
       // }
+      await query('BEGIN')
       await query(queryText)
+      await query('COMMIT')
       console.log( new Date().getTime()- timeStart)
       queryInsert()
     } else {
