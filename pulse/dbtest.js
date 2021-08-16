@@ -174,8 +174,8 @@ const queryInsert = async () => {
         FROM opt_db_hist
         WHERE opt_db_hist.optioncode = opt_db.optioncode
         AND opt_db_hist.dayid = (select max(dayid) from opt_db);`)
-        didUpdateOI = false;
-        console.lo(`Updated OI :: ${timenow()}`)
+        didUpdateOI = true;
+        console.log(`Updated OI :: ${timenow()}`)
       }
       await query(queryText)
       console.log( new Date().getTime()- timeStart)
