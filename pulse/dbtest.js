@@ -91,8 +91,13 @@ const queryInsert = async () => {
     // //     rho = ${fixNum(payload.rho)},
     // //     vega = ${fixNum(payload.vega)}
     // //     WHERE optioncode = '${payload.eventSymbol}'
-    Object.keys(contractsCopy).forEach((k) => {
-      queryText+=`UPDATE opt_db set `
+    // Object.keys(contractsCopy).forEach((k) => {
+    //
+    // });
+    const ckeys = Object.keys(contractsCopy)
+    for (var i = 0; i < ckeys.length; i++) {
+      const k = ckeys[i]
+      queryText=`UPDATE opt_db set `
       Object.keys(contractsCopy[k]).forEach((c,i) => {
         const value = contractsCopy[k][c]
         if (i === 0) {
@@ -162,7 +167,8 @@ const queryInsert = async () => {
         }
       });
       queryText+=` WHERE optioncode = '${k}'; `
-    });
+      await query(queryText)
+    }
 
 
     if (queryText) {
@@ -185,7 +191,7 @@ const queryInsert = async () => {
     } else {
       setTimeout(() => {
         queryInsert()
-      },10)
+      },500)
     }
   } catch (e) {
 
