@@ -167,16 +167,16 @@ const queryInsert = async () => {
 
     if (queryText) {
       const timeStart = new Date().getTime();
-      if (timeIs5AM()) {
-        await query(`UPDATE opt_db
-        SET prevvol = opt_db_hist.volatility,
-          prevoi = opt_db_hist.openInterest
-        FROM opt_db_hist
-        WHERE opt_db_hist.optioncode = opt_db.optioncode
-        AND opt_db_hist.dayid = (select max(dayid) from opt_db);`)
-        didUpdateOI = true;
-        console.log(`Updated OI :: ${timenow()}`)
-      }
+      // if (timeIs5AM()) {
+      //   await query(`UPDATE opt_db
+      //   SET prevvol = opt_db_hist.volatility,
+      //     prevoi = opt_db_hist.openInterest
+      //   FROM opt_db_hist
+      //   WHERE opt_db_hist.optioncode = opt_db.optioncode
+      //   AND opt_db_hist.dayid = (select max(dayid) from opt_db);`)
+      //   didUpdateOI = true;
+      //   console.log(`Updated OI :: ${timenow()}`)
+      // }
       await query(queryText)
       console.log( new Date().getTime()- timeStart)
       queryInsert()
