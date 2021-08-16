@@ -79,6 +79,7 @@ const queryInsert = async () => {
   let queryText = ''
   const contractsCopy = {...contracts}
   try {
+    const timeStart = new Date().getTime();
 
     contracts = {}
     // UPDATE opt_db set
@@ -172,7 +173,7 @@ const queryInsert = async () => {
 
 
     if (queryText) {
-      const timeStart = new Date().getTime();
+
       // if (timeIs5AM()) {
       //   await query(`UPDATE opt_db
       //   SET prevvol = opt_db_hist.volatility,
