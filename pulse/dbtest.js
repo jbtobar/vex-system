@@ -246,9 +246,9 @@ subber.on('message', (channel, message) => {
           contracts[eventSymbol].theta = fixNum(payload.theta)
           contracts[eventSymbol].rho = fixNum(payload.rho)
           contracts[eventSymbol].vega = fixNum(payload.vega)
-          calculateGXOI(eventSymbol,{
-            ...contracts[eventSymbol]
-          })
+          // calculateGXOI(eventSymbol,{
+          //   ...contracts[eventSymbol]
+          // })
           // queryAppend(
           //   `UPDATE opt_db set
           //     eventTimeG = ${fixNum(payload.eventTime)},
