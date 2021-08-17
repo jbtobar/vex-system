@@ -167,7 +167,7 @@ const queryInsert = async () => {
 
     if (queryText) {
       const timeStart = new Date().getTime();
-      if (!didUpdateOI) {
+      if (timeIs5AM()) {
         await query(`UPDATE opt_db
         SET prevvol = opt_db_hist.volatility,
           prevoi = opt_db_hist.openInterest
