@@ -167,16 +167,16 @@ const queryInsert = async () => {
 
     if (queryText) {
       const timeStart = new Date().getTime();
-      // if (timeIs5AM()) {
-      //   await query(`UPDATE opt_db
-      //   SET prevvol = opt_db_hist.volatility,
-      //     prevoi = opt_db_hist.openInterest
-      //   FROM opt_db_hist
-      //   WHERE opt_db_hist.optioncode = opt_db.optioncode
-      //   AND opt_db_hist.dayid = (select max(dayid) from opt_db);`)
-      //   didUpdateOI = true;
-      //   console.log(`Updated OI :: ${timenow()}`)
-      // }
+      if (!didUpdateOI) {
+        await query(`UPDATE opt_db
+        SET prevvol = opt_db_hist.volatility,
+          prevoi = opt_db_hist.openInterest
+        FROM opt_db_hist
+        WHERE opt_db_hist.optioncode = opt_db.optioncode
+        AND opt_db_hist.dayid = (select max(dayid) from opt_db);`)
+        didUpdateOI = true;
+        console.log(`Updated OI :: ${timenow()}`)
+      }
       // await query('BEGIN')
       await query(queryText)
       // await query('COMMIT')
@@ -410,6 +410,30 @@ subber.subscribe('Greeks')
 subber.subscribe('Summary')
 subber.subscribe('Quote')
 subber.subscribe('Custom')
+//
+// voir                  | real              |           |          | generated always as ((dayvolume / openinterest)) stored
+//  volmch                | bigint            |           |          | generated always as (dayvolume - prevdayvolume) stored
+//  volmchpct             | real              |           |          | generated always as (round(((dayvolume - prevdayvolume) / prevdayvolume * 100)::numeric, 2)) stored
+//  oich                  | integer           |           |          | generated always as ((openinterest - prevoi)) stored
+//  oichpct               | real              |           |          | generated always as (round(((openinterest - prevoi) / prevoi)::numeric, 2)) stored
+//
+//  volch                 | integer           |           |          | generated always as ((volatility - prevvol)) stored
+//
+//  dxoi                  | real              |           |          | generated always as ((delta * openinterest::double precision * 100::double precision)) stored
+//  gxoi                  | real              |           |          | generated always as ((gamma * openinterest::double precision * 100::double precision)) stored
+//  vxoi                  | real              |           |          | generated always as ((vega * openinterest::double precision * 100::double precision)) stored
+//  txoi
+//
+// alter table opt_db drop column voir;
+// alter table opt_db drop column volmch;
+// alter table opt_db drop column volmchpct;
+// alter table opt_db drop column oich;
+// alter table opt_db drop column oichpct;
+// alter table opt_db drop column volch;
+// alter table opt_db drop column dxoi;
+// alter table opt_db drop column gxoi;
+// alter table opt_db drop column vxoi;
+// alter table opt_db drop column txoi;
 //
 // ALTER TABLE opt_db add column eventTimeG bigint;
 // ALTER TABLE opt_db add column gprice real;
