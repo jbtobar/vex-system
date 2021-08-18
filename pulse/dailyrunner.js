@@ -8,7 +8,7 @@ const { query } = require('../db')
 const subber = redis.createClient();
 
 (async () =>  {
-  const contracts = await query(`SELECT optioncode,oich from opt_db where optioncode != '';`)
+  const contracts = await query(`SELECT optioncode,openinterest - prevoi as oich from opt_db where optioncode != '';`)
   console.log(contracts.rows.length)
   console.log(contracts.rows[0])
   for (var i = 0; i < contracts.rows.length; i++) {
