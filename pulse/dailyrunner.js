@@ -13,7 +13,7 @@ const subber = redis.createClient();
   console.log(contracts.rows[0])
   for (var i = 0; i < contracts.rows.length; i++) {
     subber.hmset(contracts.rows[i].optioncode,{
-      oich:contracts.rows[i].oich
+      oich:contracts.rows[i].oich  || 'null'
     })
   }
   console.log('done')
