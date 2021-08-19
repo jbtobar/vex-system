@@ -3,9 +3,10 @@
  * jbtobar.io@gmail.com
  * @author Juan Bernardo Tobar <jbtobar.io@gmail.com>
  */
-const redis = require('redis');
+// const redis = require('redis');
+const { hmset } = require('../redis')
 const { query } = require('../db')
-const subber = redis.createClient();
+// const subber = redis.createClient();
 
 (async () =>  {
   const contracts = await query(`SELECT optioncode,openinterest - prevoi as oich,
@@ -27,7 +28,7 @@ countbs from opt_db where optioncode != '';`)
   console.log(contracts.rows.length)
   console.log(contracts.rows[0])
   for (var i = 0; i < contracts.rows.length; i++) {
-    subber.hmset(contracts.rows[i].optioncode,{
+    await hmset(contracts.rows[i].optioncode,{
       oich:contracts.rows[i].oich  || 'null',
       valuebuy:contracts.rows[i].valuebuy  || 0,
       volmbuy:contracts.rows[i].volmbuy  || 0,
