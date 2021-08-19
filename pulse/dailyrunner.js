@@ -4,8 +4,8 @@
  * @author Juan Bernardo Tobar <jbtobar.io@gmail.com>
  */
 // const redis = require('redis');
-const { hmset } = require('../redis')
-const { query } = require('../db')
+const { hmset } = require('../redis');
+const { query } = require('../db');
 // const subber = redis.createClient();
 
 (async () =>  {
