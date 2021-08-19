@@ -174,16 +174,28 @@ const getBreakdown = (payload) => {
 const processedContracts = {}
 const handleTASOption = (eventSymbol,side,value,volm) => {
   try {
+    client_redis.hincrbyfloat(eventSymbol,'value',value)
+    client_redis.hincrby(eventSymbol,'volm',volm)
+    client_redis.hincrby(eventSymbol,'count',1)
+
     switch (side) {
       case 'buy':
         client_redis.hincrbyfloat(eventSymbol,'valuebuy',value)
         client_redis.hincrby(eventSymbol,'volmbuy',volm)
         client_redis.hincrby(eventSymbol,'countbuy',1)
+
+        client_redis.hincrbyfloat(eventSymbol,'valuebs',value)
+        client_redis.hincrby(eventSymbol,'volmbs',volm)
+        client_redis.hincrby(eventSymbol,'countbs',1)
         break;
       case 'sell':
         client_redis.hincrbyfloat(eventSymbol,'valuesell',value)
         client_redis.hincrby(eventSymbol,'volmsell',volm)
         client_redis.hincrby(eventSymbol,'countsell',1)
+
+        client_redis.hincrbyfloat(eventSymbol,'valuebs',-value)
+        client_redis.hincrby(eventSymbol,'volmbs',-volm)
+        client_redis.hincrby(eventSymbol,'countbs',-1)
         break;
       default:
         client_redis.hincrbyfloat(eventSymbol,'valueund',value)
@@ -191,6 +203,7 @@ const handleTASOption = (eventSymbol,side,value,volm) => {
         client_redis.hincrby(eventSymbol,'countund',1)
         break;
     }
+    client_redis.publish('CustomUpdate',JSON.stringify({eventSymbol}))
   } catch(err) {
     console.error(err)
   }
@@ -203,67 +216,69 @@ const handleTAS = payload => {
   const sumVega = fixNum(volm*vega)
   const sumTheta = fixNum(volm*theta)
 
-  handleTASOption(eventSymbol,side,value,volm)
+  if (volm>0) {
+    handleTASOption(eventSymbol,side,value,volm)
 
-  if (!totals[rootsymbol]) totals[rootsymbol] = generateEmptyObject()
-  if (!minutes[minute]) minutes[minute] = {}
-  if (!minutes[minute][rootsymbol]) {
-    minutes[minute][rootsymbol] = generateEmptyObject()
+    if (!totals[rootsymbol]) totals[rootsymbol] = generateEmptyObject()
+    if (!minutes[minute]) minutes[minute] = {}
+    if (!minutes[minute][rootsymbol]) {
+      minutes[minute][rootsymbol] = generateEmptyObject()
+    }
+
+    minutes[minute][rootsymbol].value+=value
+    minutes[minute][rootsymbol].volm+=volm
+    minutes[minute][rootsymbol].count+=1
+    minutes[minute][rootsymbol].sumdelta+=sumDelta
+    minutes[minute][rootsymbol].sumgamma+=sumGamma
+    minutes[minute][rootsymbol].sumvega+=sumVega
+    minutes[minute][rootsymbol].sumtheta+=sumTheta
+
+
+
+    minutes[minute][rootsymbol][`value${flag}`]+=value
+    minutes[minute][rootsymbol][`volm${flag}`]+=volm
+    minutes[minute][rootsymbol][`count${flag}`]+=1
+    minutes[minute][rootsymbol][`sumdelta${flag}`]+=sumDelta
+    minutes[minute][rootsymbol][`sumgamma${flag}`]+=sumGamma
+    minutes[minute][rootsymbol][`sumvega${flag}`]+=sumVega
+    minutes[minute][rootsymbol][`sumtheta${flag}`]+=sumTheta
+
+
+    minutes[minute][rootsymbol][`value${side}${flag}`]+=value
+    minutes[minute][rootsymbol][`volm${side}${flag}`]+=volm
+    minutes[minute][rootsymbol][`count${side}${flag}`]+=1
+    minutes[minute][rootsymbol][`sumdelta${side}${flag}`]+=sumDelta
+    minutes[minute][rootsymbol][`sumgamma${side}${flag}`]+=sumGamma
+    minutes[minute][rootsymbol][`sumvega${side}${flag}`]+=sumVega
+    minutes[minute][rootsymbol][`sumtheta${side}${flag}`]+=sumTheta
+
+
+
+    totals[rootsymbol].value+=value
+    totals[rootsymbol].volm+=volm
+    totals[rootsymbol].count+=1
+    totals[rootsymbol].sumdelta+=sumDelta
+    totals[rootsymbol].sumgamma+=sumGamma
+    totals[rootsymbol].sumvega+=sumVega
+    totals[rootsymbol].sumtheta+=sumTheta
+
+    totals[rootsymbol][`value${flag}`]+=value
+    totals[rootsymbol][`volm${flag}`]+=volm
+    totals[rootsymbol][`count${flag}`]+=1
+    totals[rootsymbol][`sumdelta${flag}`]+=sumDelta
+    totals[rootsymbol][`sumgamma${flag}`]+=sumGamma
+    totals[rootsymbol][`sumvega${flag}`]+=sumVega
+    totals[rootsymbol][`sumtheta${flag}`]+=sumTheta
+
+    totals[rootsymbol][`value${side}${flag}`]+=value
+    totals[rootsymbol][`volm${side}${flag}`]+=volm
+    totals[rootsymbol][`count${side}${flag}`]+=1
+    totals[rootsymbol][`sumdelta${side}${flag}`]+=sumDelta
+
+    totals[rootsymbol][`sumgamma${side}${flag}`]+=sumGamma
+    totals[rootsymbol][`sumvega${side}${flag}`]+=sumVega
+    totals[rootsymbol][`sumtheta${side}${flag}`]+=sumTheta
   }
-
-  minutes[minute][rootsymbol].value+=value
-  minutes[minute][rootsymbol].volm+=volm
-  minutes[minute][rootsymbol].count+=1
-  minutes[minute][rootsymbol].sumdelta+=sumDelta
-  minutes[minute][rootsymbol].sumgamma+=sumGamma
-  minutes[minute][rootsymbol].sumvega+=sumVega
-  minutes[minute][rootsymbol].sumtheta+=sumTheta
-
-
-
-  minutes[minute][rootsymbol][`value${flag}`]+=value
-  minutes[minute][rootsymbol][`volm${flag}`]+=volm
-  minutes[minute][rootsymbol][`count${flag}`]+=1
-  minutes[minute][rootsymbol][`sumdelta${flag}`]+=sumDelta
-  minutes[minute][rootsymbol][`sumgamma${flag}`]+=sumGamma
-  minutes[minute][rootsymbol][`sumvega${flag}`]+=sumVega
-  minutes[minute][rootsymbol][`sumtheta${flag}`]+=sumTheta
-
-
-  minutes[minute][rootsymbol][`value${side}${flag}`]+=value
-  minutes[minute][rootsymbol][`volm${side}${flag}`]+=volm
-  minutes[minute][rootsymbol][`count${side}${flag}`]+=1
-  minutes[minute][rootsymbol][`sumdelta${side}${flag}`]+=sumDelta
-  minutes[minute][rootsymbol][`sumgamma${side}${flag}`]+=sumGamma
-  minutes[minute][rootsymbol][`sumvega${side}${flag}`]+=sumVega
-  minutes[minute][rootsymbol][`sumtheta${side}${flag}`]+=sumTheta
-
-
-
-  totals[rootsymbol].value+=value
-  totals[rootsymbol].volm+=volm
-  totals[rootsymbol].count+=1
-  totals[rootsymbol].sumdelta+=sumDelta
-  totals[rootsymbol].sumgamma+=sumGamma
-  totals[rootsymbol].sumvega+=sumVega
-  totals[rootsymbol].sumtheta+=sumTheta
-
-  totals[rootsymbol][`value${flag}`]+=value
-  totals[rootsymbol][`volm${flag}`]+=volm
-  totals[rootsymbol][`count${flag}`]+=1
-  totals[rootsymbol][`sumdelta${flag}`]+=sumDelta
-  totals[rootsymbol][`sumgamma${flag}`]+=sumGamma
-  totals[rootsymbol][`sumvega${flag}`]+=sumVega
-  totals[rootsymbol][`sumtheta${flag}`]+=sumTheta
-
-  totals[rootsymbol][`value${side}${flag}`]+=value
-  totals[rootsymbol][`volm${side}${flag}`]+=volm
-  totals[rootsymbol][`count${side}${flag}`]+=1
-  totals[rootsymbol][`sumdelta${side}${flag}`]+=sumDelta
-
-  totals[rootsymbol][`sumgamma${side}${flag}`]+=sumGamma
-  totals[rootsymbol][`sumvega${side}${flag}`]+=sumVega
-  totals[rootsymbol][`sumtheta${side}${flag}`]+=sumTheta
 
 }
 

@@ -403,8 +403,8 @@ subber.on('message', (channel, message) => {
     console.error(e,channel, message)
   }
 })
-subber.subscribe('TASER')
-subber.subscribe('TASERFUT')
+// subber.subscribe('TASER')
+// subber.subscribe('TASERFUT')
 subber.subscribe('Trade')
 subber.subscribe('Greeks')
 subber.subscribe('Summary')
