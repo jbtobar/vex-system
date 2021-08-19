@@ -4,7 +4,7 @@
  * @author Juan Bernardo Tobar <jbtobar.io@gmail.com>
  */
 // const redis = require('redis');
-const { client, get } = require('./redis');
+const { client, get } = require('../redis');
 const { query } = require('../db')
 // const client_redis = redis.createClient();
 
