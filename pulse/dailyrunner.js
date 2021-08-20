@@ -159,7 +159,7 @@ const getFlowRep = async () => {
 
     console.log('got it all',new Date().getTime() - timeStart)
 
-    await query(`UPDATE jkeys set t_up=NOW(),body = ${JSON.stringify(data)} where name='flowrep'`)
+    await query(`UPDATE jkeys set t_up=NOW(),body = '${JSON.stringify(data)}' where name='flowrep'`)
 
 
     console.log('loaded it all and done',new Date().getTime() - timeStart)
