@@ -16,7 +16,7 @@ const onlyNum = (val) => {
 const timenow = () => new Date().toLocaleString("en-US", {timeZone: "America/New_York"})
 
 const enhanceMetrics = (data) => {
-  return data.filter(d => !['null',':undefined'].includes(d.symbol)).map((d) => {
+  return data.filter(d => !['null',':undefined','/:undefined'].includes(d.symbol)).map((d) => {
     try {
       d.callbuysharecall = onlyNum(Number(((d.valuebuycall/d.valuecall)*100).toFixed(2)))
       d.callbuysharetotal = onlyNum(Number(((d.valuebuycall/d.value)*100).toFixed(2)))
