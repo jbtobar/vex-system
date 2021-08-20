@@ -14,9 +14,27 @@ function wait(milliseconds) {
   return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
 
+// │ 0  │ cometOPT           │ fork     │ 257… │ online    │ 0%       │ 112.3mb  │
+// │ 6  │ cometTAS           │ fork     │ 127… │ online    │ 0%       │ 88.2mb   │
+// │ 3  │ cometTASFUT        │ fork     │ 8    │ online    │ 0%       │ 80.0mb   │
+// │ 5  │ flowMaker          │ fork     │ 368  │ online    │ 0%       │ 880.6mb  │
+// │ 2  │ flowMakerFUT       │ fork     │ 3    │ online    │ 0%       │ 131.7mb  │
+// │ 1  │ publisherOPT       │ fork     │ 14   │ online    │ 0%       │ 640.7mb  │
+// │ 7  │ publisherTAS       │ fork     │ 3    │ online    │ 0%       │ 405.4mb  │
+// │ 4  │ publisherTASFUT    │ fork     │ 22   │ online    │ 0%       │ 75.5mb   │
+// │ 9  │ server             │ fork     │ 7    │ online    │ 0%       │ 537.2mb  │
+// │ 8  │ vex-pay            │ fork     │ 0    │ online    │ 0%       │ 60.7mb
+
 const marketClose = async () => {
   try {
-    await exec('pm2 stop all')
+    await exec('pm2 stop cometOPT')
+    await exec('pm2 stop cometTAS')
+    await exec('pm2 stop cometTASFUT')
+    await exec('pm2 stop flowMaker')
+    await exec('pm2 stop flowMakerFUT')
+    await exec('pm2 stop publisherOPT')
+    await exec('pm2 stop publisherTAS')
+    await exec('pm2 stop publisherTASFUT')
     await query(`INSERT INTO opt_db_hist (select * from opt_db);`)
     console.log(`pm2 stop all - ${timenow()}`)
   } catch (e) {
