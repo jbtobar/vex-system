@@ -212,10 +212,10 @@ const handleTASOption = (eventSymbol,side,value,volm) => {
 
 const handleTAS = payload => {
   const [rootsymbol,minute,flag,side,value,volm,delta,gamma,vega,theta,eventSymbol] = getBreakdown(payload)
-  const sumDelta = fixNum(volm*delta)
-  const sumGamma = fixNum(volm*gamma)
-  const sumVega = fixNum(volm*vega)
-  const sumTheta = fixNum(volm*theta)
+  const sumDelta = fixNum(volm*delta)*(side === 'sell' ? -1 : 1)
+  const sumGamma = fixNum(volm*gamma)*(side === 'sell' ? -1 : 1)
+  const sumVega = fixNum(volm*vega)*(side === 'sell' ? -1 : 1)
+  const sumTheta = fixNum(volm*theta)*(side === 'sell' ? -1 : 1)
 
   if (volm>0) {
     handleTASOption(eventSymbol,side,value,volm)
