@@ -33,8 +33,7 @@ const get = (args) => {
     })
   });
 }
-const todayMidnight = () =>  1631296876181
-// Math.floor(new Date().getTime()/8.64e7)*8.64e7+ 1000*60*60*4
+const todayMidnight = () => Math.floor(new Date().getTime()/8.64e7)*8.64e7+ 1000*60*60*4
 
 // new Date(
 //   Math.floor(new Date().getTime()/8.64e7)*8.64e7+ 1000*60*60*4
