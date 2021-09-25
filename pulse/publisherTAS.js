@@ -43,8 +43,7 @@ let timeId = 0;
 (async () => {
   const lastFut = await get('LAST_TAS')
   console.log(lastFut)
-  timeId =  1632499687857
-  ///todayMidnight()
+  timeId = todayMidnight()
   console.log('firsttime',{timeId})
   // process.exit()
 })();
