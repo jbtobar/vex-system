@@ -15,8 +15,8 @@ const {
   META_UNSUCCESSFUL_CHANNEL
 } = require('./constants')
 var cometd = new lib.CometD();
-const COMET_URL = 'https://tasty.dxfeed.com/live/cometd'
-// const COMET_URL = 'wss://tasty-live-web.dxfeed.com/live/cometd'
+// const COMET_URL = 'https://tasty.dxfeed.com/live/cometd'
+const COMET_URL = 'wss://tasty-live-web.dxfeed.com/live/cometd'
 cometd.websocketEnabled = true;
 cometd.configure({
     url: COMET_URL,
