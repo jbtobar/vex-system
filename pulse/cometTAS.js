@@ -44,6 +44,7 @@ const LENGTHS = {
 }
 // const fixNum = (val) => isNaN(val) ? 0 : Number(val);
 const fixNum = (val) => {
+  if (!val) return null
   if (val === Infinity) return null;
   if (val === -Infinity) return null;
   if (val === null) return null;
@@ -154,7 +155,7 @@ pool.connect(async function (err, client, done) {
                  ])
                  client_redis.set('LAST_TAS',singleLoad[3])
                  client_redis.publish('TASER',json)
-                 readable.push(json.substring(1, json.length-1)+'\n')
+                 readable.push(json.replace(/"null"/g, null).replace(/'null'/g, null)..substring(1, json.length-1)+'\n')
                }
              }
              readable.push(null)
