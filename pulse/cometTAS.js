@@ -44,14 +44,14 @@ const LENGTHS = {
 }
 // const fixNum = (val) => isNaN(val) ? 0 : Number(val);
 const fixNum = (val) => {
-  if (!val) return null
-  if (val === Infinity) return null;
-  if (val === -Infinity) return null;
-  if (val === null) return null;
-  if (val === 'null') return null;
-  if (val === false) return null;
-  if (val === undefined) return null;
-  if (isNaN(val)) return null;
+  if (!val) return 0
+  if (val === Infinity) return 0;
+  if (val === -Infinity) return 0;
+  if (val === null) return 0;
+  if (val === 'null') return 0;
+  if (val === false) return 0;
+  if (val === undefined) return 0;
+  if (isNaN(val)) return 0;
   const num = Number(val)
   if (Math.abs(Number(Math.abs(num).countDecimals())) > 6)  {
     return Number(num.toFixed(6))
