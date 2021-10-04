@@ -48,8 +48,7 @@ let timeId = 0;
   console.log(lastFut)
   // timeId = today500pm()
   // timeId = today545pm()
-  timeId = 1633343311342
-  //today545pm();
+  timeId = today545pm();
   // timeId = today300pm()
   console.log('firsttime',{timeId})
   // process.exit()
