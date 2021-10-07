@@ -49,6 +49,7 @@ const subCommand = async () => {
     const symbolLoad = codes.splice(0,2000)
     symbolLoad.forEach((item, i) => {
       subbed[item.optioncode] = true
+      item.underlying = item.underlying_symbol.slice(0, item.underlying_symbol.length-1) + '2' + item.underlying_symbol.slice(item.underlying_symbol.length-1) +":"+item.optioncode.split(':')[1]
       client_redis.hmset(item.optioncode,{
         ...item,
         valuebuy:0,
