@@ -168,4 +168,7 @@ const getFlowRep = async () => {
     console.error(e)
   }
 };
-getFlowRep()
+
+setInterval(() => {
+  getFlowRep()
+},1000*60*2)
