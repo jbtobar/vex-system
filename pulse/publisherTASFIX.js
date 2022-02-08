@@ -79,7 +79,7 @@ const subCommand = async () => {
       client_redis.hmset(item,{pub:new Date().getTime()})
     });
 
-    client_redis.publish('cometTAS',JSON.stringify({"addTimeSeries":{
+    client_redis.publish('cometTASFIX',JSON.stringify({"addTimeSeries":{
       "TimeAndSale": symbolLoad.map(d => ({"eventSymbol":d,"fromTime":timeId})),
     }}))
     await wait(500);

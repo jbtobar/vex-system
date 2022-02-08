@@ -16,7 +16,7 @@ console.log('-----------------------------------------------------------------')
 console.log('-----------------------------------------------------------------')
 console.log('-----------------------------------------------------------------')
 console.log('-----------------------------------------------------------------')
-console.log(`cometTAS - start - ${timenow()} - v4.0.5`)
+console.log(`cometTASFIX - start - ${timenow()} - v4.0.5`)
 console.log('-----------------------------------------------------------------')
 console.log('-----------------------------------------------------------------')
 console.log('-----------------------------------------------------------------')
@@ -112,7 +112,7 @@ pool.connect(async function (err, client, done) {
     const handeTimeSeriesChannel = async msg => {
       try {
         // console.log(msg)
-        client_redis.set('cometTAS',new Date().getTime())
+        client_redis.set('cometTASFIX',new Date().getTime())
         messageNum+=1;
         const [payloadType,payload] = msg.data
          if (payload.length > 0) {
@@ -183,7 +183,7 @@ pool.connect(async function (err, client, done) {
       // console.log(message)
       // console.log(payload)
       switch (channel) {
-        case 'cometTAS':
+        case 'cometTASFIX':
           comet.publish(SUBSCRIPTION_CHANNEL,payload,ack => {
             if (!ack.successful) {
               console.log('sub fail',ack)
@@ -196,7 +196,7 @@ pool.connect(async function (err, client, done) {
         default:
       }
     })
-    publisher.subscribe('cometTAS')
+    publisher.subscribe('cometTASFIX')
 
 
 
@@ -205,7 +205,7 @@ pool.connect(async function (err, client, done) {
 
 
     setInterval(() => {
-      console.log('cometTAS',{messageNum,okNum,time:timenow()})
+      console.log('cometTASFIX',{messageNum,okNum,time:timenow()})
     },1000*30)
   } catch (e) {
     console.error(e)
