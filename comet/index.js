@@ -38,6 +38,7 @@ module.exports = async () => {
       let streamerD = {
         token
       }
+      console.log(token);
       var additional = {
           'ext': {'com.devexperts.auth.AuthToken': streamerD.token},
           'com.devexperts.auth.AuthToken': streamerD.token

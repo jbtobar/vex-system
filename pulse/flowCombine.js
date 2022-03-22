@@ -33,6 +33,7 @@ const enhanceMetrics = (data) => {
         )
       )
       d.changepct = onlyNum(Number(((d.change/(d.price-d.change))*100).toFixed(2)))
+      d.open = onlyNum(Number((d.price-d.change).toFixed(2)))
 
       d.sumdelta = onlyNum(Number((d.sumdelta*100).toFixed(2)))
       d.sumgamma = onlyNum(Number((d.sumgamma*100).toFixed(2)))
