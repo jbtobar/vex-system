@@ -287,7 +287,7 @@ const handleTAS = payload => {
 
 const getUnderlyingValues = async (totalKeys) => {
   try {
-    const vals = await runBatchMini(totalKeys,['dayVolume','dayOpenPrice','price','change','callVolume','putVolume','volatility','frontVolatility','backVolatility'],true)
+    const vals = await runBatchMini(totalKeys,['dayVolume','price','change','callVolume','putVolume','volatility','frontVolatility','backVolatility','dayOpenPrice'],true)
     let obj = {}
     vals.forEach((item, i) => {
       obj[item[0]] = {
@@ -299,6 +299,7 @@ const getUnderlyingValues = async (totalKeys) => {
         volatility:Number(item[6]),
         frontVolatility:Number(item[7]),
         backVolatility:Number(item[8]),
+        open:Number(item[9])
       }
     });
     return obj
