@@ -7,26 +7,6 @@ const redis = require('redis');
 const client_redis = redis.createClient();
 const { query } = require('../db');
 
-const toggleChannel = (ch) => {
-    switch (ch) {
-        case 'cometOPT0':
-            return 'cometOPT1';
-        case 'cometOPT1':
-            return 'cometOPT2';
-        case 'cometOPT2':
-            return 'cometOPT3';
-        case 'cometOPT3':
-            return 'cometOPT4';
-        case 'cometOPT4':
-            return 'cometOPT5';
-        case 'cometOPT5':
-            return 'cometOPT0';
-        default:
-            console.log('foooooked')
-            return 'com'
-    }
-}
-
 function wait(milliseconds) {
   return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
@@ -57,7 +37,7 @@ const subCommand = async () => {
 
 
 
-  let cometChannel = 'cometOPT0'
+
 
 
 
@@ -90,8 +70,8 @@ const subCommand = async () => {
         underlying:item.underlying_symbol.slice(0, item.underlying_symbol.length-1) + '2' + item.underlying_symbol.slice(item.underlying_symbol.length-1) +":"+item.optioncode.split(':')[1]
       })
     });
-    cometChannel = toggleChannel(cometChannel);
-    client_redis.publish(cometChannel,JSON.stringify({"add":{
+
+    client_redis.publish('cometOPT',JSON.stringify({"add":{
       "Greeks": symbolLoad.map(d => d.optioncode),
       "Quote": symbolLoad.map(d => d.optioncode),
       "Trade": symbolLoad.map(d => d.optioncode),
@@ -127,8 +107,8 @@ const subCommand = async () => {
     symbolLoad.forEach((item, i) => {
       subbed[item] = true
     });
-    cometChannel = toggleChannel(cometChannel);
-    client_redis.publish(cometChannel,JSON.stringify({"add":{
+
+    client_redis.publish('cometOPT',JSON.stringify({"add":{
       // "Greeks": symbolLoad,
       "Quote": symbolLoad,
       "Trade": symbolLoad,
@@ -197,8 +177,8 @@ const subCommand = async () => {
     //     console.error(e,item)
     //   }
     // });
-    cometChannel = toggleChannel(cometChannel);
-    client_redis.publish(cometChannel,JSON.stringify({"add":{
+
+    client_redis.publish('cometOPT',JSON.stringify({"add":{
       "Greeks": symbolLoad.map(d => d.optioncode),
       "Quote": symbolLoad.map(d => d.optioncode),
       "Trade": symbolLoad.map(d => d.optioncode),
@@ -223,8 +203,7 @@ const subCommand = async () => {
       subbed[item] = true
     });
 
-    cometChannel = toggleChannel(cometChannel);
-    client_redis.publish(cometChannel,JSON.stringify({"add":{
+    client_redis.publish('cometOPT',JSON.stringify({"add":{
       "Quote": symbolLoad,
       "Trade": symbolLoad,
       "Summary": symbolLoad,
