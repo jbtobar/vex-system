@@ -75,5 +75,5 @@ subber.on('message', (channel, message) => {
 })
 subber.subscribe('cx')
 setInterval(() => {
-  console.log('cxOPT',{messageNum,okNum,time:timenow()})
+  console.log('cxOPT',{messageNum,time:timenow()})
 },1000*30);
