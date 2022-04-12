@@ -90,7 +90,8 @@ const handleDataChannel = msg => {
 
   const comet = await connectedComet()
 
-  comet.subscribe(DATA_CHANNEL,handleDataChannel)
+  // comet.subscribe(DATA_CHANNEL,handleDataChannel)
+  comet.subscribe(DATA_CHANNEL,e => client_redis.publish("cx", JSON.stringify(e)))
 
   publisher.on('message', (channel, message) => {
     const payload = JSON.parse(message)
