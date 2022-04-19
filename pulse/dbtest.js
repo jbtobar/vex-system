@@ -76,7 +76,7 @@ let contracts = {}
 
 const queryInsert = async () => {
 
-  let queryText = ''
+
   const contractsCopy = {...contracts}
   try {
 
@@ -91,107 +91,123 @@ const queryInsert = async () => {
     // //     rho = ${fixNum(payload.rho)},
     // //     vega = ${fixNum(payload.vega)}
     // //     WHERE optioncode = '${payload.eventSymbol}'
-    const keyser = Object.keys(contractsCopy);
-    const keylengths = keyser.length;
-    console.log(`keys: ${keylengths}`);
-    keyser.forEach((k) => {
-      queryText+=`UPDATE opt_db set `
-      Object.keys(contractsCopy[k]).forEach((c,i) => {
-        const value = contractsCopy[k][c]
-        if (i === 0) {
-          switch (c) {
-            case 'bidExchangeCode':
-            case 'askExchangeCode':
-            case 'dayClosePriceType':
-            case 'prevDayClosePriceType':
-              queryText+=`${c} = '${value}' `
-              break;
-            case 'theo':
-            case 'volatility':
-            case 'delta':
-            case 'gamma':
-            case 'theta':
-            case 'rho':
-            case 'vega':
-            case 'bidprice':
-            case 'askprice':
-            case 'price':
-            case 'change':
-            case 'dayturnover':
-            case 'dayopenprice':
-            case 'dayhighprice':
-            case 'daylowprice':
-            case 'daycloseprice':
-            case 'prevdaycloseprice':
-            case 'changepct':
-              queryText+=`${c} = ${value}::real `
-              break;
-          default:
-              queryText+=`${c} = ${value} `
+    let keyser = Object.keys(contractsCopy);
+    console.log(`keys: ${keyser.length}`);
 
-          }
-        } else {
-          switch (c) {
-            case 'bidExchangeCode':
-            case 'askExchangeCode':
-            case 'dayClosePriceType':
-            case 'prevDayClosePriceType':
-              queryText+=`, ${c} = '${value}' `
-              break;
-            case 'theo':
-            case 'volatility':
-            case 'delta':
-            case 'gamma':
-            case 'theta':
-            case 'rho':
-            case 'vega':
-            case 'bidprice':
-            case 'askprice':
-            case 'price':
-            case 'change':
-            case 'dayturnover':
-            case 'dayopenprice':
-            case 'dayhighprice':
-            case 'daylowprice':
-            case 'daycloseprice':
-            case 'prevdaycloseprice':
-            case 'changepct':
-              queryText+=`, ${c} = ${value}::real `
-              break;
-            default:
-              queryText+=`, ${c} = ${value} `
+    const chunkSize = 1000;
+    for (let i = 0; i < keyser.length; i += chunkSize) {
+        const chunk = keyser.slice(i, i + chunkSize);
+        // do whatever
+        let queryText = ''
+        chunk.forEach((k) => {
+          queryText+=`UPDATE opt_db set `
+          Object.keys(contractsCopy[k]).forEach((c,i) => {
+            const value = contractsCopy[k][c]
+            if (i === 0) {
+              switch (c) {
+                case 'bidExchangeCode':
+                case 'askExchangeCode':
+                case 'dayClosePriceType':
+                case 'prevDayClosePriceType':
+                  queryText+=`${c} = '${value}' `
+                  break;
+                case 'theo':
+                case 'volatility':
+                case 'delta':
+                case 'gamma':
+                case 'theta':
+                case 'rho':
+                case 'vega':
+                case 'bidprice':
+                case 'askprice':
+                case 'price':
+                case 'change':
+                case 'dayturnover':
+                case 'dayopenprice':
+                case 'dayhighprice':
+                case 'daylowprice':
+                case 'daycloseprice':
+                case 'prevdaycloseprice':
+                case 'changepct':
+                  queryText+=`${c} = ${value}::real `
+                  break;
+              default:
+                  queryText+=`${c} = ${value} `
 
-          }
-        }
-      });
-      queryText+=` WHERE optioncode = '${k}'; `
-    });
+              }
+            } else {
+              switch (c) {
+                case 'bidExchangeCode':
+                case 'askExchangeCode':
+                case 'dayClosePriceType':
+                case 'prevDayClosePriceType':
+                  queryText+=`, ${c} = '${value}' `
+                  break;
+                case 'theo':
+                case 'volatility':
+                case 'delta':
+                case 'gamma':
+                case 'theta':
+                case 'rho':
+                case 'vega':
+                case 'bidprice':
+                case 'askprice':
+                case 'price':
+                case 'change':
+                case 'dayturnover':
+                case 'dayopenprice':
+                case 'dayhighprice':
+                case 'daylowprice':
+                case 'daycloseprice':
+                case 'prevdaycloseprice':
+                case 'changepct':
+                  queryText+=`, ${c} = ${value}::real `
+                  break;
+                default:
+                  queryText+=`, ${c} = ${value} `
 
+              }
+            }
+          });
+          queryText+=` WHERE optioncode = '${k}'; `
+        });
 
-    if (queryText) {
-      const timeStart = new Date().getTime();
-      if (timeIs5AM()) {
-        await query(`UPDATE opt_db
-        SET prevvol = opt_db_hist.volatility,
-          prevoi = opt_db_hist.openInterest
-        FROM opt_db_hist
-        WHERE opt_db_hist.optioncode = opt_db.optioncode
-        AND opt_db_hist.dayid = (select max(dayid) from opt_db);`)
-        didUpdateOI = true;
-        console.log(`Updated OI :: ${timenow()}`)
-      }
-      // await query('BEGIN')
-      const q11 = new Date().getTime();
-      await query(queryText)
-      console.log(`q:${new Date().getTime()- q11}`)
-      // await query('COMMIT')
-      console.log( new Date().getTime()- timeStart)
-      queryInsert()
-    } else {
-        setTimeout(() => {
-            queryInsert()
-        },500)
+        const q11 = new Date().getTime();
+        await query(queryText)
+        console.log(`q:${new Date().getTime()- q11}`)
     }
+
+    setTimeout(() => {
+        queryInsert()
+    },500)
+
+    
+
+
+    // if (queryText) {
+    //   const timeStart = new Date().getTime();
+    //   if (timeIs5AM()) {
+    //     await query(`UPDATE opt_db
+    //     SET prevvol = opt_db_hist.volatility,
+    //       prevoi = opt_db_hist.openInterest
+    //     FROM opt_db_hist
+    //     WHERE opt_db_hist.optioncode = opt_db.optioncode
+    //     AND opt_db_hist.dayid = (select max(dayid) from opt_db);`)
+    //     didUpdateOI = true;
+    //     console.log(`Updated OI :: ${timenow()}`)
+    //   }
+    //   // await query('BEGIN')
+    //   const q11 = new Date().getTime();
+    //   await query(queryText)
+    //   console.log(`q:${new Date().getTime()- q11}`)
+    //   // await query('COMMIT')
+    //   console.log( new Date().getTime()- timeStart)
+    //   queryInsert()
+    // } else {
+    //     setTimeout(() => {
+    //         queryInsert()
+    //     },500)
+    // }
   } catch (e) {
 
     console.error('queryText',e)
