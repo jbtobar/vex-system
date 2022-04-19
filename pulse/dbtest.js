@@ -91,7 +91,9 @@ const queryInsert = async () => {
     // //     rho = ${fixNum(payload.rho)},
     // //     vega = ${fixNum(payload.vega)}
     // //     WHERE optioncode = '${payload.eventSymbol}'
-    Object.keys(contractsCopy).forEach((k) => {
+    const keylengths = Object.keys(contractsCopy);
+    console.log(keylengths.length);
+    keylengths.forEach((k) => {
       queryText+=`UPDATE opt_db set `
       Object.keys(contractsCopy[k]).forEach((c,i) => {
         const value = contractsCopy[k][c]
@@ -185,9 +187,9 @@ const queryInsert = async () => {
       console.log( new Date().getTime()- timeStart)
       queryInsert()
     } else {
-      setTimeout(() => {
-        queryInsert()
-    },15000)
+        setTimeout(() => {
+            queryInsert()
+        },500)
     }
   } catch (e) {
 
