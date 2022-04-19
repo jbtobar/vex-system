@@ -91,9 +91,10 @@ const queryInsert = async () => {
     // //     rho = ${fixNum(payload.rho)},
     // //     vega = ${fixNum(payload.vega)}
     // //     WHERE optioncode = '${payload.eventSymbol}'
-    const keylengths = Object.keys(contractsCopy);
-    console.log(`keys: ${keylengths.length}`);
-    keylengths.forEach((k) => {
+    const keyser = Object.keys(contractsCopy);
+    const keylengths = keyser.length;
+    console.log(`keys: ${keylengths}`);
+    keyser.forEach((k) => {
       queryText+=`UPDATE opt_db set `
       Object.keys(contractsCopy[k]).forEach((c,i) => {
         const value = contractsCopy[k][c]
