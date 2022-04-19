@@ -185,7 +185,7 @@ const queryInsert = async () => {
     } else {
       setTimeout(() => {
         queryInsert()
-      },5)
+    },5000)
     }
   } catch (e) {
 
