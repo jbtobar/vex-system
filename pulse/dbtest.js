@@ -180,7 +180,7 @@ const queryInsert = async () => {
       // await query('BEGIN')
       const q11 = new Date().getTime();
       await query(queryText)
-      console.log(new Date().getTime()- q11)
+      console.log(`q:${new Date().getTime()- q11}`)
       // await query('COMMIT')
       console.log( new Date().getTime()- timeStart)
       queryInsert()
