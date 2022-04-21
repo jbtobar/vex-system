@@ -99,5 +99,5 @@ subber.on('message', (channel, message) => {
 subber.subscribe('cx')
 storeQueue()
 setInterval(() => {
-  console.log('cxOPT',{messageNum,time:timenow()})
+  console.log('cxOPT',{messageNum,time:timenow(),queue:queue.length})
 },1000*30);
