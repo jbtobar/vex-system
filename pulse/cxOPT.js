@@ -20,8 +20,8 @@ async function storeQueue() {
         const copyQueue = [...queue]
         queue = []
         try {
-            for (var i = 0; i < queue.length; i++) {
-                const msg = JSON.parse(queue[i])
+            for (var i = 0; i < copyQueue.length; i++) {
+                const msg = JSON.parse(copyQueue[i])
                 messageNum+=1
                 // console.log(msg)
                 const ltime = new Date().getTime()
