@@ -7,7 +7,7 @@ const redis = require('redis');
 const client_redis = redis.createClient();
 const { query } = require('../db');
 
-const data = {}
+const data = {};
 
 (async () => {
     const startTime = new Date().getTime();
