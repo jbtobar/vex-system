@@ -152,31 +152,31 @@ const subCommand = async () => {
   while (codes.length > 0) {
     const symbolLoad = codes.splice(0,2000)
 
-    // symbolLoad.forEach((item, i) => {
-    //   subbed[item.optioncode] = true
-    //   try {
-    //     client_redis.hmset(item.optioncode,{
-    //       ...item,
-    //       valuebuy:0,
-    //       volmbuy:0,
-    //       countbuy:0,
-    //       valuesell:0,
-    //       volmsell:0,
-    //       countsell:0,
-    //       valueund:0,
-    //       volmund:0,
-    //       countund:0,
-    //       value:0,
-    //       volm:0,
-    //       count:0,
-    //       valuebs:0,
-    //       volmbs:0,
-    //       countbs:0,
-    //     })
-    //   } catch (e) {
-    //     console.error(e,item)
-    //   }
-    // });
+    symbolLoad.forEach((item, i) => {
+      subbed[item.optioncode] = true
+      try {
+        client_redis.hmset(item.optioncode,{
+          ...item,
+          // valuebuy:0,
+          // volmbuy:0,
+          // countbuy:0,
+          // valuesell:0,
+          // volmsell:0,
+          // countsell:0,
+          // valueund:0,
+          // volmund:0,
+          // countund:0,
+          // value:0,
+          // volm:0,
+          // count:0,
+          // valuebs:0,
+          // volmbs:0,
+          // countbs:0,
+        })
+      } catch (e) {
+        console.error(e,item)
+      }
+    });
 
     client_redis.publish('cometOPT',JSON.stringify({"add":{
       "Greeks": symbolLoad.map(d => d.optioncode),

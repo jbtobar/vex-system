@@ -24,7 +24,7 @@ subber.on('message', (channel, message) => {
         messageNum+=1
         // console.log(msg)
         const ltime = new Date().getTime()
-        client_redis.set('cometOPT',ltime)
+        // client_redis.set('cometOPT',ltime)
 
         const [payloadType,payload] = msg.data
         let name
