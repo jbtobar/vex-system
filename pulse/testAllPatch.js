@@ -31,7 +31,7 @@ function runBatch(rows,includeKeys) {
           rowMode: 'array',
         });
         // codes = codes.map(d => d.symbol)
-        console.log(codes[0])
+        console.log(codes.rows[0])
         console.log(`time codes:${new Date().getTime() - startTime}`)
         const data = await runBatch(codes,true);
         console.log(`time all:${new Date().getTime() - startTime}`)
