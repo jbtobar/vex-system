@@ -21,7 +21,7 @@ async function storeQueue() {
         queue = []
         try {
             for (var i = 0; i < copyQueue.length; i++) {
-                const [item,payloadObj] = copyQueue[i]
+                const [item,name,payloadObj] = copyQueue[i]
                 await client_redis.hmset(item,payloadObj)
                 await client_redis.publish(
                   name,
@@ -84,7 +84,7 @@ subber.on('message', (channel, message) => {
           }
           payloadObj[`${name}_ts`] = ltime
 
-          queue.push([item[0],payloadObj])
+          queue.push([item[0],name,payloadObj])
           // client_redis.hmset(item[0],payloadObj)
           // client_redis.publish(
           //   name,
