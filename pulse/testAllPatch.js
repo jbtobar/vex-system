@@ -26,12 +26,12 @@ function runBatch(rows,includeKeys) {
 (async () => {
     try {
         const startTime =  new Date().getTime();
-        let codes = await query({
+        let codes = (await query({
           text: `SELECT symbol from ipf_opt;`,
           rowMode: 'array',
-        });
+        })).rows;
         // codes = codes.map(d => d.symbol)
-        console.log(codes.rows[0])
+        console.log(codes[0])
         console.log(`time codes:${new Date().getTime() - startTime}`)
         const data = await runBatch(codes,true);
         console.log(`time all:${new Date().getTime() - startTime}`)
