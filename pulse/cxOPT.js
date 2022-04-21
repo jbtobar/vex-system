@@ -20,16 +20,59 @@ async function storeQueue() {
         const copyQueue = [...queue]
         queue = []
         try {
-            for (var i = 0; i < copyQueue.length; i++) {
-                const [item,name,payloadObj] = copyQueue[i]
-                await client_redis.hmset(item,payloadObj)
-                await client_redis.publish(
-                  name,
-                  JSON.stringify({eventSymbol:item,...payloadObj})
-                )
+            for (var i = 0; i < queue.length; i++) {
+                const msg = JSON.parse(queue[i])
+                messageNum+=1
+                // console.log(msg)
+                const ltime = new Date().getTime()
+                // client_redis.set('cometOPT',ltime)
+
+                const [payloadType,payload] = msg.data
+                let name
+                if (typeof payloadType !== 'string') {
+                  LENGTHS[payloadType[0]] = payloadType[1]
+                  name = payloadType[0]
+                } else {
+                  name = payloadType
+                }
+                if (!LENGTHS[name]) return console.log('fucked',[payloadType,payload])
+
+                while (payload.length > 0) {
+                  let item = payload.splice(0,LENGTHS[name].length);
+                  let payloadObj = {
+
+                  }
+                  LENGTHS[name].forEach((key, i) => {
+                    if (i > 0) {
+                      payloadObj[key] = item[i] || 'null'
+                    }
+                  });
+
+                  if (name === 'Greeks') {
+                    // console.log(payloadObj)
+                    payloadObj.theo = payloadObj.price
+                    // console.log(payloadObj)
+                    delete payloadObj.price
+                  }
+                  if (name === 'Trade') {
+                    // console.log(payloadObj)
+                    payloadObj.changePct = payloadObj.change/(payloadObj.price-payloadObj.change)
+                    // console.log(payloadObj)
+                    // delete payloadObj.changePct
+                  }
+                  payloadObj[`${name}_ts`] = ltime
+
+
+                  client_redis.hmset(item[0],payloadObj)
+                  client_redis.publish(
+                    name,
+                    JSON.stringify({eventSymbol:item[0],...payloadObj})
+                  )
+
+                }
             }
         } catch (e) {
-            console.error(e)
+            console.error(e);
         }
         storeQueue();
     } else {
@@ -41,61 +84,7 @@ async function storeQueue() {
 
 let messageNum = 0
 
-subber.on('message', (channel, message) => {
-    try {
-        const msg = JSON.parse(message)
-        messageNum+=1
-        // console.log(msg)
-        const ltime = new Date().getTime()
-        // client_redis.set('cometOPT',ltime)
-
-        const [payloadType,payload] = msg.data
-        let name
-        if (typeof payloadType !== 'string') {
-          LENGTHS[payloadType[0]] = payloadType[1]
-          name = payloadType[0]
-        } else {
-          name = payloadType
-        }
-        if (!LENGTHS[name]) return console.log('fucked',[payloadType,payload])
-
-        while (payload.length > 0) {
-          let item = payload.splice(0,LENGTHS[name].length);
-          let payloadObj = {
-
-          }
-          LENGTHS[name].forEach((key, i) => {
-            if (i > 0) {
-              payloadObj[key] = item[i] || 'null'
-            }
-          });
-
-          if (name === 'Greeks') {
-            // console.log(payloadObj)
-            payloadObj.theo = payloadObj.price
-            // console.log(payloadObj)
-            delete payloadObj.price
-          }
-          if (name === 'Trade') {
-            // console.log(payloadObj)
-            payloadObj.changePct = payloadObj.change/(payloadObj.price-payloadObj.change)
-            // console.log(payloadObj)
-            // delete payloadObj.changePct
-          }
-          payloadObj[`${name}_ts`] = ltime
-
-          queue.push([item[0],name,payloadObj])
-          // client_redis.hmset(item[0],payloadObj)
-          // client_redis.publish(
-          //   name,
-          //   JSON.stringify({eventSymbol:item[0],...payloadObj})
-          // )
-
-        }
-    } catch (e) {
-        console.error(e);
-    }
-})
+subber.on('message', (channel, message) => queue.push(message))
 subber.subscribe('cx')
 storeQueue()
 setInterval(() => {
