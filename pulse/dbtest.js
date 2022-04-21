@@ -226,7 +226,7 @@ const cleanString = (val) => {
 
 subber.on('message', (channel, message) => {
   try {
-      console.log(message)
+      // console.log(message)
     const payload = JSON.parse(message)
     if (payload.eventSymbol?.charAt(0) === '.') {
       // console.log(payload)
