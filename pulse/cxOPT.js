@@ -13,7 +13,7 @@ const LENGTHS = {
 }
 
 const timenow = () => new Date().toLocaleString("en-US", {timeZone: "America/New_York"})
-
+let messageNum = 0
 let queue = []
 async function storeQueue() {
     if (queue.length > 0) {
@@ -82,7 +82,7 @@ async function storeQueue() {
     }
 }
 
-let messageNum = 0
+
 
 subber.on('message', (channel, message) => queue.push(message))
 subber.subscribe('cx')
