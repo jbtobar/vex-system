@@ -14,7 +14,30 @@ const LENGTHS = {
 
 const timenow = () => new Date().toLocaleString("en-US", {timeZone: "America/New_York"})
 
-
+let queue = []
+async function storeQueue() {
+    if (queue.length > 0) {
+        const copyQueue = [...queue]
+        queue = []
+        try {
+            for (var i = 0; i < copyQueue.length; i++) {
+                const [item,payloadObj] = copyQueue[i]
+                await client_redis.hmset(item,payloadObj)
+                await client_redis.publish(
+                  name,
+                  JSON.stringify({eventSymbol:item,...payloadObj})
+                )
+            }
+        } catch (e) {
+            console.error(e)
+        }
+        storeQueue();
+    } else {
+        setTimeout(() => {
+            storeQueue()
+        },1000)
+    }
+}
 
 let messageNum = 0
 
@@ -61,12 +84,12 @@ subber.on('message', (channel, message) => {
           }
           payloadObj[`${name}_ts`] = ltime
 
-
-          client_redis.hmset(item[0],payloadObj)
-          client_redis.publish(
-            name,
-            JSON.stringify({eventSymbol:item[0],...payloadObj})
-          )
+          queue.push([item[0],payloadObj])
+          // client_redis.hmset(item[0],payloadObj)
+          // client_redis.publish(
+          //   name,
+          //   JSON.stringify({eventSymbol:item[0],...payloadObj})
+          // )
 
         }
     } catch (e) {
@@ -74,6 +97,7 @@ subber.on('message', (channel, message) => {
     }
 })
 subber.subscribe('cx')
+storeQueue()
 setInterval(() => {
   console.log('cxOPT',{messageNum,time:timenow()})
 },1000*30);
