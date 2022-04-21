@@ -181,7 +181,7 @@ const queryInsert = async () => {
         queryInsert()
     },500)
 
-    
+
 
 
     // if (queryText) {
@@ -226,6 +226,7 @@ const cleanString = (val) => {
 
 subber.on('message', (channel, message) => {
   try {
+      console.log(message)
     const payload = JSON.parse(message)
     if (payload.eventSymbol?.charAt(0) === '.') {
       // console.log(payload)
