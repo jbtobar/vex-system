@@ -27,7 +27,7 @@ function runBatch(rows,includeKeys) {
     try {
         const startTime =  new Date().getTime();
         let codes = await query(`select symbol from ipf_opt;`);
-        codes = codes.map(d => d.symbol)
+        // codes = codes.map(d => d.symbol)
         console.log(codes[0])
         console.log(`time codes:${new Date().getTime() - startTime}`)
         const data = await runBatch(codes,true);
