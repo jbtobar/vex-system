@@ -63,8 +63,8 @@ async function storeQueue() {
                   payloadObj[`${name}_ts`] = ltime
 
 
-                  client_redis.hmset(item[0],payloadObj)
-                  client_redis.publish(
+                  await client_redis.hmset(item[0],payloadObj)
+                  await client_redis.publish(
                     name,
                     JSON.stringify({eventSymbol:item[0],...payloadObj})
                   )
