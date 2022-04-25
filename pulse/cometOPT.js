@@ -99,7 +99,7 @@ const channelName = payloadType => {
 
   // comet.subscribe(DATA_CHANNEL,handleDataChannel)
   // comet.subscribe(DATA_CHANNEL,e => client_redis.publish("cx", JSON.stringify(e)))
-  comet.subscribe(DATA_CHANNEL,e => client_redis.publish(channelName(msg.data[0]), JSON.stringify(e)))
+  comet.subscribe(DATA_CHANNEL,msg => client_redis.publish(channelName(msg.data[0]), JSON.stringify(msg)))
 
   publisher.on('message', (channel, message) => {
     const payload = JSON.parse(message)
