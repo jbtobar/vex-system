@@ -83,6 +83,13 @@ const handleDataChannel = msg => {
 
 };
 
+const channelName = payloadType => {
+
+    return payloadType !== 'string' ?
+        `x${payloadType[0]}`
+        :
+        `x${payloadType}`
+};
 
 (async () => {
   console.log('suball')
@@ -91,7 +98,8 @@ const handleDataChannel = msg => {
   const comet = await connectedComet()
 
   // comet.subscribe(DATA_CHANNEL,handleDataChannel)
-  comet.subscribe(DATA_CHANNEL,e => client_redis.publish("cx", JSON.stringify(e)))
+  // comet.subscribe(DATA_CHANNEL,e => client_redis.publish("cx", JSON.stringify(e)))
+  comet.subscribe(DATA_CHANNEL,e => client_redis.publish(channelName(msg.data[0]), JSON.stringify(e)))
 
   publisher.on('message', (channel, message) => {
     const payload = JSON.parse(message)
@@ -113,6 +121,6 @@ const handleDataChannel = msg => {
 
 
   setInterval(() => {
-    console.log('cometOPT',{messageNum,okNum,time:timenow()})
+    console.log('cometOPTv2',{messageNum,okNum,time:timenow()})
   },1000*30)
 })();
