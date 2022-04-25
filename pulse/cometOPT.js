@@ -85,6 +85,11 @@ const handleDataChannel = msg => {
 
 const channelName = payloadType => {
 
+    console.log(payloadType !== 'string' ?
+        `x${payloadType[0]}`
+        :
+        `x${payloadType}`)
+
     return payloadType !== 'string' ?
         `x${payloadType[0]}`
         :
