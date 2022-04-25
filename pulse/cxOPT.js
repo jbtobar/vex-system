@@ -9,7 +9,36 @@ const subber = redis.createClient();
 const client_redis = redis.createClient();
 
 const LENGTHS = {
-
+    Greeks: ["eventSymbol","eventTime","eventFlags","index","time","sequence","price","volatility","delta","gamma","theta","rho","vega"],
+    Quote: ["eventSymbol","eventTime","sequence","timeNanoPart","bidTime","bidExchangeCode","bidPrice","bidSize","askTime","askExchangeCode","askPrice","askSize"],
+    Trade: ["eventSymbol","eventTime","time","timeNanoPart","sequence","exchangeCode","price","change","size","dayId","dayVolume","dayTurnover","tickDirection","extendedTradingHours"],
+    Summary: ["eventSymbol","eventTime","dayId","dayOpenPrice","dayHighPrice","dayLowPrice","dayClosePrice","dayClosePriceType","prevDayId","prevDayClosePrice","prevDayClosePriceType","prevDayVolume","openInterest"],
+    TheoPrice: ["eventSymbol","eventTime","eventFlags","index","time","sequence","price","underlyingPrice","delta","gamma","dividend","interest"],
+    Series:[
+          'eventSymbol',  'eventTime',
+          'eventFlags',   'index',
+          'time',         'sequence',
+          'expiration',   'volatility',
+          'callVolume',   'putVolume',
+          'putCallRatio', 'forwardPrice',
+          'dividend',     'interest',
+          'optionVolume'
+      ],
+    Underlying:[
+    "eventSymbol",
+    "eventTime",
+    "eventFlags",
+    "index",
+    "time",
+    "sequence",
+    "volatility",
+    "frontVolatility",
+    "backVolatility",
+    "callVolume",
+    "putVolume",
+    "putCallRatio",
+    "optionVolume"
+    ]
 }
 
 const timenow = () => new Date().toLocaleString("en-US", {timeZone: "America/New_York"})
