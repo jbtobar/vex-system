@@ -84,12 +84,6 @@ const handleDataChannel = msg => {
 };
 
 const channelName = payloadType => {
-
-    console.log(Array.isArray(payloadType) ?
-        `x${payloadType[0]}`
-        :
-        `x${payloadType}`)
-
     return Array.isArray(payloadType) ?
         `x${payloadType[0]}`
         :
