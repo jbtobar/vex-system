@@ -716,6 +716,7 @@ async function insertIntoFutDir(dxcode,futures) {
 async function run() {
   let startTime = new Date().getTime()
   const TastyWorks = await Tasty()
+  if (!TastyWorks) return process.exit();
   const {rows} = await query(`select * from futuresdir;`)
   // const bar1 = multibar.create(rows.length, 0);
   // bar1.start(rows.length,0,{symbol:''})
