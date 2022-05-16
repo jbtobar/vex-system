@@ -15,6 +15,9 @@ TastyWorks.setUser({
 const Tasty = async () => {
   try {
     const token = await TastyWorks.authorization()
+    console.log('mmmmmmmmmmmm.........')
+    console.log({token})
+    console.log('uuuuuuuuuuppp')
     TastyWorks.setAuthorizationToken(token);
     return TastyWorks;
   } catch(err) {
