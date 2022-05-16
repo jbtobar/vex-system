@@ -14,15 +14,17 @@ TastyWorks.setUser({
 });
 const Tasty = async () => {
   try {
-    // const token = await TastyWorks.authorization()
-    token = "dGFzdHksbGl2ZSwsMTY1Mjc4Mjg0OCwxNjUyNjk2NDQ4LFUwMDAwOTIxODYw.Gg5pwy3knK_oELeefRMlhBgtol3Z3GwOnQ5z2odA3Kc"
-    console.log('mmmmmmmmmmmm.........')
+    const token = await TastyWorks.authorization()
+    // token = "Npt_bHW7g8V6SnE-Djo_WudiMFk7bQ6ySPLsJglOp9U21DrPggiLiw+C"
+    // console.log('mmmmmmmmmmmm.........')
     console.log({token})
-    console.log('uuuuuuuuuuppp')
+    // console.log('uuuuuuuuuuppp')
+    // process.exit();
     TastyWorks.setAuthorizationToken(token);
     return TastyWorks;
   } catch(err) {
     console.log(err)
+    process.exit();
     return null;
   }
 }

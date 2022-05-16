@@ -7,5 +7,6 @@ module.exports = {
     'Connection': 'keep-alive',
     'Host': 'api.tastyworks.com',
     'Origin': 'https://trade.tastyworks.com',
-    'Referer': 'https://trade.tastyworks.com/tw'
+    'Referer': 'https://trade.tastyworks.com/index.html',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15'
 }
