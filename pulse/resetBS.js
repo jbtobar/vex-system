@@ -11,7 +11,7 @@ const data = {};
 
 (async () => {
     const startTime = new Date().getTime();
-    const trades = (await query(`SELECT eventsymbol, size, price, aggressorside FROM tasc;`)).rows
+    const trades = (await query(`SELECT eventsymbol, size, price, aggressorside FROM tasc_hist where dayid=19130;`)).rows
     console.log(`tasc length: ${trades.length}`)
     for (var i = 0; i < trades.length; i++) {
         const trade = trades[i]
