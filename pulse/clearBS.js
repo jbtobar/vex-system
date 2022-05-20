@@ -16,26 +16,35 @@ const data = {};
     for (var i = 0; i < trades.length; i++) {
         const trade = trades[i]
         let { symbol } = trade;
+        data[symbol] = {
+            valuebuy:0,
+            volmbuy:0,
+            countbuy:0,
+            valuesell:0,
+            volmsell:0,
+            countsell:0,
+            valueund:0,
+            volmund:0,
+            countund:0,
+            value:0,
+            volm:0,
+            count:0,
+            valuebs:0,
+            volmbs:0,
+            countbs:0,
+        }
+
+
+    }
+    console.log(`FINISHED ${new Date().getTime() - startTime}`)
+
+    const symbols = Object.keys(data)
+    for (var i = 0; i < symbols.length; i++) {
         await client_redis.hmset(
-            symbol,{
-                valuebuy:0,
-                volmbuy:0,
-                countbuy:0,
-                valuesell:0,
-                volmsell:0,
-                countsell:0,
-                valueund:0,
-                volmund:0,
-                countund:0,
-                value:0,
-                volm:0,
-                count:0,
-                valuebs:0,
-                volmbs:0,
-                countbs:0,
+            symbols[i],{
+                ...data[symbols[i]],
+                gucc:1
             })
-
-
     }
     console.log(`FINISHED DOUBLE ${new Date().getTime() - startTime}`)
 })();
