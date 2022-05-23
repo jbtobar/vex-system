@@ -18,7 +18,7 @@ const data = {};
         let { eventsymbol, size, price, aggressorside } = trade;
 
         size = Number(size)
-        price = Number(size)
+        price = Number(price)
         let value = size * price * 100
 
         if (!data[eventsymbol]) {
