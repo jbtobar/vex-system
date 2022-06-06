@@ -58,7 +58,7 @@ const subCommand = async () => {
   console.log(`subbing TAS ${timenow()}`)
   const optioncodes = (
     await query({
-      text: `SELECT symbol from ipf_opt where rootsymbol='AMZN';`,
+      text: `select * from ipf_opt WHERE LEFT(symbol,5)='.AMZN';`,
       rowMode: 'array',
     })
   ).rows.map(d => d[0]).filter(d => d[0] && d[0].length>0).filter(d => !subbed[d])
